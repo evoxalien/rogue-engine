@@ -19,15 +19,18 @@ private:
    SDL_Surface *surface;
    SDL_Surface *image;
    SDL_Event Event;
+   bool initialize();
+
 public:
    gameroot();
-   int execute();
-   bool initialize();
    bool loadContent();
+   int execute();
    void OnEvent(SDL_Event *Event);
    void update();
    void draw();
    void close();
+
+   int GLOBAL_FRAME_COUNTER;
 
 };
 #endif
