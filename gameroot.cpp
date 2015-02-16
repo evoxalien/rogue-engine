@@ -23,7 +23,7 @@ enum GameState
    Paused,
    levelSelect
 };  
-//GameState gameState;
+GameState gameState;
 
 //Simple initializes
 gameroot::gameroot()
@@ -156,16 +156,7 @@ void gameroot::close()
    SDL_DestroyWindow(window);
    SDL_Quit();
 }
-//john
-// void close()
-// {
 
-//     // Close and destroy the window
-//     SDL_DestroyWindow(window);
-//     window = NULL;
-
-//    SDL_Quit();
-// }
 
 //Just the main. Very boring
 int main(int argc, char *argv[])
@@ -174,17 +165,5 @@ int main(int argc, char *argv[])
    gameroot theGame;
 
    return theGame.execute();
-   //john
-   // initialize();
 
-   // loadMedia();
-
-   // update();
-
-   // draw();
-
-   //  SDL_Delay(3000);
-
-   // close();
-   // return 0;
 }
