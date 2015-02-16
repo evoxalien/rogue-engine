@@ -1,4 +1,29 @@
-#include"gameroot.h"
+//INCLUDES
+#include "SDL.h"
+#include <stdio.h>
+#include <string>
+#include "gameroot.h"
+using namespace std;
+
+//Global Variables
+SDL_Window *window = NULL;
+SDL_Surface *surface = NULL;
+SDL_Surface *image = NULL;
+//String window_name = "Rogue Engine Window Title Here"
+const int SCREEN_WIDTH = 1024;
+const int SCREEN_HEIGHT = 720;
+//david
+enum GameState
+{
+   StartMenu,
+   Loading,
+   EndMenu,
+   Playing,
+   leveledup,
+   Paused,
+   levelSelect
+};  
+//GameState gameState;
 
 //Simple initializes
 gameroot::gameroot()
@@ -8,26 +33,54 @@ gameroot::gameroot()
    renderer = NULL;
    surface = NULL;
    image = NULL;
-}
 
+}
 
 //Initialize all the SDL
 bool gameroot::initialize()
 {
+   bool success = true;
    //Tests SDL components, important to call before other SDL operations
    //https://wiki.libsdl.org/SDL_Init
+
+//juan
    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
    {
       return false;
    }
+//john 
+   // if(SDL_Init(SDL_INIT_VIDEO) < 0)
+   // {
 
+   //    printf("SDL could not initialize! SDL_ERROR: %s\n", SDL_GetError() );
+   //    success = false;
+   // }
+
+   //juan
    //Calls and tests function to create SDL Window (documentation in link)
    //https://wiki.libsdl.org/SDL_CreateWindow
    if((window = SDL_CreateWindow( "Rogue Engine Window Title Here", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 720, SDL_WINDOW_SHOWN )) == NULL)
    {
       return false;
    }
+   //john
+   //window = SDL_CreateWindow( "Rogue Engine Window Title Here", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+//     window = SDL_CreateWindow( "Rogue Engine Window Title Here", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 
+//     // Check that the window was successfully made
+//     if (window == NULL) {
+//         // In the event that the window could not be made...
+//         printf("Could not create window: %s\n", SDL_GetError());
+//         success = false;
+//     }
+//     else
+//     {
+//       //Window Surface
+//       surface = SDL_GetWindowSurface(window);
+//       SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 55,55,55,55));
+//     }
+
+// return success;
    //Creates SDL Renderer. Renderer renders assets to SDL windows
    //Can be used to draw .bmp images to window (example in link)
    //https://wiki.libsdl.org/SDL_CreateRenderer
@@ -46,12 +99,30 @@ bool gameroot::initialize()
 }
 
 //Does Nothing. Load textures here in future
+//juan
 bool gameroot::loadContent()
 {
 
    return true;
 
 }
+//load Media 
+//john
+// bool loadMedia()
+// {
+//    bool success = true;
+
+//    image = SDL_LoadBMP ("rogue-engine/dino.bmp");
+//    if(image == NULL)
+//    {
+//       printf ("The image didn't load. Error: %s", SDL_GetError() );
+//       success = false;
+//    }
+
+
+//    return success;
+
+// }
 
 //Event checking if X has been clicked 
 //Triggers SDL_QUIT and exit program
@@ -66,15 +137,20 @@ void gameroot::OnEvent(SDL_Event *Event)
 //Does nothing. Math and physics later
 void gameroot::update()
 {
+   //john
+ //SDL_BlitSurface( image, NULL, surface, NULL);
 
+  //SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 155,155,155,155));
 }
 
 //Does nothing. Feel free to draw dinosaur here
 void gameroot::draw()
 {
 
-}
+   SDL_UpdateWindowSurface( window );
 
+}
+//juan
 //Actual game loop
 int gameroot::execute()
 {
@@ -114,6 +190,16 @@ void gameroot::close()
    SDL_DestroyWindow(window);
    SDL_Quit();
 }
+//john
+// void close()
+// {
+
+//     // Close and destroy the window
+//     SDL_DestroyWindow(window);
+//     window = NULL;
+
+//    SDL_Quit();
+// }
 
 //Just the main. Very boring
 int main(int argc, char *argv[])
@@ -122,4 +208,17 @@ int main(int argc, char *argv[])
    gameroot theGame;
 
    return theGame.execute();
+   //john
+   // initialize();
+
+   // loadMedia();
+
+   // update();
+
+   // draw();
+
+   //  SDL_Delay(3000);
+
+   // close();
+   // return 0;
 }
