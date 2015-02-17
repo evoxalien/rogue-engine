@@ -13,6 +13,9 @@ SDL_Surface *image = NULL;
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 720;
 //david
+// enums that track things 
+// game state will change based on events
+// atm it changes color on the screen
 enum GameState
 {
    StartMenu,
@@ -24,7 +27,8 @@ enum GameState
    levelSelect
 };  
 GameState gameState;
-
+//keyboard david 
+//http://lazyfoo.net/tutorials/SDL/04_key_presses/index.php
 //Simple initializes
 gameroot::gameroot()
 {
@@ -42,9 +46,10 @@ bool gameroot::initialize()
    bool success = true;
    renderer = SDL_CreateRenderer(window, -1, 0);
    GLOBAL_FRAME_COUNTER = 0;
+   //intitalize the gamestate
+   gameState=StartMenu;
    //Tests SDL components, important to call before other SDL operations
    //https://wiki.libsdl.org/SDL_Init
-
 
    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
    {
@@ -92,6 +97,24 @@ void gameroot::OnEvent(SDL_Event *Event)
    {
       Running = false;
    }
+   //this event works to track keyboard inputs
+   else if (Event->type == SDL_KEYDOWN)
+   {
+      //change the screen based on key 
+      switch (Event->key.keysym.sym)
+      {   
+         case SDLK_UP: gameState=StartMenu;
+         break;
+         case SDLK_DOWN:gameState=EndMenu;
+         break;
+         case SDLK_LEFT:gameState=Playing;
+         break;
+         case SDLK_RIGHT:gameState=Paused;
+         break;
+         default:gameState=leveledup;
+         break;
+      } 
+   }
 }
 
 //Does nothing. Math and physics later
@@ -102,7 +125,19 @@ void gameroot::update()
       surface = SDL_GetWindowSurface(window);
       SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 55,55,55,55));
    }
-
+   //if the frame count is more than 100 u can change the color
+   //this implementaion will change once other things happen its just proof of concept
+   else if (GLOBAL_FRAME_COUNTER > 100)
+   {
+   if(gameState==StartMenu)
+      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 0,0,0,0));
+   if(gameState==EndMenu)
+      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 25,25,25,25));
+   if(gameState==Playing)
+      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 85,85,85,85));
+   if(gameState==Paused)
+      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 155,155,155,155));
+   }
 }
 
 //Does nothing. Feel free to draw dinosaur here
