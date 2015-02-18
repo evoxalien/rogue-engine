@@ -6,6 +6,7 @@
 #include "SDL.h"
 #include <stdio.h>
 #include <string>
+#include "inputDavid.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ private:
    SDL_Surface *surface;
    SDL_Surface *image;
    SDL_Event Event;
+   GameState gameState;
    bool initialize();
 
 public:

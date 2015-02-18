@@ -5,30 +5,10 @@
 #include "gameroot.h"
 using namespace std;
 
-//Global Variables
-SDL_Window *window = NULL;
-SDL_Surface *surface = NULL;
-SDL_Surface *image = NULL;
 //String window_name = "Rogue Engine Window Title Here"
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 720;
-//david
-// enums that track things 
-// game state will change based on events
-// atm it changes color on the screen
-enum GameState
-{
-   StartMenu,
-   Loading,
-   EndMenu,
-   Playing,
-   leveledup,
-   Paused,
-   levelSelect
-};  
-GameState gameState;
-//keyboard david 
-//http://lazyfoo.net/tutorials/SDL/04_key_presses/index.php
+
 //Simple initializes
 gameroot::gameroot()
 {
@@ -43,23 +23,25 @@ gameroot::gameroot()
 //Initialize all the SDL
 bool gameroot::initialize()
 {
-   bool success = true;
-   renderer = SDL_CreateRenderer(window, -1, 0);
+
    GLOBAL_FRAME_COUNTER = 0;
+   
    //intitalize the gamestate
    gameState=StartMenu;
+   
    //Tests SDL components, important to call before other SDL operations
    //https://wiki.libsdl.org/SDL_Init
-
    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
    {
+      printf ("SDL Component failed to initialize Error: %s", SDL_GetError());
       return false;
    }
 
    //Calls and tests function to create SDL Window (documentation in link)
    //https://wiki.libsdl.org/SDL_CreateWindow
-   if((window = SDL_CreateWindow( "Rogue Engine Window Title Here", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 720, SDL_WINDOW_SHOWN )) == NULL)
+   if((window = SDL_CreateWindow( "Rogue Engine Window Title Here", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN )) == NULL)
    {
+      printf ("Window Error: %s", SDL_GetError());
       return false;
    }
 
@@ -75,7 +57,7 @@ bool gameroot::initialize()
       return false;
    }
 
-
+   //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
 
    return true;
@@ -89,69 +71,72 @@ bool gameroot::loadContent()
 
 }
 
-//Event checking if X has been clicked 
-//Triggers SDL_QUIT and exit program
+//Event checking for game loop 
+//Handles Events such as clicks and button pushes
+//https://wiki.libsdl.org/SDL_Event
 void gameroot::OnEvent(SDL_Event *Event)
 {
+   
+   //Check if event is the clicking of the exit (SDL_QUIT)
    if(Event->type == SDL_QUIT)
    {
       Running = false;
    }
-   //this event works to track keyboard inputs
+   
+   //This event works to track keyboard inputs
    else if (Event->type == SDL_KEYDOWN)
    {
-      //change the screen based on key 
-      switch (Event->key.keysym.sym)
-      {   
-         case SDLK_UP: gameState=StartMenu;
-         break;
-         case SDLK_DOWN:gameState=EndMenu;
-         break;
-         case SDLK_LEFT:gameState=Playing;
-         break;
-         case SDLK_RIGHT:gameState=Paused;
-         break;
-         default:gameState=leveledup;
-         break;
-      } 
+      keyPress(&gameState,Event);
    }
 }
 
 //Does nothing. Math and physics later
 void gameroot::update()
 {
-   if(GLOBAL_FRAME_COUNTER == 1)
+   //Loops here until event is handled. 
+   //Never enters loop if no event is happening
+   //https://wiki.libsdl.org/SDL_PollEvent
+   while(SDL_PollEvent(&Event))
    {
-      surface = SDL_GetWindowSurface(window);
-      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 55,55,55,55));
+      OnEvent(&Event);
    }
-   //if the frame count is more than 100 u can change the color
-   //this implementaion will change once other things happen its just proof of concept
-   else if (GLOBAL_FRAME_COUNTER > 100)
-   {
-   if(gameState==StartMenu)
-      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 0,0,0,0));
-   if(gameState==EndMenu)
-      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 25,25,25,25));
-   if(gameState==Playing)
-      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 85,85,85,85));
-   if(gameState==Paused)
-      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 155,155,155,155));
-   }
+   
+   
 }
 
 //Does nothing. Feel free to draw dinosaur here
 void gameroot::draw()
 {
 
+   //Makes window gray for first frame
+   if(GLOBAL_FRAME_COUNTER == 1)
+   {
+      surface = SDL_GetWindowSurface(window);
+      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 55,55,55,55));
+   }
+   
+   //if the frame count is more than 100 u can change the color
+   //this implementaion will change once other things happen its just proof of concept
+   else if (GLOBAL_FRAME_COUNTER > 100)
+   {
+      if(gameState==StartMenu)
+         SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 0,0,0,0));
+      if(gameState==EndMenu)
+         SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 25,25,25,25));
+      if(gameState==Playing)
+         SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 85,85,85,85));
+      if(gameState==Paused)
+         SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 155,155,155,155));
+   }
+   
+   //increment frame counter 
    GLOBAL_FRAME_COUNTER++;   
    if(GLOBAL_FRAME_COUNTER % 10 == 0)
       printf("Frame Count: %d \n", GLOBAL_FRAME_COUNTER);
 
-   SDL_UpdateWindowSurface( window );
+   SDL_UpdateWindowSurface(window);
 
 }
-//juan
 //Actual game loop
 int gameroot::execute()
 {
@@ -165,14 +150,6 @@ int gameroot::execute()
 
    while(Running)
    {
-      //Loops here until event is handled. 
-	  //Never enters loop if no event is happening
-	  //https://wiki.libsdl.org/SDL_PollEvent
-      while(SDL_PollEvent(&Event))
-      {
-         OnEvent(&Event);
-      }
-
 	  //update and redraw window
       update();
       draw();
