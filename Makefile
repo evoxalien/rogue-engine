@@ -23,7 +23,7 @@ LINKER_FLAGS_WIN = -lmingw32 -lSDL2main -lSDL2
 LINKER_FLAGS_MAC = -framework SDL -framework Cocoa
 
 #OBJ_NAME specifies the name of our exectuable
-OBJ_NAME = bin/windows/gameroot
+OBJ_NAME = gameroot
 
 #This is the target that compiles our executable
 all : $(OBJS)

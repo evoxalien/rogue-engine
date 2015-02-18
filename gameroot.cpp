@@ -1,5 +1,6 @@
 //INCLUDES
 #include "SDL.h"
+#include "SDL_image.h"
 #include <stdio.h>
 #include <string>
 #include "gameroot.h"
@@ -24,7 +25,6 @@ gameroot::gameroot()
 bool gameroot::initialize()
 {
 
-   GLOBAL_FRAME_COUNTER = 0;
    
    //intitalize the gamestate
    gameState=StartMenu;
@@ -60,12 +60,36 @@ bool gameroot::initialize()
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
 
+
+
+   GLOBAL_FRAME_COUNTER = 0;
+   /*
+   previousTicks = 0;
+   fps_lasttime = SDL_GetTicks(); //the last recorded time.
+   fps_current = 0; //the current FPS.
+   fps_frames = 0; //frames passed since the last recorded fps.
+   */
+   
    return true;
 }
 
 //Does Nothing. Load textures here in future
 bool gameroot::loadContent()
 {
+
+   image = SDL_LoadBMP("images/dino.bmp");
+   if( image == NULL)
+   {
+      printf("Unable to load!\n");
+      return false;
+   }
+   image2 = SDL_LoadBMP("images/dino.bmp");
+   if( image == NULL)
+   {
+      printf("Unable to load!\n");
+      return false;
+   }
+
 
    return true;
 
@@ -93,6 +117,8 @@ void gameroot::OnEvent(SDL_Event *Event)
 //Does nothing. Math and physics later
 void gameroot::update()
 {
+
+
    //Loops here until event is handled. 
    //Never enters loop if no event is happening
    //https://wiki.libsdl.org/SDL_PollEvent
@@ -108,9 +134,11 @@ void gameroot::update()
 void gameroot::draw()
 {
 
+
    //Makes window gray for first frame
    if(GLOBAL_FRAME_COUNTER == 1)
    {
+
       surface = SDL_GetWindowSurface(window);
       SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 55,55,55,55));
    }
@@ -124,15 +152,27 @@ void gameroot::draw()
       if(gameState==EndMenu)
          SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 25,25,25,25));
       if(gameState==Playing)
+      {
+
          SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 85,85,85,85));
+         SDL_BlitSurface( image, NULL, surface, NULL );
+      }
       if(gameState==Paused)
+      {
          SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 155,155,155,155));
+      }
    }
    
    //increment frame counter 
    GLOBAL_FRAME_COUNTER++;   
+   /*
    if(GLOBAL_FRAME_COUNTER % 10 == 0)
       printf("Frame Count: %d \n", GLOBAL_FRAME_COUNTER);
+   previousTicks = SDL_GetTicks();
+   */
+
+
+
 
    SDL_UpdateWindowSurface(window);
 
@@ -146,6 +186,11 @@ int gameroot::execute()
       return - 1;
    }
 
+
+   if(loadContent() == false)
+   {
+      printf("Content loaded Improperly");
+   }
 
 
    while(Running)
