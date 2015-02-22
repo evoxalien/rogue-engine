@@ -2,7 +2,7 @@
 
 #define INPUT_H_INCLUDED
 
-
+#include "Gamepad.h"
 #include <stdio.h>
 #include <string>
 
@@ -16,7 +16,6 @@ enum GameState
 {
    StartMenu,
    Loading,
-   EndMenu,
    Playing,
    leveledup,
    Paused,

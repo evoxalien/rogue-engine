@@ -149,8 +149,6 @@ void gameroot::draw()
    {
       if(gameState==StartMenu)
          SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 0,0,0,0));
-      if(gameState==EndMenu)
-         SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 25,25,25,25));
       if(gameState==Playing)
       {
 
