@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = gameroot.cpp
+OBJS = gameroot.cpp physics.cpp object.cpp
 
 #CC specifies which compiler we're using
 CC = g++
@@ -14,6 +14,7 @@ LIBRARY_PATHS = -Lmingw_dev_lib\lib
 # -w suppresses all warnings
 # -Wl,-subsystem,windows gets rid of the console window
 #COMPILER_FLAGS = -w -Wl,-subsystem,windows
+COMPILER_FLAGS = -std=c++11
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer

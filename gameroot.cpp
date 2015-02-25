@@ -245,6 +245,15 @@ SDL_Texture* gameroot::loadTexture(std::string path)
 //Actual game loop
 int gameroot::execute()
 {
+	//double maximum_Frame_Rate = 60;											//If the developers want to include a maximum frame rate, this is it; unfinished
+	double total_Time = 0;														//Keeps a running total of the amount of time that the game has been active for; temporary
+
+	std::chrono::duration<double> time_Of_Previous_Frame;						//A variable which holds the number of clock cycles between frames from the highest resolution clock available- use .count() to convert to seconds
+	auto start_Of_Previous_Frame = std::chrono::high_resolution_clock::now();	//Initializes the variable to the type best suited for the highest resolution clock
+	auto start_Of_Current_Frame = start_Of_Previous_Frame;						//Initializes the variable to the type best suited for the highest resolution clock
+
+	//cout.precision(15);														//Sets the number of decimal places for cout to display
+
    //checks all the SDL (see above)
    if(initialize() == false)
    {
@@ -260,9 +269,20 @@ int gameroot::execute()
 
    while(Running)
    {
+		start_Of_Current_Frame = std::chrono::high_resolution_clock::now();		//At the start of each frame, store the time
+		time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame);	//Number of clock cycles between frames
+		if(time_Of_Previous_Frame.count() != 0)									//Avoid dividing by 0
+		{
+			Physics::set_Frame_Rate((1.0 / time_Of_Previous_Frame.count()));	//Update Physics to know how long the previous frame took
+		}
+		total_Time = total_Time + time_Of_Previous_Frame.count();				//Add the time of the last frame to the total time
+
 	  //update and redraw window
       update();
       draw();
+
+		//Physics::set_Frame_Rate(maximum_Frame_Rate);
+		start_Of_Previous_Frame = start_Of_Current_Frame;						//At the end of each frame, store the time
     }
 
    close() ;

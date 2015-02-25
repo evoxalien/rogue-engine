@@ -8,6 +8,8 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 #include <iostream>
+#include <cmath>
+#include <vector>
 
 using namespace std;
 
@@ -15,7 +17,7 @@ class Physics
 {
 	private:
 		static double frame_Rate;
-		//static double inverse_Frame_Rate;
+		static double time_Of_Next_Collision;
 
 		static double x_Gravity;
 		static double y_Gravity;
@@ -40,12 +42,12 @@ class Physics
 		double y_Force;
 
 	public:
-
 		Physics();
 		Physics(double, double, double, double, double, double, double);
 		Physics(double, double, double, double, double, double, double, double, double, double, double, double, double);
 
-		void move();
+		//void move();
+		void half_Move();
 		void accelerate();
 		//void accelerate(double, double);
 		//void accelerate(double, double, double);
@@ -55,7 +57,8 @@ class Physics
 		void add_Force(double, double);
 		void apply_Forces();
 
-		static void resolve_Collisions(Physics, Physics);
+		static void check_For_Collisions(vector<Physics*>&);
+		static void resolve_Collisions(Physics*, Physics*);
 		static void set_X_Gravity(double);
 		static void set_Y_Gravity(double);
 		static void set_Z_Gravity(double);
@@ -71,5 +74,6 @@ class Physics
 		void display_Information();
 
 		const double get_X_Position();
+		const double get_Mass();
 };
 #endif

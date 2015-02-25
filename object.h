@@ -25,12 +25,16 @@ class Object
 	public:
 		Object();
 		Object(Physics);
+		~Object();
 
 		static vector<Object*> object_Pointer_Vector;		//A vector with pointers to all objects created
+		static vector<Physics*> physics_Pointer_Vector;
 
 		Physics physics;									//Contains position, velocity, acceleration, mass, etc, along with useful functions for dealing with collisions
 		//ArtificialIntelligence artificial_Intelligence;	//This will be the class for AI when I get around to it
 		//Stats stats; 										//Unknown name at the moment, this will contain game attributes such as hit points, defense, damage, etc.
+
+		static void check_For_Collisions();
 
 		static void display_Information();		//For testing
 		int get_Object_Pointer_Vector_Index();	//For setting the pointer to NULL in the vector of object pointers

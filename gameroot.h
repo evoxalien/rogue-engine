@@ -4,10 +4,13 @@
 
 
 #include "SDL.h"
+#include<iostream>
 #include <stdio.h>
 #include <string>
+#include <chrono>
 #include "inputDavid.h"
 //#include "log.h"
+#include "object.h"
 
 #define FPS_INTERVAL 1.0 //Seconds
 
