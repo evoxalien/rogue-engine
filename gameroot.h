@@ -22,7 +22,7 @@ private:
    SDL_Renderer *renderer;
    SDL_Surface *surface;
    SDL_Surface *image;
-   SDL_Surface *image2;
+   SDL_Texture *texture;
    SDL_Event Event;
    GameState gameState;
    bool initialize();
@@ -36,6 +36,7 @@ public:
    void update();
    void draw();
    void close();
+   SDL_Texture* loadTexture(std::string path);
 
    Uint32 GLOBAL_FRAME_COUNTER;
    Uint32 previousTicks;
