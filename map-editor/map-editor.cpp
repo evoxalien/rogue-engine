@@ -145,6 +145,16 @@ void update()
             whiteBoxRect.x++; break;
          case(SDLK_a) :
             whiteBoxRect.x--; break;
+         case(SDLK_UP) :
+            whiteBoxRect.y--;
+            whiteBoxRect.h++; break;
+         case(SDLK_DOWN) :
+            whiteBoxRect.h++; break;
+         case(SDLK_LEFT) :
+            whiteBoxRect.x--; 
+            whiteBoxRect.w++; break;
+         case(SDLK_RIGHT) :
+            whiteBoxRect.w++; break;
       }
    }
 }
