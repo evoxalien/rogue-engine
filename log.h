@@ -21,6 +21,7 @@ private:
 
 public:
 
+	bool screenOutput;
 	OutputLog()
 	{
 		Init();
@@ -31,10 +32,11 @@ public:
 	//void logE(string message) {logError(message);}
 	//void logD(string message) {logDebug(message);}
 	void FILE_LOG();
-	void consolePrint();
+	//void consolePrint();
 
 	bool Init()
 	{
+		screenOutput = false;
 		systemTime = time(0);
 
 		char cYear[100];
@@ -47,7 +49,7 @@ public:
 
 		sprintf(cYear, "%d", (now->tm_year + 1900));
 		sprintf(cMonth, "%d", (now->tm_mon + 1));
-		sprintf(cDay, "%d", (now->tm_mday + 1900));
+		sprintf(cDay, "%d", (now->tm_mday));
 
 		sYear = cYear;
 		sMonth = cMonth;
@@ -56,13 +58,12 @@ public:
 
 		sLOG = "";
 
-		sLOG += sDay + "-" + sMonth + "-" + sYear + "\n";
+		sLOG += " --- System Date: " + sMonth + "-" + sDay + "-" + sYear + " --- \n";
 
 		cout << sLOG;
 		//Check if output file is in existance
 		//Put Starting Time Stamp in Log
 		//Setup for use.
-
 
 		return true;
 	}
@@ -70,7 +71,8 @@ public:
 	void Error(string message)
 	{
 		string sLine = "";
-		printf("Error -  %s", message.data());
+		if(screenOutput == true)
+			printf("Error -  %s /n", message.data());
 		sLine += "Error - " + message + "/n";
 		log(sLine);
 	}
@@ -78,7 +80,8 @@ public:
 	void Debug(string message)
 	{
 		string sLine = "";
-		printf("Debug -  %s", message.data());
+		if(screenOutput == true)
+			printf("Debug -  %s /n", message.data());
 		sLine += "Debug - " + message + "/n";
 		addToLog(sLine);
 	}

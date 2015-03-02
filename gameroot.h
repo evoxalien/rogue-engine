@@ -26,6 +26,7 @@ private:
    SDL_Event Event;
    GameState gameState;
    bool initialize();
+   int r, g, b; 
 
 
 public:
@@ -38,13 +39,13 @@ public:
    void close();
    SDL_Texture* loadTexture(std::string path);
 
+   OutputLog log;
+
    Uint32 GLOBAL_FRAME_COUNTER;
    Uint32 previousTicks;
    Uint32 fps_lasttime; //the last recorded time.
    Uint32 fps_current; //the current FPS.
    Uint32 fps_frames; //frames passed since the last recorded fps.
-
-   OutputLog log;
 
    
 
