@@ -116,7 +116,7 @@ XButtonIDs::XButtonIDs()
 {
       // These values are used to index the XINPUT_Buttons array,
       // accessing the matching XINPUT button value
- 
+ // https://github.com/kripken/emscripten/issues/2193
       A = 0;
       B = 1;
       X = 2;
