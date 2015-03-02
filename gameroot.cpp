@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string>
 #include "gameroot.h"
+
 using namespace std;
 
 //String window_name = "Rogue Engine Window Title Here"
@@ -124,6 +125,9 @@ void gameroot::OnEvent(SDL_Event *Event)
 //Does nothing. Math and physics later
 void gameroot::update()
 {
+
+   while(GLOBAL_FRAME_COUNTER % 10)
+      log.Debug("testing the debug");
 
 
    //Loops here until event is handled. 
