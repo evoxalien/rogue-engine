@@ -28,6 +28,15 @@ public:
 	void FILE_LOG();
 	void consolePrint();
 
+	bool Init()
+	{
+		//Check if output file is in existance
+		//Put Starting Time Stamp in Log
+		//Setup for use.
+
+		return true;
+	}
+
 	void Error(string message)
 	{
 		string sLine = "";

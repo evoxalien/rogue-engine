@@ -83,6 +83,8 @@ bool gameroot::initialize()
    fps_frames = 0; //frames passed since the last recorded fps.
    */
    
+   
+
    return true;
 }
 
@@ -125,9 +127,6 @@ void gameroot::OnEvent(SDL_Event *Event)
 //Does nothing. Math and physics later
 void gameroot::update()
 {
-
-   while(GLOBAL_FRAME_COUNTER % 10)
-      log.Debug("testing the debug");
 
 
    //Loops here until event is handled. 
