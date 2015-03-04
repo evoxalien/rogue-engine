@@ -39,6 +39,11 @@ public:
 
 	}
 
+	~OutputLog()
+	{
+		log_file.close();
+	}
+
 	template<typename T>
 	OutputLog & operator << ( T& value) 
 	{
@@ -85,7 +90,7 @@ public:
 		return true;
 	}
 */
-	
+
 };
 
 extern OutputLog debug_log;
