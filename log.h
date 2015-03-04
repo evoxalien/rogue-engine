@@ -5,54 +5,53 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <iostream>
 //#include <mutex>
+
+using namespace std;
 
 class OutputLog
 {
 private:
-	string sLOG;
-	//mutex log_mutex;
-	void log(string nextLine);
+	ofstream log_file;
+	string directory;
 
 public:
 
-	OutputLog()
+	bool print;
+	
+	OutputLog(string filename)
 	{
-		sLOG = "";
+		print = false;
+		directory = "logs/";
+		string stemp = directory + filename;
+		log_file.open( stemp.data());
 	}
 
-	//void logDebug(string message);
-	//void logError(string message);
-	//void logE(string message) {logError(message);}
-	//void logD(string message) {logDebug(message);}
-	void FILE_LOG();
-	void consolePrint();
-
-	void Error(string message)
+	OutputLog(string filename, bool initPrint)
 	{
-		string sLine = "";
-		printf("Error -  %s", message.data());
-		sLine += "Error - " + message + "/n";
-		log(sLine);
+		print = initPrint;
+		directory = "logs/";
+		string stemp = directory + filename;
+		log_file.open( stemp.data());
 	}
 
-	void Debug(string message)
+
+	template<typename T>
+	OutputLog & operator << ( T& value) 
 	{
-		string sLine = "";
-		printf("Debug -  %s", message.data());
-		sLine += "Debug - " + message + "/n";
-		addToLog(sLine);
-	}
-
-	void addToLog(string nextLine)
-	{
-
-		//log_mutex.lock();
-		sLOG += nextLine;
-		//log_mutex.unlock();
-
+		log_file << value;
+		if(print)
+			cout << value; 
+		return *this;
 	}
 
 
 };
+
+extern OutputLog debug_log;
+extern OutputLog warning_log;
+extern OutputLog error_log;
+
 #endif

@@ -127,7 +127,7 @@ void gameroot::update()
 {
 
    while(GLOBAL_FRAME_COUNTER % 10)
-      log.Debug("testing the debug");
+   debug_log << "test";
 
 
    //Loops here until event is handled. 

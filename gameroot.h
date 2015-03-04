@@ -44,9 +44,6 @@ public:
    Uint32 fps_current; //the current FPS.
    Uint32 fps_frames; //frames passed since the last recorded fps.
 
-   OutputLog log;
-
-   
 
 };
 #endif
