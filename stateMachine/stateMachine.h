@@ -2,6 +2,9 @@
 
 #define STATEMACHINE_H_INCLUDED
 
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
 #include <string>
 #include <stdio.h>
 
