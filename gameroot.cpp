@@ -126,8 +126,7 @@ void gameroot::OnEvent(SDL_Event *Event)
 void gameroot::update()
 {
 
-   while(GLOBAL_FRAME_COUNTER % 10)
-   debug_log << "test";
+   debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
 
 
    //log.screenOutput = true;

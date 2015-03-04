@@ -5,6 +5,7 @@
 #include "Gamepad.h"
 #include <stdio.h>
 #include <string>
+#include "log.h"
 
 using namespace std;
 
@@ -30,8 +31,10 @@ void keyPress(GameState *gameState, SDL_Event *Event)
    switch (Event->key.keysym.sym)
    {   
       case SDLK_UP:
+		debug_log.print = true;
       break;
       case SDLK_DOWN:
+		debug_log.print = false;
       break;
       case SDLK_LEFT:
       break;
