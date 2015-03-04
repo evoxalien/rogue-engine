@@ -39,8 +39,6 @@ public:
    void close();
    SDL_Texture* loadTexture(std::string path);
 
-   OutputLog log;
-
    Uint32 GLOBAL_FRAME_COUNTER;
    Uint32 previousTicks;
    Uint32 fps_lasttime; //the last recorded time.
