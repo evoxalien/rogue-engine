@@ -30,7 +30,7 @@ private:
 
 
 public:
-   gameroot();
+   gameroot(); 
    bool loadContent();
    int execute();
    void OnEvent(SDL_Event *Event);

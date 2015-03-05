@@ -25,7 +25,7 @@ public:
 	OutputLog(string filename)
 	{
 		print = false;
-		directory = "logs/";
+		directory = "";
 		string stemp = directory + filename;
 		log_file.open( stemp.data());
 	}
@@ -33,7 +33,7 @@ public:
 	OutputLog(string filename, bool initPrint)
 	{
 		print = initPrint;
-		directory = "logs/";
+		directory = "";
 		string stemp = directory + filename;
 		log_file.open( stemp.data());
 
