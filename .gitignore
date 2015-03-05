@@ -27,6 +27,7 @@
 *.app
 
 # LogFiles
-debug.txt
-error.txt
-warning.txt
+*bug.txt
+*ror.txt
+*ning.txt
+
