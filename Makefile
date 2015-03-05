@@ -1,5 +1,7 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = gameroot.cpp physics.cpp object.cpp
+
+OBJS = gameroot.cpp physics.cpp object.cpp log.cpp
+
 
 #CC specifies which compiler we're using
 CC = g++
@@ -17,11 +19,15 @@ LIBRARY_PATHS = -Lmingw_dev_lib\lib
 COMPILER_FLAGS = -std=c++11
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+LINKER_FLAGS_W = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -D WINDOWS
+LINKER_FLAGS_L = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -D WINDOWS
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = bin/windows/gameroot
 
 #This is the target that compiles our executable
 all : $(OBJS)
-	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS_W) -o $(OBJ_NAME)
+
+linux : $(OBJS)
+	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS_L) -o $(OBJ_NAME)

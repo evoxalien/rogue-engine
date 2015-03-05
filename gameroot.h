@@ -9,8 +9,9 @@
 #include <string>
 #include <chrono>
 #include "inputDavid.h"
-//#include "log.h"
 #include "object.h"
+#include "log.h"
+
 
 #define FPS_INTERVAL 1.0 //Seconds
 
@@ -29,10 +30,11 @@ private:
    SDL_Event Event;
    GameState gameState;
    bool initialize();
+   int r, g, b; 
 
 
 public:
-   gameroot();
+   gameroot(); 
    bool loadContent();
    int execute();
    void OnEvent(SDL_Event *Event);
@@ -46,8 +48,6 @@ public:
    Uint32 fps_lasttime; //the last recorded time.
    Uint32 fps_current; //the current FPS.
    Uint32 fps_frames; //frames passed since the last recorded fps.
-
-   
 
 };
 #endif

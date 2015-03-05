@@ -26,10 +26,11 @@ gameroot::gameroot()
 bool gameroot::initialize()
 {
 
-   
+    r = 0, g = 0, b = 0; 
    //intitalize the gamestate
    gameState=StartMenu;
    
+
    //Tests SDL components, important to call before other SDL operations
    //https://wiki.libsdl.org/SDL_Init
    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -125,10 +126,9 @@ void gameroot::OnEvent(SDL_Event *Event)
 void gameroot::update()
 {
 
+   debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
 
-   //Loops here until event is handled. 
-   //Never enters loop if no event is happening
-   //https://wiki.libsdl.org/SDL_PollEvent
+
    while(SDL_PollEvent(&Event))
    {
       OnEvent(&Event);
@@ -150,6 +150,10 @@ void gameroot::draw()
    //render texture to screen
    SDL_RenderCopy(renderer, texture, NULL, NULL);
 
+  
+
+
+
    //Draw Colorful Rectangles
    //Red Rect
    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
@@ -167,51 +171,36 @@ void gameroot::draw()
    fillRect = {100, 0, 50, 50};
    SDL_RenderFillRect(renderer, &fillRect);
 
+   // Adding them together!
+
+   if(r < 255 && g == 0 && b == 0)
+      r += 1;
+   if (r == 255 && g < 255)
+      g += 1;
+   if (g == 255 && b < 255)
+   {
+      b += 1;
+      r -= 1;
+   }
+
+   if (b == 255 && r < 255)
+   {
+      r = g = b = 0;
+   }
+
+
+   SDL_SetRenderDrawColor(renderer, r, g, b, 0xFF);
+   fillRect = {150, 0, 50, 50};
+   SDL_RenderFillRect(renderer, &fillRect);
+
 
    //update screen
    SDL_RenderPresent(renderer);
 
 
-   /**** Massive comment block ***************************************
-   //Makes window gray for first frame
-   if(GLOBAL_FRAME_COUNTER == 1)
-   {
-
-      surface = SDL_GetWindowSurface(window);
-      SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 55,55,55,55));
-   }
-   
-   //if the frame count is more than 100 u can change the color
-   //this implementaion will change once other things happen its just proof of concept
-   else if (GLOBAL_FRAME_COUNTER > 100)
-   {
-      if(gameState==StartMenu)
-         SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 0,0,0,0));
-      if(gameState==Playing)
-      {
-
-         SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 85,85,85,85));
-         SDL_BlitSurface( image, NULL, surface, NULL );
-      }
-      if(gameState==Paused)
-      {
-         SDL_FillRect( surface, NULL, SDL_MapRGBA(surface->format, 155,155,155,155));
-      }
-   }
-   **********************************************************************/
-
    //increment frame counter 
    GLOBAL_FRAME_COUNTER++;   
-   /*
-   if(GLOBAL_FRAME_COUNTER % 10 == 0)
-      printf("Frame Count: %d \n", GLOBAL_FRAME_COUNTER);
-   previousTicks = SDL_GetTicks();
-   */
-
-
-
-   //unnecessary if using the renderer
-   //SDL_UpdateWindowSurface(window);
+   
 
 }
 
