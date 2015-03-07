@@ -1,6 +1,9 @@
 //INCLUDES
+/*
 #include "SDL.h"
 #include "SDL_image.h"
+*/
+#include "SDLincludes.h"
 #include <stdio.h>
 #include <string>
 #include "gameroot.h"
