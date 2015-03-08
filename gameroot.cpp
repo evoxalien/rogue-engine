@@ -3,9 +3,9 @@
 #include "SDL.h"
 #include "SDL_image.h"
 */
-#include "SDLincludes.h"
-#include <stdio.h>
-#include <string>
+//#include "SDLincludes.h"
+//#include <stdio.h>
+//#include <string>
 #include "gameroot.h"
 using namespace std;
 
@@ -31,7 +31,7 @@ bool gameroot::initialize()
 
     r = 0, g = 0, b = 0; 
    //intitalize the gamestate
-   gameState=StartMenu;
+   //gameState=StartMenu;
    
 
    //Tests SDL components, important to call before other SDL operations
@@ -121,7 +121,7 @@ void gameroot::OnEvent(SDL_Event *Event)
    //This event works to track keyboard inputs
    else if (Event->type == SDL_KEYDOWN)
    {
-      keyPress(&gameState,Event);
+      //keyPress(&gameState,Event);
    }
 }
 
