@@ -3,12 +3,13 @@
 #define GAMEROOT_H_INCLUDED
 
 
-#include "SDL.h"
+//#include "SDL.h"
+#include "SDLincludes.h"
 #include<iostream>
 #include <stdio.h>
 #include <string>
 #include <chrono>
-#include "inputDavid.h"
+//#include "inputDavid.h"
 #include "object.h"
 #include "log.h"
 
@@ -28,7 +29,7 @@ private:
    SDL_Surface *image;
    SDL_Texture *texture;
    SDL_Event Event;
-   GameState gameState;
+//   GameState gameState;
    bool initialize();
    int r, g, b; 
 
