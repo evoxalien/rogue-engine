@@ -1,10 +1,16 @@
 //INCLUDES
+/*
 #include "SDL.h"
 #include "SDL_image.h"
 #include "input.h"
 #include "playerAgency.h"
 #include <stdio.h>
 #include <string>
+*/
+//#include "SDLincludes.h"
+//#include <stdio.h>
+//#include <string>
+
 #include "gameroot.h"
 using namespace std;
 
@@ -36,9 +42,10 @@ bool gameroot::initialize()
 
     r = 0, g = 0, b = 0; 
    //intitalize the gamestate
-   gameState=StartMenu;
 
    player1.intializePlayer(0);
+   //gameState=StartMenu;
+   
 
    //Tests SDL components, important to call before other SDL operations
    //https://wiki.libsdl.org/SDL_Init

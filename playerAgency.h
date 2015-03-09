@@ -2,8 +2,8 @@
 
 #define PLAYERAGENCY_H_INCLUDED
 
-
-#include "SDL.h"
+#include "SDLincludes.h"
+//#include "SDL.h"
 #include <stdio.h>
 #include <string>
 #include "inputDavid.h"
