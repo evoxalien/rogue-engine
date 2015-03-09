@@ -108,14 +108,19 @@ bool gameroot::loadContent()
 {
 
    texture = loadTexture("../../images/dino.png");
+
    if(texture == NULL)
    {
       printf("Texture failed to load.\n");
       return false;
    }
    
-
-
+   imgTex = loadTexture("img/shapes/WhiteSquare.png");
+   if(imgTex == NULL)
+   {
+      printf("Texture failed to load.\n");
+      return false;
+   }
    return true;
 
 }
