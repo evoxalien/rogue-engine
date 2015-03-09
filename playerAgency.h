@@ -28,8 +28,13 @@ private:
    int    playerMovementSpeed;
    string playerInputMode;
 
-
 public:
+   SDL_Rect whiteBoxRect;
+   SDL_Rect whiteBoxRect1;
+   int    playerX;
+   int    playerY;
+   int    playerW;
+   int    playerH;
    int    intializePlayer(int playerIndex1);
    void updateControls(int playerIndex1);
    void updatePlayer();
@@ -47,6 +52,10 @@ public:
    void setPlayerHealth(int    playerHealth1);
    void setPlayerMovementSpeed(int    playerMovementSpeed1);
    void setPlayerInputMode(string playerInputMode1);
+   void setPlayerX(int X1);
+   void setPlayerY(int Y1);
+   void setPlayerW(int W1);
+   void setPlayerH(int H1);
    int    getPlayerIndex();
    string getPlayerName();
    string getPlayerUp();
@@ -61,6 +70,11 @@ public:
    int    getPlayerHealth();
    int    getPlayerMovementSpeed();
    string getPlayerInputMode();
+   int getPlayerX();
+   int getPlayerY();
+   int getPlayerW();
+   int getPlayerH();
+   void playerButtonPress(SDL_Keycode e);
 };
 #endif
 
@@ -82,6 +96,15 @@ int playerAgency::intializePlayer(int playerIndex)
       setPlayerHealth(200);
       setPlayerMovementSpeed(5);
       setPlayerInputMode("keyboard");
+      setPlayerX(0);
+      setPlayerY(0);
+      setPlayerW(10);
+      setPlayerH(10);
+   whiteBoxRect.x = getPlayerX();
+   whiteBoxRect.y = getPlayerY();
+   whiteBoxRect.w = getPlayerW();
+   whiteBoxRect.h = getPlayerH();
+
    }
     if(playerIndex==1)//player 2
    {
@@ -99,6 +122,15 @@ int playerAgency::intializePlayer(int playerIndex)
       setPlayerHealth(200);
       setPlayerMovementSpeed(5);
       setPlayerInputMode("keyboard");
+      setPlayerX(0);
+      setPlayerY(0);
+      setPlayerW(10);
+      setPlayerH(10);
+   whiteBoxRect1.x =getPlayerX();
+   whiteBoxRect1.y =getPlayerY();
+   whiteBoxRect1.w =getPlayerW();
+   whiteBoxRect1.h =getPlayerH();
+
    }
 }
 
@@ -158,60 +190,93 @@ void playerAgency::setPlayerInputMode(string playerInputMode1)
 {
    playerInputMode=playerInputMode1;
 }
+void playerAgency::setPlayerX(int X1)
+{    playerX=X1;}
+void playerAgency::setPlayerY(int Y1)
+{    playerY=Y1;}
+void playerAgency::setPlayerW(int W1)
+{    playerW=W1;}
+void playerAgency::setPlayerH(int H1)
+{    playerH=H1;}
+int    playerAgency::getPlayerIndex()
+{
+   return playerIndex;
+}
+string playerAgency::getPlayerName()
+{
+   return playerName;
+}
+string playerAgency::getPlayerUp()
+{
+   return playerUp;
+}
+string playerAgency::getPlayerDown()
+{
+   return playerDown;
+}
+string playerAgency::getPlayerLeft()
+{
+   return playerLeft;
+}
+string playerAgency::getPlayerRight()
+{
+   return playerRight;
+}
+string playerAgency::getPlayerActivate()
+{
+   return playerActivate;
+}
+string playerAgency::getPlayerUse()
+{
+   return playerUse;
+}
+string playerAgency::getPlayerAttack()
+{
+   return playerAttack;
+}
+string playerAgency::getPlayerSpecial()
+{
+   return playerSpecial;
+}
+string playerAgency::getPlayerPause()
+{
+   return playerPause;
+}
+int    playerAgency::getPlayerHealth()
+{
+   return playerHealth;
+}
+int    playerAgency::getPlayerMovementSpeed()
+{
+   return playerMovementSpeed;
+}
+string playerAgency::getPlayerInputMode()
+{
+   return playerInputMode;
+}
+int playerAgency::getPlayerX()
+{  return playerX;}
+int playerAgency::getPlayerY()
+{  return playerY;}
+int playerAgency::getPlayerW()
+{  return playerW;}
+int playerAgency::getPlayerH()
+{  return playerH;}
 
-   int    playerAgency::getPlayerIndex()
-   {
-      return playerIndex;
-   }
-   string playerAgency::getPlayerName()
-   {
-      return playerName;
-   }
-   string playerAgency::getPlayerUp()
-   {
-      return playerUp;
-   }
-   string playerAgency::getPlayerDown()
-   {
-      return playerDown;
-   }
-   string playerAgency::getPlayerLeft()
-   {
-      return playerLeft;
-   }
-   string playerAgency::getPlayerRight()
-   {
-      return playerRight;
-   }
-   string playerAgency::getPlayerActivate()
-   {
-      return playerActivate;
-   }
-   string playerAgency::getPlayerUse()
-   {
-      return playerUse;
-   }
-   string playerAgency::getPlayerAttack()
-   {
-      return playerAttack;
-   }
-   string playerAgency::getPlayerSpecial()
-   {
-      return playerSpecial;
-   }
-   string playerAgency::getPlayerPause()
-   {
-      return playerPause;
-   }
-   int    playerAgency::getPlayerHealth()
-   {
-      return playerHealth;
-   }
-   int    playerAgency::getPlayerMovementSpeed()
-   {
-      return playerMovementSpeed;
-   }
-   string playerAgency::getPlayerInputMode()
-   {
-      return playerInputMode;
-   }
+void playerAgency::playerButtonPress(SDL_Keycode e)
+{ 
+      switch(e)
+      {
+         case(SDLK_s) :
+            playerY++; break;
+         case(SDLK_w) :
+            playerY--; break;
+         case(SDLK_d) :
+            playerX++; break;
+         case(SDLK_a) :
+            playerX--; break;
+      }
+      whiteBoxRect.x = getPlayerX();
+      whiteBoxRect.y = getPlayerY();
+}
+

@@ -1,6 +1,8 @@
 //INCLUDES
 #include "SDL.h"
 #include "SDL_image.h"
+#include "input.h"
+#include "playerAgency.h"
 #include <stdio.h>
 #include <string>
 #include "gameroot.h"
@@ -10,6 +12,11 @@ using namespace std;
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 720;
 
+InputClass input;
+playerAgency player1;
+//The image we will load and show on the screen
+SDL_Texture* imgTex = NULL;
+SDL_Event event;
 //Simple initializes
 gameroot::gameroot()
 {
@@ -22,6 +29,7 @@ gameroot::gameroot()
 
 }
 
+
 //Initialize all the SDL
 bool gameroot::initialize()
 {
@@ -29,7 +37,8 @@ bool gameroot::initialize()
     r = 0, g = 0, b = 0; 
    //intitalize the gamestate
    gameState=StartMenu;
-   
+
+   player1.intializePlayer(0);
 
    //Tests SDL components, important to call before other SDL operations
    //https://wiki.libsdl.org/SDL_Init
@@ -72,6 +81,7 @@ bool gameroot::initialize()
 
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
+  
 
 
 
@@ -118,7 +128,7 @@ void gameroot::OnEvent(SDL_Event *Event)
    //This event works to track keyboard inputs
    else if (Event->type == SDL_KEYDOWN)
    {
-      keyPress(&gameState,Event);
+      //keyPress(&gameState,Event);
    }
 }
 
@@ -131,7 +141,17 @@ void gameroot::update()
 
    while(SDL_PollEvent(&Event))
    {
+      
+      input.update(event);
       OnEvent(&Event);
+      if(input.getMouseButton(1))
+      {
+         // whiteBoxRect.x = input.getMouseX();
+         // whiteBoxRect.y = input.getMouseY();
+      }
+      player1.playerButtonPress(input.getKeyDown());
+
+
    }
    
    
@@ -150,9 +170,6 @@ void gameroot::draw()
    //render texture to screen
    SDL_RenderCopy(renderer, texture, NULL, NULL);
 
-  
-
-
 
    //Draw Colorful Rectangles
    //Red Rect
@@ -170,6 +187,8 @@ void gameroot::draw()
    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0xFF);
    fillRect = {100, 0, 50, 50};
    SDL_RenderFillRect(renderer, &fillRect);
+   //render texture to screen
+
 
    // Adding them together!
 
@@ -193,7 +212,8 @@ void gameroot::draw()
    fillRect = {150, 0, 50, 50};
    SDL_RenderFillRect(renderer, &fillRect);
 
-
+   SDL_RenderCopy(renderer, imgTex, NULL, &player1.whiteBoxRect);
+   
    //update screen
    SDL_RenderPresent(renderer);
 
