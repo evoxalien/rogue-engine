@@ -31,10 +31,10 @@ private:
 public:
    SDL_Rect whiteBoxRect;
    SDL_Rect whiteBoxRect1;
-   int    playerX;   int    player1X;
-   int    playerY;   int    player1Y;
-   int    playerW;   int    player1W;
-   int    playerH;   int    player1H;
+   int    playerX;
+   int    playerY;
+   int    playerW;
+   int    playerH;
    int    intializePlayer(int playerIndex1);
    void updateControls(int playerIndex1);
    void updatePlayer();
@@ -122,14 +122,14 @@ int playerAgency::intializePlayer(int playerIndex)
       setPlayerHealth(200);
       setPlayerMovementSpeed(5);
       setPlayerInputMode("keyboard");
-      setPlayerX(110);
-      setPlayerY(110);
+      setPlayerX(0);
+      setPlayerY(0);
       setPlayerW(10);
       setPlayerH(10);
-   whiteBoxRect1.x =getPlayer1X();
-   whiteBoxRect1.y =getPlayer1Y();
-   whiteBoxRect1.w =getPlayer1W();
-   whiteBoxRect1.h =getPlayer1H();
+   whiteBoxRect1.x =getPlayerX();
+   whiteBoxRect1.y =getPlayerY();
+   whiteBoxRect1.w =getPlayerW();
+   whiteBoxRect1.h =getPlayerH();
 
    }
 }
@@ -262,14 +262,6 @@ int playerAgency::getPlayerW()
 {  return playerW;}
 int playerAgency::getPlayerH()
 {  return playerH;}
-int playerAgency::getPlayer1X()
-{  return player1X;}
-int playerAgency::getPlayer1Y()
-{  return player1Y;}
-int playerAgency::getPlayer1W()
-{  return player1W;}
-int playerAgency::getPlayer1H()
-{  return player1H;}
 
 void playerAgency::playerButtonPress(SDL_Keycode e)
 { 
@@ -283,18 +275,8 @@ void playerAgency::playerButtonPress(SDL_Keycode e)
             playerX++; break;
          case(SDLK_a) :
             playerX--; break;
-         case(SDLK_k) :
-            player1Y++; break;
-         case(SDLK_i) :
-            player1Y--; break;
-         case(SDLK_l) :
-            player1X++; break;
-         case(SDLK_j) :
-            player1X--; break;
       }
       whiteBoxRect.x = getPlayerX();
       whiteBoxRect.y = getPlayerY();
-      whiteBoxRect1.x = getPlayer1X();
-      whiteBoxRect1.y = getPlayer1Y();
 }
 
