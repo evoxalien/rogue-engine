@@ -20,6 +20,7 @@ const int SCREEN_HEIGHT = 720;
 
 InputClass input;
 playerAgency player1;
+//Gamestate gamestate;
 //The image we will load and show on the screen
 SDL_Texture* imgTex = NULL;
 SDL_Event event;
@@ -44,7 +45,7 @@ bool gameroot::initialize()
    //intitalize the gamestate
 
    player1.intializePlayer(0);
-   //gameState=StartMenu;
+   player1.gamestate=player1.StartMenu;
    
 
    //Tests SDL components, important to call before other SDL operations
@@ -115,7 +116,7 @@ bool gameroot::loadContent()
       return false;
    }
    
-   imgTex = loadTexture("img/shapes/WhiteSquare.png");
+   imgTex = loadTexture("img/shapes/OrangeSquare.png");
    if(imgTex == NULL)
    {
       printf("Texture failed to load.\n");
@@ -154,7 +155,7 @@ void gameroot::update()
    while(SDL_PollEvent(&Event))
    {
       
-      input.update(event);
+      input.update(Event);
       OnEvent(&Event);
       if(input.getMouseButton(1))
       {
@@ -162,6 +163,7 @@ void gameroot::update()
          // whiteBoxRect.y = input.getMouseY();
       }
       player1.playerButtonPress(input.getKeyDown());
+      player1.MenuChoices(input.getKeyDown());
 
 
    }
@@ -179,52 +181,105 @@ void gameroot::draw()
    //clear screen
    SDL_RenderClear(renderer);
 
-   //render texture to screen
-   SDL_RenderCopy(renderer, texture, NULL, NULL);
+
+   if(player1.gamestate==player1.StartMenu)
+   {
+      //render texture to screen
+      SDL_RenderCopy(renderer, texture, NULL, NULL);
+    //Draw Colorful Rectangles
+      //Red Rect
+      SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
+      //Rect params = x, y, w(width), h(height)
+      SDL_Rect fillRect = {0, 0, 50, 50};
+      SDL_RenderFillRect(renderer, &fillRect);
+      
+      //Green Rect
+      SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 0xFF);
+      fillRect = {50, 0, 50, 50};
+      SDL_RenderFillRect(renderer, &fillRect);
+      
+      //Blue Rect
+      SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0xFF);
+      fillRect = {100, 0, 50, 50};
+      SDL_RenderFillRect(renderer, &fillRect);
+
+      // Adding them together!
+
+      if(r < 255 && g == 0 && b == 0)
+         r += 1;
+      if (r == 255 && g < 255)
+         g += 1;
+      if (g == 255 && b < 255)
+      {
+         b += 1;
+         r -= 1;
+      }
+
+      if (b == 255 && r < 255)
+      {
+         r = g = b = 0;
+      }
 
 
+      SDL_SetRenderDrawColor(renderer, r, g, b, 0xFF);
+      fillRect = {150, 0, 50, 50};
+      SDL_RenderFillRect(renderer, &fillRect);
+   }
    //Draw Colorful Rectangles
-   //Red Rect
-   SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
-   //Rect params = x, y, w(width), h(height)
-   SDL_Rect fillRect = {0, 0, 50, 50};
-   SDL_RenderFillRect(renderer, &fillRect);
-   
-   //Green Rect
-   SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 0xFF);
-   fillRect = {50, 0, 50, 50};
-   SDL_RenderFillRect(renderer, &fillRect);
-   
-   //Blue Rect
-   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0xFF);
-   fillRect = {100, 0, 50, 50};
-   SDL_RenderFillRect(renderer, &fillRect);
-   //render texture to screen
-
-
-   // Adding them together!
-
-   if(r < 255 && g == 0 && b == 0)
-      r += 1;
-   if (r == 255 && g < 255)
-      g += 1;
-   if (g == 255 && b < 255)
+   if(player1.gamestate== player1.Red)
    {
-      b += 1;
-      r -= 1;
+      //Red Rect
+      SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
+      //Rect params = x, y, w(width), h(height)
+      SDL_Rect fillRect = {0, 0, 50, 50};
+      SDL_RenderFillRect(renderer, &fillRect);
+   }
+   if (player1.gamestate==player1.Green)
+   {
+      //Green Rect
+      SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 0xFF);
+      SDL_Rect fillRect = {50, 0, 50, 50};
+      SDL_RenderFillRect(renderer, &fillRect);
+   }
+   if(player1.gamestate==player1.Blue)
+   {
+      //Blue Rect
+      SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xFF, 0xFF);
+      SDL_Rect fillRect = {100, 0, 50, 50};
+      SDL_RenderFillRect(renderer, &fillRect);
+      //render texture to screen
+   }
+   if (player1.gamestate==player1.all)
+   {
+      /* code */
+
+      // Adding them together!
+
+      if(r < 255 && g == 0 && b == 0)
+         r += 1;
+      if (r == 255 && g < 255)
+         g += 1;
+      if (g == 255 && b < 255)
+      {
+         b += 1;
+         r -= 1;
+      }
+
+      if (b == 255 && r < 255)
+      {
+         r = g = b = 0;
+      }
+
+
+      SDL_SetRenderDrawColor(renderer, r, g, b, 0xFF);
+      SDL_Rect fillRect = {150, 0, 50, 50};
+      SDL_RenderFillRect(renderer, &fillRect);
    }
 
-   if (b == 255 && r < 255)
+   if(player1.gamestate==player1.Playing)
    {
-      r = g = b = 0;
+      SDL_RenderCopy(renderer, imgTex, NULL, &player1.whiteBoxRect);
    }
-
-
-   SDL_SetRenderDrawColor(renderer, r, g, b, 0xFF);
-   fillRect = {150, 0, 50, 50};
-   SDL_RenderFillRect(renderer, &fillRect);
-
-   SDL_RenderCopy(renderer, imgTex, NULL, &player1.whiteBoxRect);
    
    //update screen
    SDL_RenderPresent(renderer);

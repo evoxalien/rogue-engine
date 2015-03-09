@@ -7,8 +7,11 @@
 #include <stdio.h>
 #include <string>
 #include "inputDavid.h"
+#include "input.h"
 using namespace std;
 
+
+// InputClass inputPlayer;
 
 class playerAgency
 {
@@ -75,6 +78,21 @@ public:
    int getPlayerW();
    int getPlayerH();
    void playerButtonPress(SDL_Keycode e);
+   void MenuChoices(SDL_Keycode e);
+   enum GameState
+{
+   StartMenu,
+   Loading,
+   Playing,
+   leveledup,
+   Paused,
+   levelSelect,
+   all,
+   Red,
+   Green,
+   Blue
+};
+GameState gamestate;
 };
 #endif
 
@@ -265,6 +283,8 @@ int playerAgency::getPlayerH()
 
 void playerAgency::playerButtonPress(SDL_Keycode e)
 { 
+   if (gamestate==Playing)
+   {
       switch(e)
       {
          case(SDLK_s) :
@@ -278,5 +298,40 @@ void playerAgency::playerButtonPress(SDL_Keycode e)
       }
       whiteBoxRect.x = getPlayerX();
       whiteBoxRect.y = getPlayerY();
+   }
 }
 
+
+
+void playerAgency::MenuChoices(SDL_Keycode e)
+{
+      if (e==SDLK_UP&&gamestate==StartMenu)
+      {
+         gamestate=Red;
+      }
+      if (e==SDLK_BACKSPACE)
+      {
+         gamestate=StartMenu;
+      }
+      if (e==SDLK_DOWN&&gamestate==StartMenu)
+      {
+         gamestate=Green;
+
+      }
+      if (e==SDLK_LEFT&&gamestate==StartMenu)
+      {
+         gamestate=all;
+
+      }
+      if (e==SDLK_RIGHT&&gamestate==StartMenu)
+      {
+         gamestate=Blue;
+
+      }
+      if (e==SDLK_BACKSLASH&&gamestate==StartMenu)
+      {
+         gamestate=Playing;
+      }
+
+
+}

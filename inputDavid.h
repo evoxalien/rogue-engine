@@ -13,15 +13,15 @@ using namespace std;
 // enums that track things 
 // game state will change based on events
 // atm it changes color on the screen
-enum GameState
-{
-   StartMenu,
-   Loading,
-   Playing,
-   leveledup,
-   Paused,
-   levelSelect
-};
+// enum GameState
+// {
+//    StartMenu,
+//    Loading,
+//    Playing,
+//    leveledup,
+//    Paused,
+//    levelSelect
+// };
 //keyboard david 
 //http://lazyfoo.net/tutorials/SDL/04_key_presses/index.php
 
