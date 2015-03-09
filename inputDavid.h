@@ -2,7 +2,7 @@
 
 #define INPUT_H_INCLUDED
 
-#include "Gamepad.h"
+// #include "Gamepad.h"
 #include <stdio.h>
 #include <string>
 #include "log.h"
