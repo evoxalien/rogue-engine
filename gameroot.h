@@ -5,7 +5,7 @@
 
 //#include "SDL.h"
 #include "SDLincludes.h"
-#include<iostream>
+#include <iostream>
 #include <stdio.h>
 #include <string>
 #include <chrono>
