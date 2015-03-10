@@ -17,6 +17,13 @@ using namespace std;
 //String window_name = "Rogue Engine Window Title Here"
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 720;
+const int SCREEN_FPS = 60;
+const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
+
+//The frames per second timer
+LTimer fpsTimer;
+//The frames per second cap timer
+LTimer capTimer;
 
 InputClass input;
 playerAgency player1;
@@ -94,6 +101,7 @@ bool gameroot::initialize()
 
 
    GLOBAL_FRAME_COUNTER = 0;
+   fpsTimer.start();
    /*
    previousTicks = 0;
    fps_lasttime = SDL_GetTicks(); //the last recorded time.
@@ -177,6 +185,9 @@ void gameroot::update()
 //Does nothing. Feel free to draw dinosaur here
 void gameroot::draw()
 {
+   //Start cap Timer
+   capTimer.start();
+
    //using the renderer//
 
    //set render clear color to non-transparent white(0xFFFFFFFF)
@@ -286,10 +297,17 @@ void gameroot::draw()
    
    //update screen
    SDL_RenderPresent(renderer);
+   ++GLOBAL_FRAME_COUNTER;   
 
+   //If frame finished early
+   int frameTicks = capTimer.getTicks();
+   if( frameTicks < SCREEN_TICKS_PER_FRAME )
+   {
+      //Wait remaining time
+      SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
+   }
 
    //increment frame counter 
-   GLOBAL_FRAME_COUNTER++;   
    
 
 }

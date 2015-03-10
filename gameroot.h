@@ -14,11 +14,11 @@
 #include "log.h"
 #include "input.h"
 #include "playerAgency.h"
+#include "ltimer.h"
 
 #define FPS_INTERVAL 1.0 //Seconds
 
 using namespace std;
-
 
 class gameroot
 {

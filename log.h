@@ -15,24 +15,25 @@ class OutputLog
 {
 private:
 
-	ofstream log_file;
-	string directory;
+	ofstream log_file; //the output handle for the log file.
+	string directory; //the directory that the log writes too.
 
 public:
 
-	bool print;
+	bool print; //decides when the log should print to screen or not.
+		//Logs always write to file regardless of printing to screen.
 	
 	OutputLog(string filename)
 	{
-		print = false;
-		directory = "";
-		string stemp = directory + filename;
-		log_file.open( stemp.data());
+		print = false; //Defaults to false so no output will show up in console.
+		directory = ""; //Defaults to the same dirrectory as the exicutable
+		string stemp = directory + filename; //Adds the file name to the directory
+		log_file.open( stemp.data()); //Opens our new file for output
 	}
 
 	OutputLog(string filename, bool initPrint)
 	{
-		print = initPrint;
+		print = initPrint; //Takes user's pref.
 		directory = "";
 		string stemp = directory + filename;
 		log_file.open( stemp.data());
@@ -41,60 +42,22 @@ public:
 
 	~OutputLog()
 	{
-		log_file.close();
+		log_file.close(); //On program close this closes the files.
 	}
 
 	template<typename T>
-	OutputLog & operator << ( T& value) 
+	OutputLog & operator << ( T& value) //This is where the magic happens.
 	{
-		log_file << value;
-		if(print)
+		log_file << value; //Overloaded redirection operator pushes to the log file any variable type passed in.
+		if(print) //Only print if asked too.
 			cout << value; 
-		return *this;
+		return *this; //Returns it self and sets up for the next << operator to add additional output.
 	}
-
-/*
-	time_t systemTime;
-
-	bool Init()
-	{
-		screenOutput = false;
-		systemTime = time(0);
-
-		char cYear[100];
-		char cMonth[100];
-		char cDay[100];
-
-		string sYear, sMonth, sDay = "";
-
-		struct tm * now = localtime(&systemTime);
-
-		sprintf(cYear, "%d", (now->tm_year + 1900));
-		sprintf(cMonth, "%d", (now->tm_mon + 1));
-		sprintf(cDay, "%d", (now->tm_mday));
-
-		sYear = cYear;
-		sMonth = cMonth;
-		sDay = cDay;
-
-
-		sLOG = "";
-
-		sLOG += " --- System Date: " + sMonth + "-" + sDay + "-" + sYear + " --- \n";
-
-		cout << sLOG;
-		//Check if output file is in existance
-		//Put Starting Time Stamp in Log
-		//Setup for use.
-
-		return true;
-	}
-*/
-
 };
 
 extern OutputLog debug_log;
-extern OutputLog warning_log;
 extern OutputLog error_log;
+extern OutputLog warning_log;
 
 #endif
+
