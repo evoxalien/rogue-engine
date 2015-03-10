@@ -108,6 +108,13 @@ bool gameroot::initialize()
    fps_current = 0; //the current FPS.
    fps_frames = 0; //frames passed since the last recorded fps.
    */
+
+	Object::set_Number_Of_X_Physics_Segments(64);		//64 is arbitrary, but will divide the level into 64 columns to improve the efficiency of collision detection
+	Object::set_Number_Of_Y_Physics_Segments(64);		//64 is arbitrary, but will divide the level into 64 rows to improve the efficiency of collision detection
+	Object::set_Screen_X_Length(SCREEN_WIDTH);			//Will be changing in the future to setLevelSize(struct level_Size, int level_Number) or moved to update in the loop
+	Object::set_Screen_Y_Length(SCREEN_HEIGHT);			//Will be included in setLevelSize in the future
+
+	Physics::set_Frame_Rate(60);
    
    return true;
 }
@@ -173,6 +180,7 @@ void gameroot::update()
       if (player1.gamestate==player1.Playing)
       {
          player1.playerButtonPress(input.getKeyDown());
+		Object::check_For_Collisions();			//Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
       }
       player1.MenuChoices(input.getKeyDown());
 
