@@ -162,7 +162,10 @@ void gameroot::update()
          // whiteBoxRect.x = input.getMouseX();
          // whiteBoxRect.y = input.getMouseY();
       }
-      player1.playerButtonPress(input.getKeyDown());
+      if (player1.gamestate==player1.Playing)
+      {
+         player1.playerButtonPress(input.getKeyDown());
+      }
       player1.MenuChoices(input.getKeyDown());
 
 
