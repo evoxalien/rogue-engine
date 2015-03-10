@@ -1,7 +1,7 @@
 #ifndef INPUT_H_
 #define INPUT_H_
 
-#include <SDL.h>
+#include "SDLincludes.h"
 
 class InputClass
 {
