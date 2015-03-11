@@ -22,6 +22,10 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* render)
 {
 	ifstream inputFile;
 	inputFile.open(filePath);
+
+	if(!inputFile)
+		return false;
+
 	inputFile >> numPlatforms;
 
 	string shape = "";
@@ -45,7 +49,39 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* render)
 		}
 	}
 
+	inputFile.close();
+
 	return true;
+}
+
+void Map::exportMapFile()
+{
+	ofstream outFile;
+	outFile.open("maps/Map_NewFile.txt");
+
+	outFile << numPlatforms << "\n";
+
+	for(int x = 0; x < numPlatforms; x++)
+	{
+		outFile << "quad ";
+		outFile << platCoords[x*2] << " ";
+		outFile << platCoords[x*2+1] << " ";
+		outFile << platforms[x].getWidth() << " ";
+		outFile << platforms[x].getHeight() << "\n";
+		outFile << platforms[x].getFilePath() << "\n";
+	}
+
+	outFile.close();
+	cout << "Map file saved\n";
+}
+
+void Map::unfocus()
+{
+	for(int x = 0; x < numPlatforms; x++)
+	{
+		platSelected[x] = false;
+		platforms[x].setColor(0xFF,0xFF,0xFF);
+	}
 }
 
 void Map::renderMap()
@@ -58,6 +94,10 @@ void Map::renderMap()
 
 void Map::updateMap(InputClass input)
 {
+	if(input.getKeyDown() == SDLK_SPACE)
+	{
+		exportMapFile();
+	}
 	if(input.getKeyDown() == SDLK_UP)
 	{
 		for(int x = 0; x < numPlatforms; x++)

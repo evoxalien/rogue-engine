@@ -211,6 +211,7 @@ void gameroot::update()
          if(input.getKeyDown() == SDLK_BACKSPACE)
          {
             engineState = Waiting;
+            map.unfocus();
          }
       }
 

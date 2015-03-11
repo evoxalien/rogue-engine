@@ -19,6 +19,8 @@ public:
 	bool parseMapFile(std::string filePath,SDL_Renderer* render);
 	void renderMap();
 	void updateMap(InputClass input);
+	void unfocus();
+	void exportMapFile();
 };
 
 #endif
