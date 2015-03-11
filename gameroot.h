@@ -16,7 +16,7 @@
 #include "playerAgency.h"
 #include "ltimer.h"
 #include "Texture.h"
-#include "Map.h"
+#include "Map.cpp"
 
 #define FPS_INTERVAL 1.0 //Seconds
 
@@ -32,6 +32,7 @@ private:
    SDL_Surface *image;
    Texture texture;
    SDL_Event Event;
+   Map map;
    enum EngineState
    {
       Waiting,

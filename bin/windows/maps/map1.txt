@@ -1,0 +1,5 @@
+2
+quad 0 500 200 30
+img/shapes/OrangeSquare.png
+quad 300 400 200 30
+img/shapes/OrangeSquare.png

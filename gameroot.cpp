@@ -88,6 +88,9 @@ bool gameroot::initialize()
    //tell texture the renderer to use
    texture.setRenderer(renderer);
 
+   //initialize map from file
+   map.parseMapFile("maps/Map1.txt", renderer);
+
    //initialize image subsystem to load png files
    int imgFlags = IMG_INIT_PNG;
    if(!(IMG_Init(imgFlags) & imgFlags))
@@ -158,7 +161,7 @@ void gameroot::OnEvent(SDL_Event *Event)
    //This event works to track keyboard inputs
    else if (Event->type == SDL_KEYDOWN)
    {
-      //keyPress(&gameState,Event);
+
    }
 }
 
@@ -174,17 +177,31 @@ void gameroot::update()
       
       input.update(Event);
       OnEvent(&Event);
-      if(input.getMouseButton(1))
+      
+      if(engineState == Waiting)
       {
-         // whiteBoxRect.x = input.getMouseX();
-         // whiteBoxRect.y = input.getMouseY();
+         if(input.getKeyDown() == SDLK_t)
+         {
+            engineState = PlayingGame;
+         }
       }
+      if(engineState == PlayingGame)
+      {
+         if(input.getKeyDown() == SDLK_b)
+         {
+            engineState = Waiting;
+         }
+      }
+
+      //temporarily commenting this out
+      //feel free to change this back if you want
+      /*
       if (player1.gamestate==player1.Playing)
       {
          player1.playerButtonPress(input.getKeyDown());
 		Object::check_For_Collisions();			//Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
       }
-      player1.MenuChoices(input.getKeyDown());
+      player1.MenuChoices(input.getKeyDown());*/
 
 
    }
@@ -306,6 +323,10 @@ void gameroot::draw()
          SDL_RenderCopy(renderer, imgTex, NULL, &player1.whiteBoxRect);
       }
    }
+   else if(engineState == PlayingGame)
+   {
+      map.renderMap();
+   }
    
    //update screen
    SDL_RenderPresent(renderer);
@@ -319,9 +340,7 @@ void gameroot::draw()
       SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
    }
 
-   //increment frame counter 
-   
-
+   //increment frame counter
 }
 
 //load texture function taken from lazyfoo
