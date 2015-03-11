@@ -39,7 +39,6 @@ gameroot::gameroot()
    renderer = NULL;
    surface = NULL;
    image = NULL;
-   texture = NULL;
 
 }
 
@@ -86,6 +85,9 @@ bool gameroot::initialize()
    //set render draw color property
    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
+   //tell texture the renderer to use
+   texture.setRenderer(renderer);
+
    //initialize image subsystem to load png files
    int imgFlags = IMG_INIT_PNG;
    if(!(IMG_Init(imgFlags) & imgFlags))
@@ -123,13 +125,13 @@ bool gameroot::initialize()
 bool gameroot::loadContent()
 {
 
-   texture = loadTexture("../../images/dino.png");
-
-   if(texture == NULL)
+   if(!texture.loadTexture("../../images/dino.png"))
    {
-      printf("Texture failed to load.\n");
+      error_log << "Texture failed to load.\n";
       return false;
    }
+   texture.setWidth(SCREEN_WIDTH);
+   texture.setHeight(SCREEN_HEIGHT);
    
    imgTex = loadTexture("img/shapes/OrangeSquare.png");
    if(imgTex == NULL)
@@ -207,7 +209,7 @@ void gameroot::draw()
    if(player1.gamestate==player1.StartMenu)
    {
       //render texture to screen
-      SDL_RenderCopy(renderer, texture, NULL, NULL);
+      texture.render(0,0);
     //Draw Colorful Rectangles
       //Red Rect
       SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
@@ -397,7 +399,7 @@ int gameroot::execute()
 //Free all the assets
 void gameroot::close()
 {
-   SDL_DestroyTexture(texture);
+   texture.free();
    SDL_DestroyRenderer (renderer);
    SDL_FreeSurface(image);
    SDL_FreeSurface(surface);

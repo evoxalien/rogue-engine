@@ -15,6 +15,7 @@
 #include "input.h"
 #include "playerAgency.h"
 #include "ltimer.h"
+#include "Texture.h"
 
 #define FPS_INTERVAL 1.0 //Seconds
 
@@ -28,8 +29,13 @@ private:
    SDL_Renderer *renderer;
    SDL_Surface *surface;
    SDL_Surface *image;
-   SDL_Texture *texture;
+   Texture texture;
    SDL_Event Event;
+   enum EngineState
+   {
+      Waiting,
+      PlayingGame
+   };
 //   GameState gameState;
    bool initialize();
    int r, g, b; 
