@@ -57,6 +57,9 @@ public:
       return -1;
    }
 
+   //1 = left click
+   //2 = mid click
+   //3 = right click
    bool getMouseButton(int index)
    {
       if(index >= 0 && index <= 5)

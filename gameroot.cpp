@@ -190,6 +190,7 @@ void gameroot::update()
       }
       if(engineState == PlayingGame)
       {
+         map.updateMap(input);
          if(input.getKeyDown() == SDLK_b)
          {
             engineState = Waiting;
