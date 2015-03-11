@@ -116,8 +116,8 @@ int playerAgency::intializePlayer(int playerIndex)
       setPlayerInputMode("keyboard");
       setPlayerX(0);
       setPlayerY(0);
-      setPlayerW(10);
-      setPlayerH(10);
+      setPlayerW(66);
+      setPlayerH(66);
    whiteBoxRect.x = getPlayerX();
    whiteBoxRect.y = getPlayerY();
    whiteBoxRect.w = getPlayerW();
