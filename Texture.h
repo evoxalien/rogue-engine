@@ -15,6 +15,8 @@ class Texture
 
 		SDL_Renderer* renderer;
 
+		std::string filePath;
+
 	public:
 		//Initializes variables
 		Texture()
@@ -23,6 +25,7 @@ class Texture
 			height = 0;
 			texture = NULL;
 			renderer = NULL;
+			filePath = "";
 		}
 
 		//Deallocates memory
@@ -65,6 +68,7 @@ class Texture
 
 		   SDL_FreeSurface(loadSurface);
 
+		   filePath = path;
 		   texture = newTexture;
 
 		   return texture != NULL;
@@ -82,6 +86,7 @@ class Texture
 			texture = NULL;
 			width = 0;
 			height = 0;
+			filePath = "";
 		}
 
 		//Set color modulation
@@ -134,6 +139,11 @@ class Texture
 		void setHeight(int h)
 		{
 			height = h;
+		}
+
+		std::string getFilePath()
+		{
+			return filePath;
 		}
 };
 
