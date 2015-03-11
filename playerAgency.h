@@ -281,6 +281,11 @@ int playerAgency::getPlayerW()
 int playerAgency::getPlayerH()
 {  return playerH;}
 
+/*
+This will control the player while he is playing the game
+wasd control his movement
+
+*/
 void playerAgency::playerButtonPress(SDL_Keycode e)
 { 
    if (gamestate==Playing)
@@ -301,7 +306,18 @@ void playerAgency::playerButtonPress(SDL_Keycode e)
    }
 }
 
+/*
+This controls how the player controls the menu
+O and P control debug toggle
+BACKSPACE WILL TAKE YOU TO THE MAIN MENU
+UP  changes to the RED Menu
+DOWN changes to the GREEN Menu
+LEFT changes to the ALL Menu
+RIGHT changes to the BLUE Menu
+T take you to the player
+M takes you to the map editor
 
+*/
 
 void playerAgency::MenuChoices(SDL_Keycode e)
 {
