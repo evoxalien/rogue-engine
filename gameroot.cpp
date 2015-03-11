@@ -212,6 +212,7 @@ void gameroot::update()
          {
             engineState = Waiting;
             map.unfocus();
+            player1.gamestate = player1.StartMenu;
          }
       }
 
