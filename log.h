@@ -7,7 +7,6 @@
 #include <fstream>
 #include <time.h>
 #include <iostream>
-//#include <mutex>
 
 using namespace std;
 
@@ -26,7 +25,7 @@ public:
 	OutputLog(string filename)
 	{
 		print = false; //Defaults to false so no output will show up in console.
-		directory = ""; //Defaults to the same dirrectory as the exicutable
+		directory = "../../log/"; //Defaults to the same dirrectory as the exicutable
 		string stemp = directory + filename; //Adds the file name to the directory
 		log_file.open( stemp.data()); //Opens our new file for output
 	}
@@ -34,7 +33,7 @@ public:
 	OutputLog(string filename, bool initPrint)
 	{
 		print = initPrint; //Takes user's pref.
-		directory = "";
+		directory = "../../log/";
 		string stemp = directory + filename;
 		log_file.open( stemp.data());
 

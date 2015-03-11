@@ -191,9 +191,10 @@ void gameroot::update()
       if(engineState == PlayingGame)
       {
          map.updateMap(input);
-         if(input.getKeyDown() == SDLK_b)
+         if(input.getKeyDown() == SDLK_BACKSPACE)
          {
             engineState = Waiting;
+            player1.gamestate = player1.StartMenu;
          }
          if (player1.gamestate==player1.Playing)
          {
