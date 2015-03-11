@@ -32,6 +32,7 @@ private:
    SDL_Surface *image;
    Texture texture;
    SDL_Event Event;
+   int dino;
    Map map;
    enum EngineState
    {

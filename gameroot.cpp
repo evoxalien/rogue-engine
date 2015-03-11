@@ -46,6 +46,7 @@ gameroot::gameroot()
 //Initialize all the SDL
 bool gameroot::initialize()
 {
+   dino = 0;
 
     r = 0, g = 0, b = 0; 
    //intitalize the gamestate
@@ -279,6 +280,35 @@ void gameroot::draw()
       //Draw Colorful Rectangles
       if(player1.gamestate== player1.Red)
       {
+
+         if(GLOBAL_FRAME_COUNTER % 3 == 0)
+            dino++;
+
+
+         char cTemp[100];
+         string sTemp;
+
+         sprintf(cTemp, "../../images/dino/frame_%03d.png", dino);
+
+         debug_log << cTemp;
+         debug_log << "\n";
+
+         sTemp = cTemp;
+         //stringstream 
+         texture.free();
+         if(!texture.loadTexture(sTemp.data()))
+         {
+            error_log << "Texture failed to load.\n";
+            error_log << sTemp << "\n";
+         }
+
+         if(dino >= 19)
+            dino = 0;
+
+         texture.setWidth(SCREEN_WIDTH);
+         texture.setHeight(SCREEN_HEIGHT);
+
+         texture.render(0,0);
          //Red Rect
          SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
          //Rect params = x, y, w(width), h(height)
