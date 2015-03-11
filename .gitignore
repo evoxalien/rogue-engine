@@ -31,10 +31,11 @@
 *ror.txt
 *ning.txt
 
-bin\windows\error.txt
-bin\windows\warning.txt
-bin\windows\debug.txt
+bin/windows/error.txt
+bin/windows/warning.txt
+bin/windows/debug.txt
 
-bin\linux\error.txt
-bin\linux\warning.txt
-bin\linux\debug.txt
+bin/linux/error.txt
+bin/linux/warning.txt
+bin/linux/debug.txt
+
