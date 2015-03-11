@@ -211,6 +211,7 @@ void gameroot::update()
          if(input.getKeyDown() == SDLK_BACKSPACE)
          {
             engineState = Waiting;
+            player1.gamestate = player1.StartMenu;
          }
       }
 
