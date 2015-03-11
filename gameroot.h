@@ -36,6 +36,7 @@ private:
       Waiting,
       PlayingGame
    };
+   EngineState engineState;
 //   GameState gameState;
    bool initialize();
    int r, g, b; 
