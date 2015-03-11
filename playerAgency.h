@@ -305,33 +305,41 @@ void playerAgency::playerButtonPress(SDL_Keycode e)
 
 void playerAgency::MenuChoices(SDL_Keycode e)
 {
-      if (e==SDLK_UP&&gamestate==StartMenu)
-      {
-         gamestate=Red;
-      }
-      if (e==SDLK_BACKSPACE)
-      {
-         gamestate=StartMenu;
-      }
-      if (e==SDLK_DOWN&&gamestate==StartMenu)
-      {
-         gamestate=Green;
+   if (e==SDLK_p)
+   {
+      debug_log.print = true;
+   }
+   if (e==SDLK_o)
+   {
+      debug_log.print = false;
+   }
+   if (e==SDLK_UP&&gamestate==StartMenu)
+   {
+      gamestate=Red;
+   }
+   if (e==SDLK_BACKSPACE)
+   {
+      gamestate=StartMenu;
+   }
+   if (e==SDLK_DOWN&&gamestate==StartMenu)
+   {
+      gamestate=Green;
 
-      }
-      if (e==SDLK_LEFT&&gamestate==StartMenu)
-      {
-         gamestate=all;
+   }
+   if (e==SDLK_LEFT&&gamestate==StartMenu)
+   {
+      gamestate=all;
 
-      }
-      if (e==SDLK_RIGHT&&gamestate==StartMenu)
-      {
-         gamestate=Blue;
+   }
+   if (e==SDLK_RIGHT&&gamestate==StartMenu)
+   {
+      gamestate=Blue;
 
-      }
-      if (e==SDLK_BACKSLASH&&gamestate==StartMenu)
-      {
-         gamestate=Playing;
-      }
+   }
+   if (e==SDLK_BACKSLASH&&gamestate==StartMenu)
+   {
+      gamestate=Playing;
+   }
 
 
 }
