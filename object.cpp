@@ -6,6 +6,7 @@ using namespace std;
 std::vector<Object*> Object::object_Pointer_Vector;
 std::vector<Physics*> Object::physics_Pointer_Vector;
 std::vector<std::vector<std::vector<Physics*>>> Object::physics_Segments;
+std::vector<Physics*> Object::out_Of_Bounds_Physics_Vector;
 
 int Object::number_Of_X_Physics_Segments = 1;
 int Object::number_Of_Y_Physics_Segments = 1;
@@ -88,6 +89,7 @@ void Object::check_For_Collisions()
 			Object::physics_Segments[i][j].clear();
 		}
 	}
+	Object::out_Of_Bounds_Physics_Vector.clear();
 	for(i = 0; i < Object::physics_Pointer_Vector.size(); i++)
 	{
 		//cout << "[" << static_cast<int>((*Object::physics_Pointer_Vector[i]).get_X_Position() / (static_cast<double>(Object::screen_X_Length) / Object::get_Number_Of_X_Physics_Segments())) << "] [" << static_cast<int>((*Object::physics_Pointer_Vector[i]).get_Y_Position() / (static_cast<double>(Object::screen_Y_Length) / Object::get_Number_Of_Y_Physics_Segments())) << "]" << endl;
@@ -98,7 +100,14 @@ void Object::check_For_Collisions()
 			for(k = static_cast<int>((*Object::physics_Pointer_Vector[i]).get_Y_Position() / (static_cast<double>(Object::screen_Y_Length) / Object::get_Number_Of_Y_Physics_Segments())); k <= static_cast<int>(((*Object::physics_Pointer_Vector[i]).get_Y_Position() + (*Object::physics_Pointer_Vector[i]).get_Y_Length()) / (static_cast<double>(Object::screen_Y_Length) / Object::get_Number_Of_Y_Physics_Segments())); k++)
 			{
 				//cout << "[" << j << "] [" << k << "]" << endl;
-				Object::physics_Segments[j][k].push_back(Object::physics_Pointer_Vector[i]);
+				if(!((j < 0 || j >= Object::get_Number_Of_X_Physics_Segments()) || (k < 0 || k >= Object::get_Number_Of_Y_Physics_Segments())))
+				{
+					Object::physics_Segments[j][k].push_back(Object::physics_Pointer_Vector[i]);
+				}
+				else if(out_Of_Bounds_Physics_Vector.size() != 0 && out_Of_Bounds_Physics_Vector[out_Of_Bounds_Physics_Vector.size() - 1] != Object::physics_Pointer_Vector[i])
+				{
+					Object::out_Of_Bounds_Physics_Vector.push_back(Object::physics_Pointer_Vector[i]);
+				}
 			}
 			//Object::physics_Segments[static_cast<int>(((*Object::physics_Pointer_Vector[i]).get_X_Position() + (*Object::physics_Pointer_Vector[i]).get_X_Length()) / (static_cast<double>(Object::screen_X_Length) / Object::get_Number_Of_X_Physics_Segments()))][static_cast<int>((*Object::physics_Pointer_Vector[i]).get_Y_Position() / (static_cast<double>(Object::screen_Y_Length) / Object::get_Number_Of_Y_Physics_Segments()))].push_back(physics_Pointer_Vector[i]);
 			//if(static_cast<int>((*Object::physics_Pointer_Vector[i]).get_Y_Position() / (static_cast<double>(Object::screen_Y_Length) / Object::get_Number_Of_Y_Physics_Segments())) != static_cast<int>(((*Object::physics_Pointer_Vector[i]).get_Y_Position() + (*Object::physics_Pointer_Vector[i]).get_Y_Length()) / (static_cast<double>(Object::screen_Y_Length) / Object::get_Number_Of_Y_Physics_Segments())))
@@ -125,6 +134,7 @@ void Object::check_For_Collisions()
 			}
 		}
 	}
+	Physics::check_For_Collisions(out_Of_Bounds_Physics_Vector);
 	for(i = 0; i < Object::physics_Pointer_Vector.size(); i++)
 	{
 		(*Object::physics_Pointer_Vector[i]).clear_Objects_Collided_With_This_Frame();

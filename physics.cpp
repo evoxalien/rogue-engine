@@ -270,7 +270,7 @@ void Physics::display_Information()
 void Physics::check_For_Collisions(vector<Physics*>& physics_Pointer_Vector)
 {
 	bool pair_Has_Collided = false;
-	vector<double> collision_Times;
+	//vector<double> collision_Times;
 	//cout << physics_Pointer_Vector.size() << endl;
 	for(int i = 0; i < physics_Pointer_Vector.size(); i++)
 	{
@@ -432,12 +432,12 @@ void Physics::resolve_Collisions(Physics* physics_A, Physics* physics_B)
 		//cout << "y_Momentum = " << y_Momentum << endl;
 		//cout << "y_Kinetic_Energy = " << y_Kinetic_Energy << endl << endl;
 	//	double temp = (*physics_A).x_Velocity;//(((*physics_A).x_Velocity * (*physics_A).mass) + ((*physics_B).x_Velocity * (*physics_B).mass)) / ((*physics_A).mass + (*physics_B).mass);
-		double inelastic_Collision_X_Velocities = cos(angle_Of_Collision) * ((((*physics_A).x_Velocity * (*physics_A).mass) + ((*physics_B).x_Velocity * (*physics_B).mass)) / ((*physics_A).mass + (*physics_B).mass)) * (1 - elasticity);
-		double elastic_Collision_Physics_A_X_Velocity = cos(angle_Of_Collision) * (((((*physics_A).x_Velocity * ((*physics_A).mass - (*physics_B).mass)) + (2 * (*physics_B).mass * (*physics_B).x_Velocity)) / ((*physics_A).mass + (*physics_B).mass))) * elasticity;
-		double elastic_Collision_Physics_B_X_Velocity = cos(angle_Of_Collision) * (((((*physics_B).x_Velocity * ((*physics_B).mass - (*physics_A).mass)) + (2 * (*physics_A).mass * (*physics_A).x_Velocity)) / ((*physics_A).mass + (*physics_B).mass))) * elasticity;
-		double inelastic_Collision_Y_Velocities = sin(angle_Of_Collision) * ((((*physics_A).y_Velocity * (*physics_A).mass) + ((*physics_B).y_Velocity * (*physics_B).mass)) / ((*physics_A).mass + (*physics_B).mass)) * (1 - elasticity);
-		double elastic_Collision_Physics_A_Y_Velocity = sin(angle_Of_Collision) * (((((*physics_A).y_Velocity * ((*physics_A).mass - (*physics_B).mass)) + (2 * (*physics_B).mass * (*physics_B).y_Velocity)) / ((*physics_A).mass + (*physics_B).mass))) * elasticity;
-		double elastic_Collision_Physics_B_Y_Velocity = sin(angle_Of_Collision) * (((((*physics_B).y_Velocity * ((*physics_B).mass - (*physics_A).mass)) + (2 * (*physics_A).mass * (*physics_A).y_Velocity)) / ((*physics_A).mass + (*physics_B).mass))) * elasticity;
+		double inelastic_Collision_X_Velocities = /*cos(angle_Of_Collision) * */((((*physics_A).x_Velocity * (*physics_A).mass) + ((*physics_B).x_Velocity * (*physics_B).mass)) / ((*physics_A).mass + (*physics_B).mass)) * (1 - elasticity);
+		double elastic_Collision_Physics_A_X_Velocity = /*cos(angle_Of_Collision) * */(((((*physics_A).x_Velocity * ((*physics_A).mass - (*physics_B).mass)) + (2 * (*physics_B).mass * (*physics_B).x_Velocity)) / ((*physics_A).mass + (*physics_B).mass))) * elasticity;
+		double elastic_Collision_Physics_B_X_Velocity = /*cos(angle_Of_Collision) * */(((((*physics_B).x_Velocity * ((*physics_B).mass - (*physics_A).mass)) + (2 * (*physics_A).mass * (*physics_A).x_Velocity)) / ((*physics_A).mass + (*physics_B).mass))) * elasticity;
+		double inelastic_Collision_Y_Velocities = /*sin(angle_Of_Collision) * */((((*physics_A).y_Velocity * (*physics_A).mass) + ((*physics_B).y_Velocity * (*physics_B).mass)) / ((*physics_A).mass + (*physics_B).mass)) * (1 - elasticity);
+		double elastic_Collision_Physics_A_Y_Velocity = /*sin(angle_Of_Collision) * */(((((*physics_A).y_Velocity * ((*physics_A).mass - (*physics_B).mass)) + (2 * (*physics_B).mass * (*physics_B).y_Velocity)) / ((*physics_A).mass + (*physics_B).mass))) * elasticity;
+		double elastic_Collision_Physics_B_Y_Velocity = /*sin(angle_Of_Collision) * */(((((*physics_B).y_Velocity * ((*physics_B).mass - (*physics_A).mass)) + (2 * (*physics_A).mass * (*physics_A).y_Velocity)) / ((*physics_A).mass + (*physics_B).mass))) * elasticity;
 
 		//if((*physics_A).x_Position + (*physics_A).x_Length < (*physics_B).x_Position)
 		//{

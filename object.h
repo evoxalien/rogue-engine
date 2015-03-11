@@ -34,6 +34,7 @@ class Object
 		static std::vector<Object*> object_Pointer_Vector;							//A vector with pointers to all objects created
 		static std::vector<Physics*> physics_Pointer_Vector;						//Contains a pointer to all active Object's physics members
 		static std::vector<std::vector<std::vector<Physics*>>> physics_Segments;	//A two-dimensional vector which holds pointers to the physics member of Objects near eachother
+		static std::vector<Physics*> out_Of_Bounds_Physics_Vector;					//A vector of Physics pointers which are not inside the bounds of the physics segments
 
 		Physics physics;									//Contains position, velocity, acceleration, mass, etc, along with useful functions for dealing with collisions
 		//ArtificialIntelligence artificial_Intelligence;	//This will be the class for AI when I get around to it

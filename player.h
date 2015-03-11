@@ -1,4 +1,4 @@
-//player.h
+//Object -> player.h
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "object.h"
@@ -10,9 +10,10 @@ class Player : public Object
 	private:
 
 	public:
-		Player();
+		//Player();
+		//Player(playerAgency);
 
 		//Statistics statistics;
-		//Input? input?
+		//playerAgency player_Agency;
 };
 #endif

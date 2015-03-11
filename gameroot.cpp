@@ -31,6 +31,13 @@ playerAgency player1;
 //The image we will load and show on the screen
 SDL_Texture* imgTex = NULL;
 SDL_Event event;
+
+Player player;
+
+Object immobile_Blocks[10];
+Object mobile_Blocks[2];
+
+
 //Simple initializes
 gameroot::gameroot()
 {
@@ -53,6 +60,88 @@ bool gameroot::initialize()
 
    player1.intializePlayer(0);
    player1.gamestate=player1.StartMenu;
+
+	player.physics.set_X_Position(20);//player1.getPlayerX());
+	player.physics.set_Y_Position(650);//player1.getPlayerY());
+	player.physics.set_X_Length(25);//player1.getPlayerW());
+	player.physics.set_Y_Length(25);//player1.getPlayerH());
+	player.physics.set_Elasticity(.2);
+	player.physics.set_Mass(30);
+
+	immobile_Blocks[0].physics.set_X_Position(-100);
+	immobile_Blocks[0].physics.set_Y_Position(-100);
+	immobile_Blocks[0].physics.set_X_Length(SCREEN_WIDTH + 200);
+	immobile_Blocks[0].physics.set_Y_Length(100);
+
+	immobile_Blocks[1].physics.set_X_Position(-100);
+	immobile_Blocks[1].physics.set_Y_Position(SCREEN_HEIGHT - 1);
+	immobile_Blocks[1].physics.set_X_Length(SCREEN_WIDTH + 200);
+	immobile_Blocks[1].physics.set_Y_Length(100);
+
+	immobile_Blocks[2].physics.set_X_Position(-100);
+	immobile_Blocks[2].physics.set_Y_Position(0);
+	immobile_Blocks[2].physics.set_X_Length(100);
+	immobile_Blocks[2].physics.set_Y_Length(SCREEN_HEIGHT);
+
+	immobile_Blocks[3].physics.set_X_Position(SCREEN_WIDTH - 1);
+	immobile_Blocks[3].physics.set_Y_Position(0);
+	immobile_Blocks[3].physics.set_X_Length(100);
+	immobile_Blocks[3].physics.set_Y_Length(SCREEN_HEIGHT);
+
+	immobile_Blocks[4].physics.set_X_Position(400);
+	immobile_Blocks[4].physics.set_Y_Position(600);
+	immobile_Blocks[4].physics.set_X_Length(200);
+	immobile_Blocks[4].physics.set_Y_Length(75);
+
+	immobile_Blocks[5].physics.set_X_Position(100);
+	immobile_Blocks[5].physics.set_Y_Position(500);
+	immobile_Blocks[5].physics.set_X_Length(200);
+	immobile_Blocks[5].physics.set_Y_Length(75);
+
+	immobile_Blocks[6].physics.set_X_Position(800);
+	immobile_Blocks[6].physics.set_Y_Position(400);
+	immobile_Blocks[6].physics.set_X_Length(250);
+	immobile_Blocks[6].physics.set_Y_Length(100);
+
+	immobile_Blocks[7].physics.set_X_Position(150);
+	immobile_Blocks[7].physics.set_Y_Position(200);
+	immobile_Blocks[7].physics.set_X_Length(100);
+	immobile_Blocks[7].physics.set_Y_Length(50);
+
+	immobile_Blocks[8].physics.set_X_Position(850);
+	immobile_Blocks[8].physics.set_Y_Position(200);
+	immobile_Blocks[8].physics.set_X_Length(100);
+	immobile_Blocks[8].physics.set_Y_Length(50);
+
+	immobile_Blocks[9].physics.set_X_Position(50);
+	immobile_Blocks[9].physics.set_Y_Position(350);
+	immobile_Blocks[9].physics.set_X_Length(75);
+	immobile_Blocks[9].physics.set_Y_Length(50);
+
+
+	for(int i = 0; i < 10; i++)
+	{
+		immobile_Blocks[i].physics.set_Elasticity(1);
+		immobile_Blocks[i].physics.set_Mass(100000000000);
+	}
+
+	mobile_Blocks[0].physics.set_X_Position(750);
+	mobile_Blocks[0].physics.set_Y_Position(200);
+	mobile_Blocks[0].physics.set_X_Length(50);
+	mobile_Blocks[0].physics.set_Y_Length(50);
+
+	mobile_Blocks[1].physics.set_X_Position(300);
+	mobile_Blocks[1].physics.set_Y_Position(200);
+	mobile_Blocks[1].physics.set_X_Length(50);
+	mobile_Blocks[1].physics.set_Y_Length(50);
+
+	for(int i = 0; i < 2; i++)
+	{
+		mobile_Blocks[i].physics.set_Elasticity(1);
+		mobile_Blocks[i].physics.set_Mass(10000000);
+//		mobile_Blocks[i].physics.set_Y_Velocity(25);
+		mobile_Blocks[i].physics.set_X_Velocity(100);
+	}
    
 
    //Tests SDL components, important to call before other SDL operations
@@ -156,6 +245,27 @@ void gameroot::OnEvent(SDL_Event *Event)
    //This event works to track keyboard inputs
    else if (Event->type == SDL_KEYDOWN)
    {
+		switch((*Event).key.keysym.sym)
+		{
+			case SDLK_w:
+				player.physics.add_Force(0, player.physics.get_Mass() * -250);
+				player.physics.set_Y_Position(player.physics.get_Y_Position() - 1);
+				break;
+			case SDLK_a:
+				player.physics.add_Force(player.physics.get_Mass() * -250, 0);
+				player.physics.set_X_Position(player.physics.get_X_Position() - 1);
+				break;
+			case SDLK_s:
+				player.physics.add_Force(0, player.physics.get_Mass() * 250);
+				player.physics.set_Y_Position(player.physics.get_Y_Position() + 1);
+				break;
+			case SDLK_d:
+				player.physics.add_Force(player.physics.get_Mass() * 250, 0);
+				player.physics.set_X_Position(player.physics.get_X_Position() + 1);
+				break;
+			default:
+				break;
+		}
       //keyPress(&gameState,Event);
    }
 }
@@ -180,13 +290,31 @@ void gameroot::update()
       if (player1.gamestate==player1.Playing)
       {
          player1.playerButtonPress(input.getKeyDown());
-		Object::check_For_Collisions();			//Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
       }
       player1.MenuChoices(input.getKeyDown());
 
 
    }
-   
+	player.physics.half_Move();
+	for(int i = 0; i < 2; i++)
+	{
+		mobile_Blocks[i].physics.half_Move();
+	}
+
+	Object::check_For_Collisions();			//Will check through the sectioned physics pointer vectors stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
+
+	player.physics.add_Force(Physics::get_X_Gravity() * player.physics.get_Mass(), Physics::get_Y_Gravity() * player.physics.get_Mass());
+	player.physics.apply_Forces();
+	player.physics.accelerate();
+	player.physics.half_Move();
+	for(int i = 0; i < 2; i++)
+	{
+		//mobile_Blocks[i].physics.add_Force(Physics::get_X_Gravity() * mobile_Blocks[i].physics.get_Mass(), Physics::get_Y_Gravity() * mobile_Blocks[i].physics.get_Mass());
+		mobile_Blocks[i].physics.apply_Forces();
+		mobile_Blocks[i].physics.accelerate();
+		mobile_Blocks[i].physics.half_Move();
+	}
+
    
 }
 
@@ -203,6 +331,8 @@ void gameroot::draw()
    //clear screen
    SDL_RenderClear(renderer);
 
+	SDL_Rect object_Rectangle;
+   
 
    if(player1.gamestate==player1.StartMenu)
    {
@@ -303,6 +433,25 @@ void gameroot::draw()
       SDL_RenderCopy(renderer, imgTex, NULL, &player1.whiteBoxRect);
    }
    
+
+	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0x00, 0xFF);
+	object_Rectangle = {static_cast<int>(player.physics.get_X_Position()), static_cast<int>(player.physics.get_Y_Position()), static_cast<int>(player.physics.get_X_Length()), static_cast<int>(player.physics.get_Y_Length())};
+	SDL_RenderFillRect(renderer, &object_Rectangle);
+
+	for(int i = 0; i < 2; i++)
+	{
+		SDL_SetRenderDrawColor(renderer, 0xFF, 0x55, 0x55, 0xFF);
+		object_Rectangle = {static_cast<int>(mobile_Blocks[i].physics.get_X_Position()), static_cast<int>(mobile_Blocks[i].physics.get_Y_Position()), static_cast<int>(mobile_Blocks[i].physics.get_X_Length()), static_cast<int>(mobile_Blocks[i].physics.get_Y_Length())};
+		SDL_RenderFillRect(renderer, &object_Rectangle);
+	}
+
+	for(int i = 0; i < 10; i++)
+	{
+		SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
+		object_Rectangle = {static_cast<int>(immobile_Blocks[i].physics.get_X_Position()), static_cast<int>(immobile_Blocks[i].physics.get_Y_Position()), static_cast<int>(immobile_Blocks[i].physics.get_X_Length()), static_cast<int>(immobile_Blocks[i].physics.get_Y_Length())};
+		SDL_RenderFillRect(renderer, &object_Rectangle);
+	}
+
    //update screen
    SDL_RenderPresent(renderer);
    ++GLOBAL_FRAME_COUNTER;   
