@@ -1,7 +1,7 @@
 3
 quad 0 0 1280 720
 img/shapes/dontbeweird.png
-quad 108 532 200 30
+quad 47 485 200 30
 img/shapes/OrangeSquare.png
-quad 485 277 200 30
+quad 417 418 200 30
 img/shapes/OrangeSquare.png
