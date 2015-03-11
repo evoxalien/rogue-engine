@@ -185,12 +185,15 @@ void gameroot::update()
             engineState = PlayingGame;
             player1.gamestate = player1.Playing;
          }
+         if(input.getKeyDown() == SDLK_m)
+         {
+            engineState = MapEditor;
+         }
 
          player1.MenuChoices(input.getKeyDown());
       }
       if(engineState == PlayingGame)
       {
-         map.updateMap(input);
          if(input.getKeyDown() == SDLK_BACKSPACE)
          {
             engineState = Waiting;
@@ -201,6 +204,14 @@ void gameroot::update()
             player1.playerButtonPress(input.getKeyDown());
             Object::check_For_Collisions();        //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
          }   
+      }
+      if(engineState == MapEditor)
+      {
+         map.updateMap(input);
+         if(input.getKeyDown() == SDLK_BACKSPACE)
+         {
+            engineState = Waiting;
+         }
       }
 
       //temporarily commenting this out
@@ -335,6 +346,10 @@ void gameroot::draw()
       {
          SDL_RenderCopy(renderer, imgTex, NULL, &player1.whiteBoxRect);
       }
+   }
+   else if(engineState == MapEditor)
+   {
+      map.renderMap();
    }
    
    //update screen

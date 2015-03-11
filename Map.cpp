@@ -109,6 +109,7 @@ void Map::updateMap(InputClass input)
 				input.getMouseY() <= platCoords[x*2+1] + platforms[x].getHeight())
 			{
 				platSelected[x] = true;
+				platforms[x].setColor(0x77,0x77,0x77);
 			}
 		}
 	}
@@ -123,6 +124,7 @@ void Map::updateMap(InputClass input)
 				input.getMouseY() <= platCoords[x*2+1] + platforms[x].getHeight())
 			{
 				platSelected[x] = false;
+				platforms[x].setColor(0xFF,0xFF,0xFF);
 			}
 		}
 	}

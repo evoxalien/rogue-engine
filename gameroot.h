@@ -36,7 +36,8 @@ private:
    enum EngineState
    {
       Waiting,
-      PlayingGame
+      PlayingGame,
+      MapEditor
    };
    EngineState engineState;
 //   GameState gameState;
