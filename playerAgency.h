@@ -336,10 +336,10 @@ void playerAgency::MenuChoices(SDL_Keycode e)
       gamestate=Blue;
 
    }
-   if (e==SDLK_BACKSLASH&&gamestate==StartMenu)
-   {
-      gamestate=Playing;
-   }
+   // if (e==SDLK_BACKSLASH&&gamestate==StartMenu)
+   // {
+   //    gamestate=Playing;
+   // }
 
 
 }

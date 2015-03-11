@@ -183,7 +183,10 @@ void gameroot::update()
          if(input.getKeyDown() == SDLK_t)
          {
             engineState = PlayingGame;
+            player1.gamestate = player1.Playing;
          }
+
+         player1.MenuChoices(input.getKeyDown());
       }
       if(engineState == PlayingGame)
       {
@@ -191,6 +194,11 @@ void gameroot::update()
          {
             engineState = Waiting;
          }
+         if (player1.gamestate==player1.Playing)
+         {
+            player1.playerButtonPress(input.getKeyDown());
+            Object::check_For_Collisions();        //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
+         }   
       }
 
       //temporarily commenting this out
@@ -317,15 +325,14 @@ void gameroot::draw()
          SDL_Rect fillRect = {150, 0, 50, 50};
          SDL_RenderFillRect(renderer, &fillRect);
       }
-
-      if(player1.gamestate==player1.Playing)
-      {
-         SDL_RenderCopy(renderer, imgTex, NULL, &player1.whiteBoxRect);
-      }
    }
    else if(engineState == PlayingGame)
    {
       map.renderMap();
+      if(player1.gamestate==player1.Playing)
+      {
+         SDL_RenderCopy(renderer, imgTex, NULL, &player1.whiteBoxRect);
+      }
    }
    
    //update screen
