@@ -7,6 +7,8 @@ and may not be redistributed without written permission.*/
 #include <stdio.h>
 #include <string>
 #include "input.h"
+#include "Texture.h"
+#include "Room.h"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
@@ -23,20 +25,14 @@ bool loadMedia();
 //Frees media and shuts down SDL
 void close();
 
-//loads a texture from surface at string path
-SDL_Texture* loadTexture(std::string path);
-
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
 
 //renderer to display textures to the window
 SDL_Renderer* Renderer = NULL;
 
-//The image we will load and show on the screen
-SDL_Texture* imgTex = NULL;
-
+Room room;
 InputClass input;
-SDL_Rect whiteBoxRect;
 SDL_Event event;
 
 bool init()
@@ -77,15 +73,19 @@ bool init()
                printf("SDL_Image could not be initialized: %s\n", IMG_GetError());
                success = false;
             }
+            else
+            {
+               room.setRenderer(Renderer);
+            }
          }
       }
    }
 
 
-   whiteBoxRect.x = 0;
-   whiteBoxRect.y = 0;
-   whiteBoxRect.w = 10;
-   whiteBoxRect.h = 10;
+   room.baseRect.x = 0;
+   room.baseRect.y = 0;
+   room.baseRect.w = 10;
+   room.baseRect.h = 10;
 
    return success;
 }
@@ -95,17 +95,13 @@ bool loadMedia()
    //Loading success flag
    bool success = true;
 
-   imgTex = loadTexture("img/shapes/WhiteSquare.png");
+   room.setBaseTexture("img/shapes/WhiteSquare.png");
 
    return success;
 }
 
 void close()
 {
-   //Destroy Textures
-   SDL_DestroyTexture(imgTex);
-   imgTex = NULL;
-
    //Destroy Renderer
    SDL_DestroyRenderer(Renderer);
    Renderer = NULL;
@@ -131,32 +127,34 @@ void update()
 
       if(input.getMouseButton(1))
       {
-         whiteBoxRect.x = input.getMouseX();
-         whiteBoxRect.y = input.getMouseY();
+         room.baseRect.x = input.getMouseX();
+         room.baseRect.y = input.getMouseY();
       }
 
       switch(input.getKeyDown())
       {
          case(SDLK_s) :
-            whiteBoxRect.y++; break;
+            room.baseRect.y++; break;
          case(SDLK_w) :
-            whiteBoxRect.y--; break;
+            room.baseRect.y--; break;
          case(SDLK_d) :
-            whiteBoxRect.x++; break;
+            room.baseRect.x++; break;
          case(SDLK_a) :
-            whiteBoxRect.x--; break;
+            room.baseRect.x--; break;
          case(SDLK_UP) :
-            whiteBoxRect.y--;
-            whiteBoxRect.h++; break;
+            room.baseRect.y--;
+            room.baseRect.h++; break;
          case(SDLK_DOWN) :
-            whiteBoxRect.h++; break;
+            room.baseRect.h++; break;
          case(SDLK_LEFT) :
-            whiteBoxRect.x--; 
-            whiteBoxRect.w++; break;
+            room.baseRect.x--; 
+            room.baseRect.w++; break;
          case(SDLK_RIGHT) :
-            whiteBoxRect.w++; break;
+            room.baseRect.w++; break;
       }
    }
+
+   room.update();
 }
 
 void draw()
@@ -165,34 +163,11 @@ void draw()
    SDL_RenderClear(Renderer);
 
    //render texture to screen
-   SDL_RenderCopy(Renderer, imgTex, NULL, &whiteBoxRect);
+   //SDL_RenderCopy(Renderer, imgTex, NULL, &room.baseRect);
+   room.render(0,0);
 
    //update screen
    SDL_RenderPresent(Renderer);
-}
-
-SDL_Texture* loadTexture(std::string path)
-{
-   //final surface to return
-   SDL_Texture* newTexture = NULL;
-   
-   //load surface at path
-   SDL_Surface* loadSurface = IMG_Load(path.c_str());
-   if( loadSurface == NULL )
-   {
-      printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), IMG_GetError() );
-   }
-   else
-   {
-      //convert image to screen format
-      newTexture = SDL_CreateTextureFromSurface(Renderer, loadSurface);
-      if(newTexture == NULL)
-      {
-         printf("Failed to optimize image %s: %s\n", path.c_str(), SDL_GetError());
-      }
-      
-   }
-   return newTexture;
 }
 
 int main( int argc, char* args[] )
