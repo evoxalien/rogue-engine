@@ -1,74 +1,40 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
-include "SDLincludes.h"
-include <string>
+#include "SDLincludes.h"
+#include <string>
+#include "Texture.h"
+#include "Input.h"
+
 class Camera
 {
 private: 
-int xPos;
-int yPos;
+int iSCREEN_WIDTH;
+int iSCREEN_HEIGHT;
 
-int CameraWidth;
-int CameraHeight;
+//CAMERA CONSTANTS
+const int CAMERA_WIDTH = 640;
+const int CAMERA_HEIGHT = 480;
 
-string Camera_Type;
+//CAMERA TYPE
+string CAMERA_TYPE;
 
-bool bCinematic = false;
-
-void set_Dimensions(int,int);
-
-void set_Position(int,int);
-
-void set_Type;
-srting get_Type;
+//CINEMATIC
+bool CINEMATIC;
 
 public:
-Camera(int,int,int,int,string);
-~Camera();
+	//CONSTRUCTOR
+	Camera(int,int,string);
+	~Camera();
 
-void update_Camera(int,int);
+	//SETTING THE CAMERA MODE EITHER FOR CINEMATICS
+	void Set_Camera_Mode(bool);
+
+	//UPDATE THE CAMERA ON SCREEN
+	void update_Camera(int,int);
+
+	//DRAW CAMERA TO SCREEN
+	void draw_Camera(SDL_Renderer* gRenderer);
 
 }
-/* cpp stuff
-void Camera::Camera(int xPos, int yPos, int width, int height, string sType)
-{
-  set_Dimensions(width,height);
-  set_Position(xPos,yPos);
-  if(sType != NULL)
-  {
-    if(sType == "MOVING" || sType == "STATIC")
-    {
-    set_Type(sType);
-    }
-    else
-    {
-    set_Type("STATIC");
-    }
-  }
-}//End of Constructor
-
-void Camera::set_Dimensions(int width,int height)
-{ CameraWidth = width; CameraHeight = height;}
-
-void Camera::set_Position(int x,int y)
-{ xPos = x; yPos = y;}
-
-void Camera::set_Type(string sCamType)
-{ Camera_Type = sCamType; }
-string Camera::get_Type()
-{ return Camera_Type;}
-
-void Camera::void update_Camera(int x,int y)
-{
-  if( bCinematic != true){
-    if(get_Type() != "STATIC")
-    {
-      xPos += x;
-      yPos += y;
-    }
-  }
-}//End of Update
-*/
-//still editing_ Marcelo L. Garza
 
 #endif
