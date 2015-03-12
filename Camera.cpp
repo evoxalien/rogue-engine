@@ -43,6 +43,13 @@ int Camera::getCamX(){return camera.x;}
 int Camera::getCamY(){return camera.y;}
 int Camera::getCamW(){return camera.w;}
 int Camera::getCamH(){return camera.h;}
+SDL_Rect Camera::getRect(){return camera;}
+
+//MOVEMENT FUNCTIONS
+void Camera::MoveCamUP(){ camera.y += 100; CheckBounds();}
+void Camera::MoveCamDOWN(){ camera.y -= 100; CheckBounds();}
+void Camera::MoveCamLEFT(){ camera.x -= 100; CheckBounds();}
+void Camera::MoveCamRIGHT(){ camera.x += 100; CheckBounds();}
 
 //Bounderies:
 //Checks bounds for the camera not to overlap edge of screen

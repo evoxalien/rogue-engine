@@ -3,9 +3,16 @@
 using namespace std;
 
 //String window_name = "Rogue Engine Window Title Here"
+
+//const int LEVEL_WIDTH = 1280;
+//const int LEVEL_HEIGHT = 960;
+
 const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 720;
-SDL_Rect bRect = {0, 0, 1024, 720};
+const int SCREEN_HEIGHT = 512;
+
+SDL_Rect bRect = {0, 0, 1280, 960};
+Camera sCamera(bRect,1);
+
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
@@ -38,7 +45,7 @@ gameroot::gameroot()
 bool gameroot::initialize()
 {
    dino = 0;
-	Camera sCamera(bRect,1);
+	
 	
     r = 0, g = 0, b = 0; 
    //intitalize the gamestate
@@ -57,7 +64,7 @@ bool gameroot::initialize()
 
    //Calls and tests function to create SDL Window (documentation in link)
    //https://wiki.libsdl.org/SDL_CreateWindow
-   if((window = SDL_CreateWindow( "Rogue Engine Window Title Here", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, sCamera.getCamW(), sCamera.getCamH(), SDL_WINDOW_SHOWN )) == NULL)
+   if((window = SDL_CreateWindow( "Rogue Engine Window Title Here", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN )) == NULL)
    {
       printf ("Window Error: %s", SDL_GetError());
       return false;
@@ -121,13 +128,13 @@ bool gameroot::initialize()
 bool gameroot::loadContent()
 {
 
-   if(!texture.loadTexture("../../images/test1.png"))
+   if(!texture.loadTexture("../../images/dino.png"))
    {
       error_log << "Texture failed to load.\n";
       return false;
    }
-   texture.setWidth(64);
-   texture.setHeight(128);
+   texture.setWidth(SCREEN_WIDTH);
+   texture.setHeight(SCREEN_HEIGHT);
    
    imgTex = loadTexture("img/shapes/OrangeSquare.png");
    if(imgTex == NULL)
@@ -171,6 +178,24 @@ void gameroot::update()
       input.update(Event);
       OnEvent(&Event);
       
+	  if(input.getKeyDown() == SDLK_i)
+	  {
+		sCamera.MoveCamUP();
+	  }
+	  if(input.getKeyDown() == SDLK_k)
+	  {
+		sCamera.MoveCamDOWN();
+	  }
+	  if(input.getKeyDown() == SDLK_j)
+	  {
+		sCamera.MoveCamLEFT();
+	  }
+	  if(input.getKeyDown() == SDLK_l)
+	  {
+		sCamera.MoveCamRIGHT();
+	  }
+
+
       if(engineState == Waiting)
       {
          if(input.getKeyDown() == SDLK_t)

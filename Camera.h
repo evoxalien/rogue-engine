@@ -13,12 +13,9 @@ private:
 	//CAMERA BOUNDING AREA
 	SDL_Rect BOUND_RECT;
 
-	//CAMERA VIEWPORT
-	SDL_Rect camera;
-
 	//CAMERA CONSTANTS
-	const int CAMERA_WIDTH = 640;
-	const int CAMERA_HEIGHT = 480;
+	const int CAMERA_WIDTH = 1024;
+	const int CAMERA_HEIGHT = 512;
 
 	//CAMERA TYPE
 	string CAMERA_TYPE;
@@ -41,6 +38,18 @@ public:
 	int getCamY();
 	int getCamW();
 	int getCamH();
+
+	SDL_Rect getRect();
+
+    //CAMERA VIEWPORT
+	SDL_Rect camera;
+	
+	//FUNCTION
+	void MoveCamUP();
+	void MoveCamDOWN();
+	void MoveCamLEFT();
+	void MoveCamRIGHT();
+
 
 	//SETTING THE CAMERA MODE EITHER FOR CINEMATICS
 	void Cinematic_Mode(bool);
