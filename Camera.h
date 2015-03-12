@@ -2,39 +2,55 @@
 #define CAMERA_H_
 #include "SDLincludes.h"
 #include <string>
-#include "Texture.h"
-#include "Input.h"
+
+using namespace std;
+//Last updated: 3/12/15
 
 class Camera
 {
 private: 
-int iSCREEN_WIDTH;
-int iSCREEN_HEIGHT;
 
-//CAMERA CONSTANTS
-const int CAMERA_WIDTH = 640;
-const int CAMERA_HEIGHT = 480;
+	//CAMERA BOUNDING AREA
+	SDL_Rect BOUND_RECT;
 
-//CAMERA TYPE
-string CAMERA_TYPE;
+	//CAMERA VIEWPORT
+	SDL_Rect camera;
 
-//CINEMATIC
-bool CINEMATIC;
+	//CAMERA CONSTANTS
+	const int CAMERA_WIDTH = 640;
+	const int CAMERA_HEIGHT = 480;
+
+	//CAMERA TYPE
+	string CAMERA_TYPE;
+
+	//CINEMATIC
+	bool CINEMATIC;
+
+	//CHECK BOUNDS
+	void CheckBounds();
 
 public:
 	//CONSTRUCTOR
-	Camera(int,int,string);
+	Camera(SDL_Rect bRect, int iType);
+	Camera(int SCREEN_WIDTH,int CAMERA_HEIGHT);
+	//Camera();
 	~Camera();
 
+	//RETURN FUNCTIONS FOR VALUES
+	int getCamX();
+	int getCamY();
+	int getCamW();
+	int getCamH();
+
 	//SETTING THE CAMERA MODE EITHER FOR CINEMATICS
-	void Set_Camera_Mode(bool);
+	void Cinematic_Mode(bool);
 
 	//UPDATE THE CAMERA ON SCREEN
-	void update_Camera(int,int);
+	void Update_Camera(int,int,int,int);
 
 	//DRAW CAMERA TO SCREEN
-	void draw_Camera(SDL_Renderer* gRenderer);
+	//void Draw_Camera(SDL_Renderer* gRenderer);
 
-}
+};
 
 #endif

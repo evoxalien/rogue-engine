@@ -16,6 +16,7 @@
 #include "playerAgency.h"
 #include "ltimer.h"
 #include "Texture.h"
+#include "CameraV2.h"
 #include "Map.cpp"
 
 #define FPS_INTERVAL 1.0 //Seconds
@@ -30,6 +31,8 @@ private:
    SDL_Renderer *renderer;
    SDL_Surface *surface;
    SDL_Surface *image;
+   
+   SDL_Rect bRect = {0, 0, 1024, 720};
    Texture texture;
    SDL_Event Event;
    int dino;

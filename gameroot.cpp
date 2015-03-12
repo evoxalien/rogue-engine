@@ -1,22 +1,11 @@
 //INCLUDES
-/*
-#include "SDL.h"
-#include "SDL_image.h"
-#include "input.h"
-#include "playerAgency.h"
-#include <stdio.h>
-#include <string>
-*/
-//#include "SDLincludes.h"
-//#include <stdio.h>
-//#include <string>
-
 #include "gameroot.h"
 using namespace std;
 
 //String window_name = "Rogue Engine Window Title Here"
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 720;
+SDL_Rect bRect = {0, 0, 1024, 720};
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
@@ -27,10 +16,12 @@ LTimer capTimer;
 
 InputClass input;
 playerAgency player1;
+
 //Gamestate gamestate;
 //The image we will load and show on the screen
 SDL_Texture* imgTex = NULL;
 SDL_Event event;
+
 //Simple initializes
 gameroot::gameroot()
 {
@@ -47,7 +38,8 @@ gameroot::gameroot()
 bool gameroot::initialize()
 {
    dino = 0;
-
+	Camera sCamera(bRect,1);
+	
     r = 0, g = 0, b = 0; 
    //intitalize the gamestate
 
@@ -65,7 +57,7 @@ bool gameroot::initialize()
 
    //Calls and tests function to create SDL Window (documentation in link)
    //https://wiki.libsdl.org/SDL_CreateWindow
-   if((window = SDL_CreateWindow( "Rogue Engine Window Title Here", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN )) == NULL)
+   if((window = SDL_CreateWindow( "Rogue Engine Window Title Here", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, sCamera.getCamW(), sCamera.getCamH(), SDL_WINDOW_SHOWN )) == NULL)
    {
       printf ("Window Error: %s", SDL_GetError());
       return false;
@@ -129,13 +121,13 @@ bool gameroot::initialize()
 bool gameroot::loadContent()
 {
 
-   if(!texture.loadTexture("../../images/dino.png"))
+   if(!texture.loadTexture("../../images/test1.png"))
    {
       error_log << "Texture failed to load.\n";
       return false;
    }
-   texture.setWidth(SCREEN_WIDTH);
-   texture.setHeight(SCREEN_HEIGHT);
+   texture.setWidth(64);
+   texture.setHeight(128);
    
    imgTex = loadTexture("img/shapes/OrangeSquare.png");
    if(imgTex == NULL)
