@@ -1,4 +1,4 @@
-#include "CameraV2.h"
+#include "Camera.h"
 
 //Constructor: 
 //Takes a bounding rectangle,

@@ -16,7 +16,7 @@
 #include "playerAgency.h"
 #include "ltimer.h"
 #include "Texture.h"
-#include "CameraV2.h"
+#include "Camera.h"
 #include "Map.cpp"
 
 #define FPS_INTERVAL 1.0 //Seconds
