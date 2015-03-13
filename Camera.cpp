@@ -32,11 +32,22 @@ Camera::Camera(int levelWidth, int levelHeight)
 	camera = { 0, 0, CAMERA_WIDTH, CAMERA_HEIGHT};
 }
 
+Camera::Camera()
+{
+	CAMERA_TYPE = "STATIC";
+	BOUND_RECT = {0,0,0,0};
+	camera = {0,0,CAMERA_WIDTH,CAMERA_HEIGHT};
+}
+
 Camera::~Camera()
 {
 
 }
 
+void Camera::setBoundRect(int brX, int brY, int brW, int brH)
+{
+	BOUND_RECT = {brX, brY, brW, brH};
+}
 
 //Return Functions:
 //Different return function values

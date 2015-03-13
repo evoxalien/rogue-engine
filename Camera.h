@@ -31,8 +31,9 @@ private:
 
 public:
 	//CONSTRUCTOR
+	Camera();
 	Camera(SDL_Rect bRect, int iType);
-	Camera(int levelHeight,int levelHeight);
+	Camera(int levelWidth,int levelHeight);
 	//Camera();
 	~Camera();
 
@@ -41,6 +42,8 @@ public:
 	int getCamY();
 	int getCamW();
 	int getCamH();
+
+	void setBoundRect(int brX, int brY, int brW, int brH);
 
 	//SETTING THE CAMERA MODE EITHER FOR CINEMATICS
 	void Cinematic_Mode(bool);

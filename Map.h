@@ -4,6 +4,7 @@
 #include "SDLincludes.h"
 #include "Texture.h"
 #include "input.h"
+#include "Camera.cpp"
 
 class Map
 {
@@ -12,6 +13,7 @@ private:
 	int platCoords[200];
 	bool platSelected[100];
 	int numPlatforms;
+	Camera camera;
 
 public:
 	Map();
