@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 
-//Class for storing and posting a shpe to the SDL renderer
+//Class for storing and posting a shape to the SDL renderer
 class shape
 {
 private:
@@ -74,7 +74,7 @@ shape::~shape()
     rendererCopy = NULL;
 }
 
-//Funtion draws a square of the color and size stored in class
+//Function draws a square of the color and size stored in class
 //Requires passing in a renderer
 bool shape::drawSquare(SDL_Renderer* tempRenderer)
 {
@@ -96,7 +96,7 @@ bool shape::drawSquare(SDL_Renderer* tempRenderer)
    	
 }
 
-//Funtion draws a square of the color and size stored in class
+//Function draws a square of the color and size stored in class
 bool shape::drawSquare()
 {
    if(rendererCopy == NULL)
@@ -123,7 +123,7 @@ bool shape::drawSquare()
    	
 }
 
-//Funtion draws an empty box of the color and size stored in class
+//Function draws an empty box of the color and size stored in class
 //Requires passing in a renderer
 bool shape::drawBox(SDL_Renderer* tempRenderer)
 {
@@ -145,7 +145,7 @@ bool shape::drawBox(SDL_Renderer* tempRenderer)
    	
 }
 
-//Funtion draws an empty box of the color and size stored in class
+//Function draws an empty box of the color and size stored in class
 bool shape::drawBox()
 {
    if(rendererCopy == NULL)
@@ -172,7 +172,7 @@ bool shape::drawBox()
    	
 }
 
-//Funtion draws a line connecting the points passed in
+//Function draws a line connecting the points passed in
 //Requires passing in a renderer
 bool shape::drawLine(SDL_Renderer* tempRenderer, int x1, int y1, int x2, int y2)
 {
@@ -194,7 +194,7 @@ bool shape::drawLine(SDL_Renderer* tempRenderer, int x1, int y1, int x2, int y2)
    	
 }
 
-//Funtion draws a line connecting the points passed in
+//Function draws a line connecting the points passed in
 bool shape::drawLine(int x1, int y1, int x2, int y2)
 {
    if(rendererCopy == NULL)
@@ -220,7 +220,7 @@ bool shape::drawLine(int x1, int y1, int x2, int y2)
    	
 }
 
-//Funtion draws a dot at position passed in as x, y cordinates
+//Function draws a dot at position passed in as x, y cordinates
 //Requires passing in a renderer
 bool shape::drawDot(SDL_Renderer* tempRenderer, int x, int y)
 {
@@ -243,7 +243,7 @@ bool shape::drawDot(SDL_Renderer* tempRenderer, int x, int y)
    	
 }
 
-//Funtion draws a dot at position passed in as x, y cordinates
+//Function draws a dot at position passed in as x, y coordinates
 bool shape::drawDot(int x, int y)
 {
    
