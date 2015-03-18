@@ -8,6 +8,7 @@
 #include <string>
 #include "inputDavid.h"
 #include "input.h"
+#include "Gamepad.h"
 using namespace std;
 
 

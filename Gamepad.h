@@ -3,7 +3,7 @@
  
 #include <SDL.h>
 #include <stdio.h>
-#include <sys/mman.h>
+// #include <sys/mman.h>
 #include <stdint.h>
 
 #define MAX_CONTROLLERS 4
@@ -14,7 +14,6 @@ SDL_Haptic *RumbleHandles[MAX_CONTROLLERS];
 class Gamepad
 {
 public:
-  Gamepad(arguments);
   void SDLOpenGameControllers();
   void SDLCloseGameControllers();
   ~Gamepad();
@@ -31,8 +30,8 @@ public:
   bool  BButton1;
   bool  XButton1;
   bool  YButton1;
-  int16 StickX1;
-  int16 StickY1;
+  int StickX1;//int16
+  int StickY1;
   bool  Up2;
   bool  Down2;
   bool  Left2;
@@ -45,8 +44,8 @@ public:
   bool  BButton2;
   bool  XButton2;
   bool  YButton2;
-  int16 StickX2;
-  int16 StickY2;
+  int StickX2;
+  int StickY2;
   
 };
 
@@ -59,13 +58,13 @@ void Gamepad::SDLOpenGameControllers()
     int ControllerIndex = 0;
     for(int JoystickIndex=0; JoystickIndex < MaxJoysticks; ++JoystickIndex)
     {
+        if (!SDL_IsGameController(JoystickIndex))
         {
             continue;
         }
         if (ControllerIndex >= MAX_CONTROLLERS)
         {
             break;
-        if (!SDL_IsGameController(JoystickIndex))
         }
         ControllerHandles[ControllerIndex] = SDL_GameControllerOpen(JoystickIndex);
         RumbleHandles[ControllerIndex] = SDL_HapticOpen(JoystickIndex);
@@ -102,7 +101,7 @@ void Gamepad::Update()
   {
       if(ControllerHandles[ControllerIndex] != 0 && SDL_GameControllerGetAttached(ControllerHandles[ControllerIndex]))
       {
-        if (ControllerHandles[ControllerIndex] == 1)
+        if (ControllerIndex == 1)
         {
           Up1 = SDL_GameControllerGetButton(ControllerHandles[ControllerIndex], SDL_CONTROLLER_BUTTON_DPAD_UP);
           Down1 = SDL_GameControllerGetButton(ControllerHandles[ControllerIndex], SDL_CONTROLLER_BUTTON_DPAD_DOWN);
@@ -120,7 +119,7 @@ void Gamepad::Update()
           StickX1 = SDL_GameControllerGetAxis(ControllerHandles[ControllerIndex], SDL_CONTROLLER_AXIS_LEFTX);
           StickY1 = SDL_GameControllerGetAxis(ControllerHandles[ControllerIndex], SDL_CONTROLLER_AXIS_LEFTY);
         }
-        if (ControllerHandles[ControllerIndex] == 2)
+        if (ControllerIndex == 2)
         {
           Up2 = SDL_GameControllerGetButton(ControllerHandles[ControllerIndex], SDL_CONTROLLER_BUTTON_DPAD_UP);
           Down2 = SDL_GameControllerGetButton(ControllerHandles[ControllerIndex], SDL_CONTROLLER_BUTTON_DPAD_DOWN);
@@ -144,3 +143,5 @@ void Gamepad::Update()
 
 }
 
+}
+#endif
