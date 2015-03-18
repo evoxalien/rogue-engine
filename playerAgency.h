@@ -292,16 +292,21 @@ void playerAgency::playerButtonPress(SDL_Keycode e)
 { 
    if (gamestate==Playing)
    {
-      switch(e)
+      if (e==SDLK_s)
       {
-         case(SDLK_s) :
-            playerY++; break;
-         case(SDLK_w) :
-            playerY--; break;
-         case(SDLK_d) :
-            playerX++; break;
-         case(SDLK_a) :
-            playerX--; break;
+            playerY++; 
+      }
+       if (e==SDLK_w)
+      {
+            playerY--; 
+      }
+      if (e==SDLK_d)
+      {
+            playerX++; 
+      }
+      if (e==SDLK_a)
+      {
+            playerX--; 
       }
       whiteBoxRect.x = getPlayerX();
       whiteBoxRect.y = getPlayerY();
