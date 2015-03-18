@@ -40,11 +40,13 @@ private:
       PlayingGame,
       MapEditor
    };
+   
    EngineState engineState;
 //   GameState gameState;
    bool initialize();
    int r, g, b; 
-
+   InputClass input;
+   playerAgency player1;
 
 public:
    gameroot(); 

@@ -30,6 +30,7 @@ private:
    int    playerHealth;
    int    playerMovementSpeed;
    string playerInputMode;
+   InputClass input;
 
 public:
    SDL_Rect whiteBoxRect;
@@ -79,6 +80,7 @@ public:
    int getPlayerH();
    void playerButtonPress(SDL_Keycode e);
    void MenuChoices(SDL_Keycode e);
+   // void updateKeys(gameroot::engineState Engine);
    enum GameState
 {
    StartMenu,
@@ -359,3 +361,19 @@ void playerAgency::MenuChoices(SDL_Keycode e)
 
 
 }
+
+// void playerAgency::updateKeys(gameroot::engineState Engine)
+// {
+
+//     if(input.getKeyDown() == SDLK_BACKSPACE)
+//          {
+//             engineState = Waiting;
+//             gamestate = StartMenu;
+//          }
+//          if (gamestate==Playing)
+//          {
+//             playerButtonPress(input.getKeyDown());
+                   
+//              //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
+//          }  
+// }

@@ -25,8 +25,7 @@ LTimer fpsTimer;
 //The frames per second cap timer
 LTimer capTimer;
 
-InputClass input;
-playerAgency player1;
+
 //Gamestate gamestate;
 //The image we will load and show on the screen
 SDL_Texture* imgTex = NULL;
@@ -195,7 +194,8 @@ void gameroot::update()
       }
       if(engineState == PlayingGame)
       {
-         if(input.getKeyDown() == SDLK_BACKSPACE)
+         // player1.updateKeys(gameroot::engineState);
+    if(input.getKeyDown() == SDLK_BACKSPACE)
          {
             engineState = Waiting;
             player1.gamestate = player1.StartMenu;
@@ -203,8 +203,10 @@ void gameroot::update()
          if (player1.gamestate==player1.Playing)
          {
             player1.playerButtonPress(input.getKeyDown());
-            Object::check_For_Collisions();        //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
-         }   
+         Object::check_For_Collisions();        //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
+                   
+             //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
+         }  
       }
       if(engineState == MapEditor)
       {
