@@ -14,7 +14,10 @@ static double NextDouble()
 
 static float NextFloat( float minValue, float maxValue)
 {
-	return (float)NextDouble() * (maxValue - minValue) + minValue;
+	float random = (float)rand() / (float) RAND_MAX;
+	float diff = maxValue - minValue;
+	float newRandom = random * diff;
+	return minValue + newRandom;
 }
 
 /* Purpose: Generate a New Random Vector Constrained by a Min and Max */

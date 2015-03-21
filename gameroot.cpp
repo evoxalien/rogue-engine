@@ -37,6 +37,20 @@ bool gameroot::initialize()
    srand(time(NULL));
    dino = 0;
 
+   Vector2D test1(1,2);
+   Vector2D test2(NextDouble(),NextDouble());
+   Vector2D test3 = (test1 * NextFloat(10, 20));
+   //test3 += test2;
+
+   debug_log.print = true;
+
+   debug_log << "Test1 x: " << test1.x << " y: " << test1.y << "\n";
+   debug_log << "Test2 x: " << test2.x << " y: " << test2.y << "\n";
+   debug_log << "Test3 x: " << test3.x << " y: " << test3.y << "\n";
+
+   debug_log.print = false;
+
+
     r = 0, g = 0, b = 0; 
    //intitalize the gamestate
 
