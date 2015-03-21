@@ -18,6 +18,7 @@
 #include "ltimer.h"
 #include "Texture.h"
 #include "Map.cpp"
+#include "mathutil.h"
 
 #define FPS_INTERVAL 1.0 //Seconds
 

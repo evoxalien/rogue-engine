@@ -2,6 +2,7 @@
 #define VECTOR_2D
 
 #include <math.h>
+
 // Used Daniel Soltyka's Vector Library as my guidline for this.
 // Source : http://www.danielsoltyka.com/programming/2010/05/30/c-vector2d-rectangle-classes/
 
