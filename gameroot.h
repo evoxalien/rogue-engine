@@ -7,6 +7,7 @@
 #include "SDLincludes.h"
 #include <iostream>
 #include <stdio.h>
+#include <cstdlib>
 #include <string>
 #include <chrono>
 #include "inputDavid.h"

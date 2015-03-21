@@ -1,6 +1,6 @@
 #OBJS specifies which files to compile as part of the project
 
-OBJS = gameroot.cpp physics.cpp object.cpp log.cpp
+OBJS = gameroot.cpp physics.cpp object.cpp log.cpp vector2d.cpp
 
 
 #CC specifies which compiler we're using

@@ -45,6 +45,8 @@ gameroot::gameroot()
 //Initialize all the SDL
 bool gameroot::initialize()
 {
+
+   srand(time(NULL));
    dino = 0;
 
     r = 0, g = 0, b = 0; 
