@@ -1,5 +1,5 @@
-#ifndef MATH_UTILITIES_
-#define MATH_UTILITIES_
+#ifndef MATH_UTILITIES
+#define MATH_UTILITIES
 #include "vector2d.h"
 #define MMM_PIE_ 3.14159265358979323846  /* pi */
 
