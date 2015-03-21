@@ -1,16 +1,4 @@
-//INCLUDES
-/*
-#include "SDL.h"
-#include "SDL_image.h"
-#include "input.h"
-#include "playerAgency.h"
-#include <stdio.h>
-#include <string>
-*/
-//#include "SDLincludes.h"
-//#include <stdio.h>
-//#include <string>
-
+/* -- all other includes should be in gameroot.h -- */
 #include "gameroot.h"
 using namespace std;
 
