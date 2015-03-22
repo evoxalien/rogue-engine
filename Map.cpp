@@ -4,6 +4,7 @@
 Map::Map()
 {
 	numPlatforms = 0;
+	camera.setBoundRect(0,0,5000,5000);
 }
 
 Map::~Map()
