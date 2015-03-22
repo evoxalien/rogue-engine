@@ -17,6 +17,9 @@
 #include "ltimer.h"
 #include "Texture.h"
 #include "Map.cpp"
+#include "playerClass.h"
+#include "startMenu.h"
+#include "Gamepad.h"
 
 #define FPS_INTERVAL 1.0 //Seconds
 
@@ -36,9 +39,18 @@ private:
    Map map;
    enum EngineState
    {
-      Waiting,
-      PlayingGame,
-      MapEditor
+      Waiting,//0
+      PlayingGame,//1
+      MapEditor,//2
+      StartMenu,//3
+      Loading,//4
+      leveledup,//5
+      Paused,//6
+      levelSelect,//7
+      all,//8
+      Red,//9
+      Green,//10
+      Blue//11
    };
    
    EngineState engineState;
@@ -47,6 +59,8 @@ private:
    int r, g, b; 
    InputClass input;
    playerAgency player1;
+   // playerClass Hero;
+   startMenu Main;
 
 public:
    gameroot(); 

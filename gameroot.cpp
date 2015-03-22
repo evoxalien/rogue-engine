@@ -177,7 +177,6 @@ void gameroot::update()
       
       input.update(Event);
       OnEvent(&Event);
-      
       if(engineState == Waiting)
       {
          if(input.getKeyDown() == SDLK_t)
@@ -190,7 +189,8 @@ void gameroot::update()
             engineState = MapEditor;
          }
 
-         player1.MenuChoices(input.getKeyDown());
+      // engineState= Main.MenuChoices(input.getKeyDown(),static_cast <int>(engineState));
+         // player1.MenuChoices(input.getKeyDown());
       }
       if(engineState == PlayingGame)
       {

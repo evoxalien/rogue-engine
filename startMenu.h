@@ -9,13 +9,14 @@
 #include "inputDavid.h"
 #include "input.h"
 #include "Gamepad.h"
+#include "log.h"
 using namespace std;
 
 class startMenu
 {
 	InputClass input;
 public:
-	void MenuChoices(SDL_Keycode e);
+	int MenuChoices(SDL_Keycode e, int gameState);
 	/* data */
 };
 
@@ -30,10 +31,24 @@ LEFT changes to the ALL Menu
 RIGHT changes to the BLUE Menu
 T take you to the player
 M takes you to the map editor
-
+   enum EngineState
+   {
+      Waiting,//0
+      PlayingGame,//1
+      MapEditor,//2
+      StartMenu,//3
+      Loading,//4
+      leveledup,//5
+      Paused,//6
+      levelSelect,//7
+      all,//8
+      Red,//9
+      Green,//10
+      Blue//11
+   };
 */
 
-void playerAgency::MenuChoices(SDL_Keycode e)
+int startMenu::MenuChoices(SDL_Keycode e, int gameState)
 {
    if (e==SDLK_p)
    {
@@ -43,33 +58,28 @@ void playerAgency::MenuChoices(SDL_Keycode e)
    {
       debug_log.print = false;
    }
-   if (e==SDLK_UP&&gamestate==StartMenu)
+   if (e==SDLK_UP&&gameState==3)
    {
-      gamestate=Red;
+      return 9;
    }
    if (e==SDLK_BACKSPACE)
    {
-      gamestate=StartMenu;
+      return 3;
    }
-   if (e==SDLK_DOWN&&gamestate==StartMenu)
+   if (e==SDLK_DOWN&&gameState==3)
    {
-      gamestate=Green;
-
+      return 10;
    }
-   if (e==SDLK_LEFT&&gamestate==StartMenu)
+   if (e==SDLK_LEFT&&gameState==3)
    {
-      gamestate=all;
-
+      return 8;
    }
-   if (e==SDLK_RIGHT&&gamestate==StartMenu)
+   if (e==SDLK_RIGHT&&gameState==3)
    {
-      gamestate=Blue;
-
+      return 11;
    }
-   // if (e==SDLK_BACKSLASH&&gamestate==StartMenu)
-   // {
-   //    gamestate=Playing;
-   // }
-
 
 }
+
+
+#endif
