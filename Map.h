@@ -20,7 +20,8 @@ public:
 	~Map();
 	bool parseMapFile(std::string filePath,SDL_Renderer* render);
 	void renderMap();
-	void updateMap(InputClass input);
+	void updateMap();
+	void mapEditorUpdate(InputClass input);
 	void unfocus();
 	void exportMapFile();
 };

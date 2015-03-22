@@ -89,12 +89,34 @@ void Map::renderMap()
 {
 	for(int x = 0; x < numPlatforms; x++)
 	{
-		platforms[x].render(platCoords[x*2], platCoords[x*2+1]);
+		platforms[x].render(platCoords[x*2] - camera.getCamX(), platCoords[x*2+1]- camera.getCamY());
 	}
 }
 
-void Map::updateMap(InputClass input)
+void Map::updateMap()
 {
+	
+}
+
+void Map::mapEditorUpdate(InputClass input)
+{
+	if(input.getKeyDown() == SDLK_w)
+	{
+		camera.Update_Camera(camera.getCamX(), camera.getCamY() - 1);
+	}
+	if(input.getKeyDown() == SDLK_s)
+	{
+		camera.Update_Camera(camera.getCamX(), camera.getCamY() + 1);
+	}
+	if(input.getKeyDown() == SDLK_a)
+	{
+		camera.Update_Camera(camera.getCamX() - 1, camera.getCamY());
+	}
+	if(input.getKeyDown() == SDLK_d)
+	{
+		camera.Update_Camera(camera.getCamX() + 1, camera.getCamY() - 1);
+	}
+
 	if(input.getKeyDown() == SDLK_SPACE)
 	{
 		exportMapFile();

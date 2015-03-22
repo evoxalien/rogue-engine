@@ -210,7 +210,7 @@ void gameroot::update()
       }
       if(engineState == MapEditor)
       {
-         map.updateMap(input);
+         map.mapEditorUpdate(input);
          if(input.getKeyDown() == SDLK_BACKSPACE)
          {
             engineState = Waiting;
