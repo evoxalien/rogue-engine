@@ -38,8 +38,8 @@ bool gameroot::initialize()
    dino = 0;
 
    Vector2D test1(1,2);
-   Vector2D test2(NextDouble(),NextDouble());
-   Vector2D test3 = (test1 * NextFloat(10, 20));
+   Vector2D test2(RandNextDouble(),RandNextDouble());
+   Vector2D test3 = (test1 * RandNextFloatRange(10, 20));
    //test3 += test2;
 
    debug_log.print = true;
@@ -47,6 +47,7 @@ bool gameroot::initialize()
    debug_log << "Test1 x: " << test1.x << " y: " << test1.y << "\n";
    debug_log << "Test2 x: " << test2.x << " y: " << test2.y << "\n";
    debug_log << "Test3 x: " << test3.x << " y: " << test3.y << "\n";
+
 
    debug_log.print = false;
 
@@ -175,7 +176,11 @@ void gameroot::update()
 
    debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
 
+   debug_log.print = true;
+   int iTemp = RandNextIntRange(0,10);
+   debug_log << "Between 0 - 10: " << iTemp << "\n";
 
+   debug_log.print = false;
    while(SDL_PollEvent(&Event))
    {
       

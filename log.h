@@ -24,7 +24,7 @@ public:
 	OutputLog(string filename)
 	{
 		print = false; //Defaults to false so no output will show up in console.
-		directory = "../../log/"; //Defaults to the same dirrectory as the exicutable
+		directory = "../../log/"; //Defaults to the log dirrectory and will not write if it doesn't exist
 		string stemp = directory + filename; //Adds the file name to the directory
 		log_file.open( stemp.data()); //Opens our new file for output
 	}
