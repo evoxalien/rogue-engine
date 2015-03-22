@@ -20,6 +20,12 @@ const int SCREEN_HEIGHT = 720;
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
+double gameroot::maximum_Frame_Rate = 120;		//Sets the maximum number of times the main game loop can execute in a single second
+double gameroot::total_Time = 0;				//The amount of time the game has run from the start of the program
+std::chrono::high_resolution_clock::time_point gameroot::start_Of_Previous_Frame = std::chrono::high_resolution_clock::now();	//The time point that the previous instance of the main game loop (A 'frame') began
+std::chrono::high_resolution_clock::time_point gameroot::start_Of_Current_Frame = gameroot::start_Of_Previous_Frame;			//The time point at which the currently active frame began
+std::chrono::duration<double> gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame);	//The length of time the previous frame took to complete
+
 //The frames per second timer
 LTimer fpsTimer;
 //The frames per second cap timer
@@ -119,7 +125,7 @@ bool gameroot::initialize()
 	Object::set_Screen_X_Length(SCREEN_WIDTH);			//Will be changing in the future to setLevelSize(struct level_Size, int level_Number) or moved to update in the loop
 	Object::set_Screen_Y_Length(SCREEN_HEIGHT);			//Will be included in setLevelSize in the future
 
-	Physics::set_Frame_Rate(60);
+	Physics::set_Frame_Rate(gameroot::maximum_Frame_Rate);
    
    return true;
 }
@@ -168,6 +174,15 @@ void gameroot::OnEvent(SDL_Event *Event)
 //Does nothing. Math and physics later
 void gameroot::update()
 {
+	if(gameroot::time_Of_Previous_Frame.count() != 0)										//Avoid dividing by 0
+	{
+		Physics::set_Frame_Rate((1.0 / gameroot::time_Of_Previous_Frame.count()));			//Update Physics to know how long the previous frame took
+	}
+	else
+	{
+		Physics::set_Frame_Rate(gameroot::maximum_Frame_Rate);								//If the frame took an unregisterable amount of time, Physics uses the maximum frame rate for this frame
+	}
+	gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
 
    debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
 
@@ -203,10 +218,8 @@ void gameroot::update()
          if (player1.gamestate==player1.Playing)
          {
             player1.playerButtonPress(input.getKeyDown());
-         Object::check_For_Collisions();        //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
-                   
-             //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
-         }  
+         }
+		Object::check_For_Collisions();        //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
       }
       if(engineState == MapEditor)
       {
@@ -431,15 +444,6 @@ SDL_Texture* gameroot::loadTexture(std::string path)
 //Actual game loop
 int gameroot::execute()
 {
-	//double maximum_Frame_Rate = 60;											//If the developers want to include a maximum frame rate, this is it; unfinished
-	double total_Time = 0;														//Keeps a running total of the amount of time that the game has been active for; temporary
-
-	std::chrono::duration<double> time_Of_Previous_Frame;						//A variable which holds the number of clock cycles between frames from the highest resolution clock available- use .count() to convert to seconds
-	auto start_Of_Previous_Frame = std::chrono::high_resolution_clock::now();	//Initializes the variable to the type best suited for the highest resolution clock
-	auto start_Of_Current_Frame = start_Of_Previous_Frame;						//Initializes the variable to the type best suited for the highest resolution clock
-
-	//cout.precision(15);														//Sets the number of decimal places for cout to display
-
    //checks all the SDL (see above)
    if(initialize() == false)
    {
@@ -455,20 +459,15 @@ int gameroot::execute()
 
    while(Running)
    {
-		start_Of_Current_Frame = std::chrono::high_resolution_clock::now();		//At the start of each frame, store the time
-		time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame);	//Number of clock cycles between frames
-		if(time_Of_Previous_Frame.count() != 0)									//Avoid dividing by 0
-		{
-			Physics::set_Frame_Rate((1.0 / time_Of_Previous_Frame.count()));	//Update Physics to know how long the previous frame took
-		}
-		total_Time = total_Time + time_Of_Previous_Frame.count();				//Add the time of the last frame to the total time
+		gameroot::start_Of_Current_Frame = std::chrono::high_resolution_clock::now();		//At the start of each frame, store the current time
+		gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(gameroot::start_Of_Current_Frame - gameroot::start_Of_Previous_Frame);	//Number of clock cycles between frames
 
 	  //update and redraw window
       update();
       draw();
 
-		//Physics::set_Frame_Rate(maximum_Frame_Rate);
-		start_Of_Previous_Frame = start_Of_Current_Frame;						//At the end of each frame, store the time
+		//std::this_thread::sleep_for(std::chrono::nanoseconds(/*calculate number of nanoseconds to wait based on maximum frame rate and time taken so far*/));
+		gameroot::start_Of_Previous_Frame = gameroot::start_Of_Current_Frame;				//At the end of each frame, store the start time of the current frame to the previous frame
     }
 
    close() ;

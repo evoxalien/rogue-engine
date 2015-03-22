@@ -10,7 +10,7 @@
 #include <string>
 #include <chrono>
 #include "inputDavid.h"
-#include "object.h"
+#include "player.h"
 #include "log.h"
 #include "input.h"
 #include "playerAgency.h"
@@ -20,6 +20,7 @@
 #include "playerClass.h"
 #include "startMenu.h"
 #include "Gamepad.h"
+//#include <thread>
 
 #define FPS_INTERVAL 1.0 //Seconds
 
@@ -28,6 +29,12 @@ using namespace std;
 class gameroot
 {
 private:
+	static double maximum_Frame_Rate;
+	static double total_Time;
+	static std::chrono::high_resolution_clock::time_point start_Of_Previous_Frame;
+	static std::chrono::high_resolution_clock::time_point start_Of_Current_Frame;
+	static std::chrono::duration<double> time_Of_Previous_Frame;
+
    bool Running;
    SDL_Window *window;
    SDL_Renderer *renderer;
