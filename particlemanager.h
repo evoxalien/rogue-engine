@@ -1,5 +1,60 @@
 #ifndef PARTICLE_MANAGER_
 #define PARTICLE_MANAGER_
+
+template<typename T>
+class ParticleManager<T> 
+{
+    private:
+        Action<Particle> updateParticle;
+        CircularParticleArray particleList;
+        int ParticleCount;
+    public:
+
+        class Color
+        {
+            public:
+                int r, g, b, a;
+        };
+
+        class Particle
+        {
+            public:
+                //Texture
+                Vector2D Position;
+                float Orientation;
+
+                Vector2D Scale = new Vector2D(1,1);
+
+                Color Tint;
+                float Duration;
+                float PercentLife = 1f;
+                T State;
+
+        };
+
+        ParticleManager(int capacity, Action<Particle> updateParticle)
+        {
+            this.updateParticle = updateParticle;
+            particleList = new CircularParticleArray(capacity);
+
+            //Populate the List with Empty Particle objects, for reuse
+            for (int i = 0; i < capacity; i++)
+                particleList[i] = new Particle();
+
+        }
+
+        //Additional Functions
+        static void Swap(CircularParticleArray list, int index1, index2)
+        {
+            auto temp = list[index1];
+            list[index1] = list[index2];
+            list[index2] = temp;
+        }
+
+        //Create Particle
+
+};
+
 #endif
 
 /* OLD PARTICLE MANAGER IN C#
@@ -41,7 +96,8 @@ public class ParticleManager<T>
             list[index2] = temp;
         }
         #endregion
-
+*/ 
+        /*
         #region CreateParticle
         public void CreateParticle(Texture2D texture, Vector2 position, Color tint, float duration, Vector2 scale, T state, float theta = 0)
         {
