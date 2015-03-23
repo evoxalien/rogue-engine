@@ -1,5 +1,6 @@
 #include "Map.h"
 #include <fstream>
+#include <sstream>
 
 Map::Map()
 {
@@ -57,10 +58,13 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 	return true;
 }
 
-void Map::exportMapFile()
+void Map::exportMapFile(Uint32 timeStamp)
 {
+	std::ostringstream stringStream;
+	stringStream << timeStamp;
+
 	ofstream outFile;
-	outFile.open("maps/Map_NewFile.txt");
+	outFile.open("maps/Map_" + stringStream.str() + ".txt");
 
 	outFile << numPlatforms << "\n";
 
@@ -123,7 +127,8 @@ void Map::mapEditorUpdate(InputClass input)
 	//export current map with space key
 	if(input.getKeyDown() == SDLK_SPACE)
 	{
-		exportMapFile();
+		Uint32 timeStamp = input.getEvent().key.timestamp;
+		exportMapFile(timeStamp);
 	}
 
 	//move currently selected platforms with arrow keys

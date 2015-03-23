@@ -57,6 +57,11 @@ public:
       return -1;
    }
 
+   SDL_Event getEvent()
+   {
+      return event;
+   }
+
    //1 = left click
    //2 = mid click
    //3 = right click

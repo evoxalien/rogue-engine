@@ -1,25 +1,23 @@
-12
+11
 quad 0 0 1280 720
 img/shapes/dontbeweird.png
-quad 26 504 200 30
+quad 0 500 200 30
 img/shapes/OrangeSquare.png
-quad 326 404 200 30
+quad 300 400 200 30
 img/shapes/OrangeSquare.png
-quad 732 451 100 100
+quad 365 178 100 100
 img/shapes/WhiteSquare.png
-quad 686 306 100 100
+quad 566 132 100 100
 img/shapes/WhiteSquare.png
-quad 912 233 100 100
+quad 736 303 100 100
 img/shapes/WhiteSquare.png
-quad 880 524 100 100
+quad 578 499 100 100
 img/shapes/WhiteSquare.png
-quad 667 656 100 100
+quad 506 397 100 100
 img/shapes/WhiteSquare.png
-quad 401 585 100 100
+quad 521 167 100 100
 img/shapes/WhiteSquare.png
-quad 192 417 100 100
+quad 255 112 100 100
 img/shapes/WhiteSquare.png
-quad 262 283 100 100
-img/shapes/WhiteSquare.png
-quad 390 210 100 100
+quad 97 313 100 100
 img/shapes/WhiteSquare.png

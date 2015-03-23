@@ -24,7 +24,7 @@ public:
 	void updateMap();
 	void mapEditorUpdate(InputClass input);
 	void unfocus();
-	void exportMapFile();
+	void exportMapFile(Uint32 timeStamp);
 };
 
 #endif
