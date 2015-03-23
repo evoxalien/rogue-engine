@@ -175,6 +175,7 @@ void Map::mapEditorUpdate(InputClass input)
 		platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
 		platforms[numPlatforms].setWidth(100);
 		platforms[numPlatforms].setHeight(100);
+		platSelected[numPlatforms] = false;
 		platCoords[numPlatforms*2] = input.getMouseX();
 		platCoords[numPlatforms*2+1] = input.getMouseY();
 		numPlatforms++;
