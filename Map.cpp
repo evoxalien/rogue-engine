@@ -5,6 +5,7 @@ Map::Map()
 {
 	numPlatforms = 0;
 	camera.setBoundRect(0,0,5000,5000);
+	render = NULL;
 }
 
 Map::~Map()
@@ -19,8 +20,9 @@ Map::~Map()
 
 }
 
-bool Map::parseMapFile(std::string filePath, SDL_Renderer* render)
+bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 {
+	render = r;
 	ifstream inputFile;
 	inputFile.open(filePath);
 
@@ -100,6 +102,7 @@ void Map::updateMap()
 
 void Map::mapEditorUpdate(InputClass input)
 {
+	//move camera with wasd
 	if(input.getKeyDown() == SDLK_w)
 	{
 		camera.Update_Camera(camera.getCamX(), camera.getCamY() - 1);
@@ -117,10 +120,13 @@ void Map::mapEditorUpdate(InputClass input)
 		camera.Update_Camera(camera.getCamX() + 1, camera.getCamY() - 1);
 	}
 
+	//export current map with space key
 	if(input.getKeyDown() == SDLK_SPACE)
 	{
 		exportMapFile();
 	}
+
+	//move currently selected platforms with arrow keys
 	if(input.getKeyDown() == SDLK_UP)
 	{
 		for(int x = 0; x < numPlatforms; x++)
@@ -162,6 +168,19 @@ void Map::mapEditorUpdate(InputClass input)
 		}
 	}
 
+	//add new platform with p key
+	if(input.getKeyDown() == SDLK_p)
+	{
+		platforms[numPlatforms].setRenderer(render);
+		platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
+		platforms[numPlatforms].setWidth(100);
+		platforms[numPlatforms].setHeight(100);
+		platCoords[numPlatforms*2] = input.getMouseX();
+		platCoords[numPlatforms*2+1] = input.getMouseY();
+		numPlatforms++;
+	}
+
+	//select platforms with left mouse button
 	if(input.getMouseButton(1))
 	{
 		for(int x = 1; x < numPlatforms; x++)
@@ -177,6 +196,7 @@ void Map::mapEditorUpdate(InputClass input)
 		}
 	}
 
+	//deselect platforms with right mouse button
 	if(input.getMouseButton(3))
 	{
 		for(int x = 1; x < numPlatforms; x++)

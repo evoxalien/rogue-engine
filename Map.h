@@ -14,6 +14,7 @@ private:
 	bool platSelected[100];
 	int numPlatforms;
 	Camera camera;
+	SDL_Renderer* render;
 
 public:
 	Map();
