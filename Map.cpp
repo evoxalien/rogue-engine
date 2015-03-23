@@ -166,10 +166,10 @@ void Map::mapEditorUpdate(InputClass input)
 	{
 		for(int x = 1; x < numPlatforms; x++)
 		{
-			if(input.getMouseX() >= platCoords[x*2] &&
-				input.getMouseX() <= platCoords[x*2] + platforms[x].getWidth() &&
-				input.getMouseY() >= platCoords[x*2+1] &&
-				input.getMouseY() <= platCoords[x*2+1] + platforms[x].getHeight())
+			if(input.getMouseX() + camera.getCamX() >= platCoords[x*2] &&
+				input.getMouseX() + camera.getCamX() <= platCoords[x*2] + platforms[x].getWidth() &&
+				input.getMouseY() + camera.getCamY() >= platCoords[x*2+1] &&
+				input.getMouseY() + camera.getCamY() <= platCoords[x*2+1] + platforms[x].getHeight())
 			{
 				platSelected[x] = true;
 				platforms[x].setColor(0x77,0x77,0x77);
@@ -181,10 +181,10 @@ void Map::mapEditorUpdate(InputClass input)
 	{
 		for(int x = 1; x < numPlatforms; x++)
 		{
-			if(input.getMouseX() >= platCoords[x*2] &&
-				input.getMouseX() <= platCoords[x*2] + platforms[x].getWidth() &&
-				input.getMouseY() >= platCoords[x*2+1] &&
-				input.getMouseY() <= platCoords[x*2+1] + platforms[x].getHeight())
+			if(input.getMouseX() + camera.getCamX() >= platCoords[x*2] &&
+				input.getMouseX() + camera.getCamX() <= platCoords[x*2] + platforms[x].getWidth() &&
+				input.getMouseY() + camera.getCamY() >= platCoords[x*2+1] &&
+				input.getMouseY() + camera.getCamY() <= platCoords[x*2+1] + platforms[x].getHeight())
 			{
 				platSelected[x] = false;
 				platforms[x].setColor(0xFF,0xFF,0xFF);
