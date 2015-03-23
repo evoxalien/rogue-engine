@@ -8,21 +8,28 @@
 class button
 {
 private:
-   SDL_Surface *tempSurface;
-   SDL_Surface *windowCopy;
+   SDL_Texture *buttonTexture;
+   SDL_Texture *textTexture;
+   SDL_Renderer *rendererCopy;
    TTF_Font *font;
 
 public:
-   button(SDL_Window *windowOriganal);
-   button(SDL_Window *windowOriganal, string tempText);
-   button(SDL_Window *windowOriganal, string tempText,int xIn, int yIn, wIn, hIn);
+   button();
+   button(SDL_Texture *buttonTextureIn);
+   button(SDL_Renderer *rendererIn);
+   button(SDL_Renderer *rendererIn, string tempText);
+   button(SDL_Renderer *rendererIn, string tempText,int xIn, int yIn,int wIn,int hIn);
+   void setRenderer(SDL_Renderer *rendererIn);
    void setWidth(int wIn);
    void setHeight(int hIn);
    void setX(int xIn);
    void setY(int yIn);
    void setText(string textIn);
-   void setColor(Uint8 rIn, Uint8 gIn, Uint8 bIn);
+   void setTextColor(Uint8 rIn, Uint8 gIn, Uint8 bIn);
    void setButtonColor(Uint8 rIn, Uint8 gIn, Uint8 bIn);
+   void setFontSize(int size);
+   void setButtonTexture(SDL_Texture *buttonTextureIn);
+   bool isClicked(int x, int y);
    bool draw();
    
    
@@ -33,35 +40,64 @@ public:
 
 };
 
-button::button(SDL_Window *windowOriganal)
+button::button()
 {
-   font = TTF_OpenFont( "lazy.ttf", 28);
-   windowCopy = SDL_GetWindowSurface(windowOriganal);
+   buttonTexture = NULL;
+   font = TTF_OpenFont( "calibri.ttf", 28);
    text = "button";
    shape = { 0, 0, 5, 5};
    textColor = { 255, 255, 255 };
    buttonColor = { 255, 0, 0};
+   rendererCopy = NULL;
+}
+
+button::button(SDL_Texture *buttonTextureIn)
+{
+   buttonTexture = buttonTextureIn;
+   font = TTF_OpenFont( "calibri.ttf", 28);
+   text = "button";
+   shape = { 0, 0, 5, 5};
+   textColor = { 255, 255, 255 };
+   buttonColor = { 255, 0, 0};
+   rendererCopy = NULL;
+}
+
+button::button(SDL_Renderer *rendererIn)
+{
+   buttonTexture = NULL;
+   font = TTF_OpenFont( "calibri.ttf", 28);
+   text = "button";
+   shape = { 0, 0, 5, 5};
+   textColor = { 255, 255, 255 };
+   buttonColor = { 255, 0, 0};
+   rendererCopy = rendererIn;
 }
 
 
-button::button(SDL_Window *windowCopy, string tempText)
+button::button(SDL_Renderer *rendererIn, string tempText)
 {
-   font = TTF_OpenFont( "lazy.ttf", 28);
-   windowCopy = SDL_GetWindowSurface(windowOriganal);
+   buttonTexture = NULL;
+   font = TTF_OpenFont( "calibri.ttf", 28);
    text = tempText;
    shape = { 0, 0, 5, 5};
    buttonColor = { 255, 0, 0};
-   
+   rendererCopy = rendererIn;   
 }
 
-button::button(SDL_Window *windowCopy, string tempText,int xIn, int yIn, wIn, hIn)
+button::button(SDL_Renderer *rendererIn, string tempText,int xIn, int yIn,int wIn,int hIn)
 {
-   font = TTF_OpenFont( "lazy.ttf", 28);
-   windowCopy = SDL_GetWindowSurface(windowOriganal);
+   buttonTexture = NULL;
+   font = TTF_OpenFont( "calibri.ttf", 28);
    text = tempText;
    shape = { xIn, yIn, wIn, hIn};
    textColor = {255, 255, 255};
    buttonColor = { 255, 0, 0};
+   rendererCopy = rendererIn;
+}
+
+void button::setRenderer(SDL_Renderer *rendererIn)
+{
+   rendererCopy = rendererIn;
 }
 
 void button::setWidth(int wIn)
@@ -99,13 +135,50 @@ void button::setButtonColor(Uint8 rIn, Uint8 gIn, Uint8 bIn)
    buttonColor = {rIn, gIn, bIn};
 }
 
+void button::setFontSize(int size)
+{
+   font = TTF_OpenFont( "calibri.ttf", size);
+}
+
+bool button::isClicked(int x, int y)
+{
+   if(x > shape.x && x < (shape.x + shape.w))
+      if(y > shape.y && y < (shape.y + shape.h))
+	     return true;
+
+   return false;
+}
+
+void button::setButtonTexture(SDL_Texture *buttonTextureIn)
+{
+   buttonTexture = buttonTextureIn;
+}
+
 bool button::draw()
 {
-   //working with font library for most complicated part
-   //currently text does not always fit in button
-   tempSurface = TTF_RenderText_Solid(font, text, textColor);
-   SDL_FillRect(windowCopy, shape, buttonColor);
-   apply_surface( shape.x, shape.y, tempSurface, windowCopy);
+   
+   if(buttonTexture == NULL)
+   {
+      SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
+      if(textSurface == NULL )
+      {
+         printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+      }
+   
+      textTexture = SDL_CreateTextureFromSurface(rendererCopy, textSurface );
+      if(textTexture == NULL )
+      {
+         printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+      }
+   
+      SDL_SetTextureColorMod(textTexture, buttonColor.r, buttonColor.g, buttonColor.b);
+   
+      SDL_RenderCopyEx(rendererCopy, textTexture, NULL, &shape, 0.0, NULL, SDL_FLIP_NONE);
+   }
+   
+   SDL_RenderCopyEx(rendererCopy, buttonTexture, NULL, &shape, 0.0, NULL, SDL_FLIP_NONE);
+   
+   return true;
 }
 
 #endif
