@@ -181,6 +181,29 @@ void Map::mapEditorUpdate(InputClass input)
 		numPlatforms++;
 	}
 
+	//remove platform with r key, mouse must be over platform
+	if(input.getKeyDown() == SDLK_r)
+	{
+		for(int x = 1; x < numPlatforms; x++)
+		{
+			if(input.getMouseX() + camera.getCamX() >= platCoords[x*2] &&
+				input.getMouseX() + camera.getCamX() <= platCoords[x*2] + platforms[x].getWidth() &&
+				input.getMouseY() + camera.getCamY() >= platCoords[x*2+1] &&
+				input.getMouseY() + camera.getCamY() <= platCoords[x*2+1] + platforms[x].getHeight())
+			{
+				for(int y = x; y < numPlatforms; y++)
+				{
+					platforms[y] = platforms[y+1];
+					platSelected[y] = platSelected[y+1];
+					platCoords[y*2] = platCoords[(y+1)*2];
+					platCoords[y*2+1] = platCoords[(y+1)*2+1];
+				}
+				numPlatforms--;
+				x--;
+			}
+		}
+	}
+
 	//select platforms with left mouse button
 	if(input.getMouseButton(1))
 	{
