@@ -105,6 +105,11 @@ bool gameroot::initialize()
       return false;
    }
 
+   if(TTF_Init() == -1)
+   {
+      printf("SDL_TTF could not be initialized. TTF Error : %s\n", TTF_GetError());
+   }
+
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
   
@@ -485,6 +490,8 @@ void gameroot::close()
    SDL_FreeSurface(image);
    SDL_FreeSurface(surface);
    SDL_DestroyWindow(window);
+   IMG_Quit();
+   TTF_Quit();
    SDL_Quit();
 }
 

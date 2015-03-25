@@ -45,6 +45,12 @@ class Texture
 
 		void setFont(std::string filePath, int fontSize)
 		{
+			if(TTF_Init() == -1)
+			{
+				printf("TTF init failed\n");
+				return;
+			}
+
 			filePath += ".ttf";
 			font = TTF_OpenFont(filePath.c_str(), fontSize);
 		}
@@ -84,7 +90,7 @@ class Texture
 		   return texture != NULL;
 		}
 		
-		bool loadFromRenderedText( std::string text, SDL_Color textColor )
+		bool loadTextRender( std::string text, SDL_Color textColor )
 		{
 			//Get rid of preexisting texture
 			free();
@@ -123,7 +129,10 @@ class Texture
 		void free()
 		{
 			if(font != NULL)
+			{
 				TTF_CloseFont(font);
+				TTF_Quit();
+			}
 			if(texture != NULL)
 				SDL_DestroyTexture(texture);
 			texture = NULL;
