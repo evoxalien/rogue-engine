@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 
-//Class for storing and posting a shape to the SDL renderer
+//Class for storing and posting a shpe to the SDL renderer
 class shape
 {
 private:
@@ -32,8 +32,7 @@ public:
    void clearRenderer();
    void clearRenderer(SDL_Renderer* tempRenderer);
    
-   //Two rectangles to store position of filled or empty box
-   SDL_Rect square;
+   //Rectangle to store position of filled or empty box
    SDL_Rect box;
    
    //Values for Red, Green, Blue, and Alpha level
@@ -48,7 +47,6 @@ public:
 shape::shape()
 {
    rendererCopy = NULL;
-   square = { 0, 0, 5, 5};
    box = { 0, 0, 5, 5};
    r = 0xFF;
    g = 0x00;
@@ -60,7 +58,6 @@ shape::shape()
 shape::shape(SDL_Renderer* tempRenderer)
 {
    rendererCopy = tempRenderer;
-   square = { 0, 0, 5, 5};
    box = { 0, 0, 5, 5};
    r = 0xFF;
    g = 0x00;
@@ -74,7 +71,7 @@ shape::~shape()
     rendererCopy = NULL;
 }
 
-//Function draws a square of the color and size stored in class
+//Funtion draws a square of the color and size stored in class
 //Requires passing in a renderer
 bool shape::drawSquare(SDL_Renderer* tempRenderer)
 {
@@ -85,7 +82,7 @@ bool shape::drawSquare(SDL_Renderer* tempRenderer)
 	  return false;
    }
    
-   if(SDL_RenderFillRect(tempRenderer, &square ) < 0)
+   if(SDL_RenderFillRect(tempRenderer, &box ) < 0)
    {
       printf("SDL_RenderFillRect in shape object failed: %s\n", SDL_GetError());
       SDL_ClearError();
@@ -96,7 +93,7 @@ bool shape::drawSquare(SDL_Renderer* tempRenderer)
    	
 }
 
-//Function draws a square of the color and size stored in class
+//Funtion draws a square of the color and size stored in class
 bool shape::drawSquare()
 {
    if(rendererCopy == NULL)
@@ -112,7 +109,7 @@ bool shape::drawSquare()
 	  return false;
    }
    
-   if(SDL_RenderFillRect(rendererCopy, &square ) < 0)
+   if(SDL_RenderFillRect(rendererCopy, &box ) < 0)
    {
       printf("SDL_RenderFillRect in shape object failed: %s\n", SDL_GetError());
       SDL_ClearError();
@@ -123,7 +120,7 @@ bool shape::drawSquare()
    	
 }
 
-//Function draws an empty box of the color and size stored in class
+//Funtion draws an empty box of the color and size stored in class
 //Requires passing in a renderer
 bool shape::drawBox(SDL_Renderer* tempRenderer)
 {
@@ -145,7 +142,7 @@ bool shape::drawBox(SDL_Renderer* tempRenderer)
    	
 }
 
-//Function draws an empty box of the color and size stored in class
+//Funtion draws an empty box of the color and size stored in class
 bool shape::drawBox()
 {
    if(rendererCopy == NULL)
@@ -172,7 +169,7 @@ bool shape::drawBox()
    	
 }
 
-//Function draws a line connecting the points passed in
+//Funtion draws a line connecting the points passed in
 //Requires passing in a renderer
 bool shape::drawLine(SDL_Renderer* tempRenderer, int x1, int y1, int x2, int y2)
 {
@@ -194,7 +191,7 @@ bool shape::drawLine(SDL_Renderer* tempRenderer, int x1, int y1, int x2, int y2)
    	
 }
 
-//Function draws a line connecting the points passed in
+//Funtion draws a line connecting the points passed in
 bool shape::drawLine(int x1, int y1, int x2, int y2)
 {
    if(rendererCopy == NULL)
@@ -220,7 +217,7 @@ bool shape::drawLine(int x1, int y1, int x2, int y2)
    	
 }
 
-//Function draws a dot at position passed in as x, y cordinates
+//Funtion draws a dot at position passed in as x, y cordinates
 //Requires passing in a renderer
 bool shape::drawDot(SDL_Renderer* tempRenderer, int x, int y)
 {
@@ -243,7 +240,7 @@ bool shape::drawDot(SDL_Renderer* tempRenderer, int x, int y)
    	
 }
 
-//Function draws a dot at position passed in as x, y coordinates
+//Funtion draws a dot at position passed in as x, y cordinates
 bool shape::drawDot(int x, int y)
 {
    

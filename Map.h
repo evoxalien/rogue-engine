@@ -14,15 +14,17 @@ private:
 	bool platSelected[100];
 	int numPlatforms;
 	Camera camera;
+	SDL_Renderer* render;
 
 public:
 	Map();
 	~Map();
 	bool parseMapFile(std::string filePath,SDL_Renderer* render);
 	void renderMap();
-	void updateMap(InputClass input);
+	void updateMap();
+	void mapEditorUpdate(InputClass input);
 	void unfocus();
-	void exportMapFile();
+	void exportMapFile(Uint32 timeStamp);
 };
 
 #endif

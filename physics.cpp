@@ -3,13 +3,14 @@
 
 using namespace std;
 
-double Physics::frame_Rate = 1;
-double Physics::time_Of_Next_Collision = 0;
+double Physics::frame_Rate = 1;					//The static member which represents the maximum number of frames the Physics should complete in a single second
+//double Physics::time_Of_Next_Collision = 0;	//Not currently implemented
 
-double Physics::x_Gravity = 0;//9.80665;
-double Physics::y_Gravity = 9.80665;
-double Physics::z_Gravity = -9.80665;
+double Physics::x_Gravity = 0;//9.80665;		//The amount of acceleration that will be present on all mobile objects in the X direction; positive is right, negative is left
+double Physics::y_Gravity = 9.80665;			//The amount of acceleration that will be present on all mobile objects in the Y direction; positive is down, negative is up
+double Physics::z_Gravity = 0;					//The amount of acceleration that will be present on all mobile objects in the Z direction; positive is down, negative is up
 
+//Default constructor
 Physics::Physics()
 {
 	(*this).x_Length = 0;
@@ -36,6 +37,7 @@ Physics::Physics()
 //	(*this).objects_Collided_With_This_Frame = {};
 }
 
+//Constructor
 Physics::Physics(double x_Length, double y_Length, double x_Position, double x_Velocity, double x_Acceleration, double elasticity, double mass)
 {
 	(*this).x_Length = x_Length;
@@ -88,6 +90,7 @@ Physics::Physics(double x_Length, double y_Length, double x_Position, double x_V
 //	(*this).objects_Collided_With_This_Frame = {};
 }*/
 
+//Constructor
 Physics::Physics(double x_Length, double y_Length, double z_Length, double x_Position, double y_Position, double z_Position, double x_Velocity, double y_Velocity, double x_Acceleration, double y_Acceleration, double angle, double elasticity, double mass)
 {
 	(*this).x_Length = x_Length;
@@ -114,33 +117,25 @@ Physics::Physics(double x_Length, double y_Length, double z_Length, double x_Pos
 //	(*this).objects_Collided_With_This_Frame = {};
 }
 
+//Updates the x and y positions of the object based on the corresponding velocity and elapsed time
 void Physics::move()
 {
 	(*this).x_Position = (*this).x_Position + ((*this).x_Velocity / Physics::frame_Rate);
 	(*this).y_Position = (*this).y_Position + ((*this).y_Velocity / Physics::frame_Rate);
 }
 
+//Updates the X and Y positions of the object based on the corresponding velocity and elapsed time, but moves only half of the distance that would be covered in that time; should generally be called once before an object accelerates and once after for more accurate movement
 void Physics::half_Move()
 {
 	(*this).x_Position = (*this).x_Position + (((*this).x_Velocity / Physics::frame_Rate) / 2);
 	(*this).y_Position = (*this).y_Position + (((*this).y_Velocity / Physics::frame_Rate) / 2);
 }
 
-void Physics::negative_Half_Move()
-{
-	(*this).x_Position = (*this).x_Position - (((*this).x_Velocity / Physics::frame_Rate) / 2);
-	(*this).y_Position = (*this).y_Position - (((*this).y_Velocity / Physics::frame_Rate) / 2);
-}
-
+//Updates the X and Y velocities of the object based on the acceleration of the object and elapsed time; should generally be called after all forces have been calculated
 void Physics::accelerate()
 {
-	//cout << "x_Velocity before = " << (*this).x_Velocity << endl;
-	//cout << "x_Acceleration before = " << (*this).x_Acceleration << endl;
-	//cout << "x_Acceleration / frame_Rate = " << ((*this).x_Acceleration / Physics::frame_Rate);
 	(*this).x_Velocity = (*this).x_Velocity + ((*this).x_Acceleration / Physics::frame_Rate);
 	(*this).y_Velocity = (*this).y_Velocity + ((*this).y_Acceleration / Physics::frame_Rate);
-	//cout << "x_Velocity after = " << (*this).x_Velocity << endl;
-	//cout << "x_Acceleration after = " << (*this).x_Acceleration << endl;
 }
 
 //void Physics::accelerate(double x_Acceleration, double y_Acceleration)
@@ -192,23 +187,14 @@ void Physics::accelerate()
 //	}
 //}
 
-//void Physics::calculate_Forces(double x_Force, double y_Force)
-//{
-//	(*this).x_Forces.push_back(x_Force);
-//	(*this).y_Forces.push_back(y_Force);
-//	(*this).y_Force = 0;
-//	for(int i = (*this).y_Forces.size() - 1; i >= 0; i--)
-//	{
-//		(*this).y_Force = (*this).y_Force + (*this).y_Forces[i];
-//	}
-//}
-
+//Adjusts the X and Y forces acting on the object for the current frame; should generally be called any time an object is subjected to something that affects movement (Collisions, gravity, friction, etc.)
 void Physics::add_Force(double x_Force, double y_Force)
 {
 	(*this).x_Force = (*this).x_Force + x_Force;
 	(*this).y_Force = (*this).y_Force + y_Force;
 }
 
+//Updates the X and Y acceleration of the object based on the forces in the frame and sets the forces to 0 to ready them for the next frame; should generally be called once after all forces are calculated
 void Physics::apply_Forces()
 {
 	if((*this).mass > 0)
@@ -220,10 +206,17 @@ void Physics::apply_Forces()
 	}
 	else
 	{
-		cout << "Not sure what to do with a mass of 0 at the moment" << endl;
+		cout << "Error: Object's mass is 0 or negative." << endl;
 	}
 }
 
+//Empties the vector containing pointers to the other objects that the object has collided with in the current frame, readying it for the next frame
+void Physics::clear_Objects_Collided_With_This_Frame()
+{
+	(*this).objects_Collided_With_This_Frame.clear();
+}
+
+//'Resets' the object's data as if it were newly constructed from the default constructor
 void Physics::clear_Object()
 {
 	(*this).x_Length = 0;
@@ -250,6 +243,7 @@ void Physics::clear_Object()
 	(*this).objects_Collided_With_This_Frame.clear();
 }
 
+//Displays the Physics data of the object to the console log
 void Physics::display_Information()
 {
 	cout << "x_Position = " << (*this).x_Position << endl;
@@ -267,10 +261,11 @@ void Physics::display_Information()
 	//cout << (*this).mass << endl << endl;	
 }
 
+//Checks through a vector of Physics pointers for all possible collisions and calls resolve_Collisions if one is found
 void Physics::check_For_Collisions(vector<Physics*>& physics_Pointer_Vector)
 {
 	bool pair_Has_Collided = false;
-	vector<double> collision_Times;
+	//vector<double> collision_Times;
 	//cout << physics_Pointer_Vector.size() << endl;
 	for(int i = 0; i < physics_Pointer_Vector.size(); i++)
 	{
@@ -369,19 +364,17 @@ void Physics::check_For_Collisions(vector<Physics*>& physics_Pointer_Vector)
 	//}
 }
 
+//The pointers passed to the function are assumed to have already collided; after the collisions, the forces on each object will be added appropriate to the velocities, mass, elasticity, etc. from each collision, and each will have a pointer to the other object stored in the objects_Collided_With_This_Frame
 void Physics::resolve_Collisions(Physics* physics_A, Physics* physics_B)
 {
 	if(((((*physics_A).x_Position - (*physics_B).x_Position) <= 0) && (((*physics_A).x_Velocity - (*physics_B).x_Velocity) > 0)) || ((((*physics_A).x_Position - (*physics_B).x_Position) >= 0) && (((*physics_A).x_Velocity - (*physics_B).x_Velocity) < 0)) || ((((*physics_A).y_Position - (*physics_B).y_Position) <= 0) && (((*physics_A).y_Velocity - (*physics_B).y_Velocity) > 0)) || ((((*physics_A).y_Position - (*physics_B).y_Position) >= 0) && (((*physics_A).y_Velocity - (*physics_B).y_Velocity) < 0)))
 	{
-	cout.precision(25);
+//	cout.precision(25);
 	double physics_A_Squared_Velocity = ((*physics_A).x_Velocity * (*physics_A).x_Velocity) + ((*physics_A).y_Velocity * (*physics_A).y_Velocity);
 	double physics_B_Squared_Velocity = ((*physics_B).x_Velocity * (*physics_B).x_Velocity) + ((*physics_B).y_Velocity * (*physics_B).y_Velocity);
 	(*physics_A).objects_Collided_With_This_Frame.push_back(physics_B);
 	(*physics_B).objects_Collided_With_This_Frame.push_back(physics_A);
-	//(*physics_A).set_Has_Collided_This_Frame(true);
-	//(*physics_B).set_Has_Collided_This_Frame(true);
-	
-	
+
 	double physics_A_X_Frame_Of_Reference = (*physics_A).x_Velocity - (*physics_B).x_Velocity;
 	double physics_A_Y_Frame_Of_Reference = (*physics_A).y_Velocity - (*physics_B).y_Velocity;
 	double physics_B_X_Frame_Of_Reference = (*physics_B).x_Velocity - (*physics_A).x_Velocity;
@@ -522,6 +515,7 @@ void Physics::resolve_Collisions(Physics* physics_A, Physics* physics_B)
 	}
 }
 
+//'Getters' and 'Setters' for private static class variables
 const double Physics::get_X_Gravity()
 {
 	return Physics::x_Gravity;
@@ -569,6 +563,7 @@ void Physics::set_Frame_Rate(double frame_rate)
 	}
 }
 
+//'Getters' and 'Setters' for private member variables
 const double Physics::get_X_Length()
 {
 	return (*this).x_Length;
@@ -707,9 +702,4 @@ const vector<Physics*> Physics::get_Objects_Collided_With_This_Frame()
 void Physics::set_Objects_Collided_With_This_Frame(vector<Physics*> objects_Collided_With_This_Frame)
 {
 	(*this).objects_Collided_With_This_Frame = objects_Collided_With_This_Frame;
-}
-
-void Physics::clear_Objects_Collided_With_This_Frame()
-{
-	(*this).objects_Collided_With_This_Frame.clear();
 }

@@ -8,6 +8,7 @@
 #include <string>
 #include "inputDavid.h"
 #include "input.h"
+#include "Gamepad.h"
 using namespace std;
 
 
@@ -30,6 +31,7 @@ private:
    int    playerHealth;
    int    playerMovementSpeed;
    string playerInputMode;
+   InputClass input;
 
 public:
    SDL_Rect whiteBoxRect;
@@ -79,6 +81,7 @@ public:
    int getPlayerH();
    void playerButtonPress(SDL_Keycode e);
    void MenuChoices(SDL_Keycode e);
+   // void updateKeys(gameroot::engineState Engine);
    enum GameState
 {
    StartMenu,
@@ -98,6 +101,14 @@ GameState gamestate;
 
 int playerAgency::intializePlayer(int playerIndex)
 {
+   //parse the file
+   ifstream inputFile;
+   inputFile.open("playerConfig/PLayerScript.txt");
+
+   if(!inputFile)
+      return false;
+
+   inputFile >> playerIndex;
    if(playerIndex==0)//player 1
    {
       setPlayerIndex(playerIndex);
@@ -290,16 +301,21 @@ void playerAgency::playerButtonPress(SDL_Keycode e)
 { 
    if (gamestate==Playing)
    {
-      switch(e)
+      if (e==SDLK_s)
       {
-         case(SDLK_s) :
-            playerY++; break;
-         case(SDLK_w) :
-            playerY--; break;
-         case(SDLK_d) :
-            playerX++; break;
-         case(SDLK_a) :
-            playerX--; break;
+            playerY++; 
+      }
+       if (e==SDLK_w)
+      {
+            playerY--; 
+      }
+      if (e==SDLK_d)
+      {
+            playerX++; 
+      }
+      if (e==SDLK_a)
+      {
+            playerX--; 
       }
       whiteBoxRect.x = getPlayerX();
       whiteBoxRect.y = getPlayerY();
@@ -359,3 +375,19 @@ void playerAgency::MenuChoices(SDL_Keycode e)
 
 
 }
+
+// void playerAgency::updateKeys(gameroot::engineState Engine)
+// {
+
+//     if(input.getKeyDown() == SDLK_BACKSPACE)
+//          {
+//             engineState = Waiting;
+//             gamestate = StartMenu;
+//          }
+//          if (gamestate==Playing)
+//          {
+//             playerButtonPress(input.getKeyDown());
+                   
+//              //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
+//          }  
+// }
