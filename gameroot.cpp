@@ -93,6 +93,9 @@ bool gameroot::initialize()
 
    //tell texture the renderer to use
    texture.setRenderer(renderer);
+   
+   //Pass renderer into button
+   testButton.setRenderer(renderer);
 
    //initialize map from file
    map.parseMapFile("maps/Map1.txt", renderer);
@@ -308,6 +311,8 @@ void gameroot::draw()
          SDL_SetRenderDrawColor(renderer, r, g, b, 0xFF);
          fillRect = {150, 0, 50, 50};
          SDL_RenderFillRect(renderer, &fillRect);
+		 testButton.draw();
+		 
       }
       //Draw Colorful Rectangles
       if(player1.gamestate== player1.Red)

@@ -20,6 +20,7 @@
 #include "playerClass.h"
 #include "startMenu.h"
 #include "Gamepad.h"
+#include "button.h"
 //#include <thread>
 
 #define FPS_INTERVAL 1.0 //Seconds
@@ -44,6 +45,7 @@ private:
    SDL_Event Event;
    int dino;
    Map map;
+   button testButton;
    enum EngineState
    {
       Waiting,//0
