@@ -1,0 +1,41 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# LogFiles
+*bug.txt
+*ror.txt
+*ning.txt
+
+bin/windows/error.txt
+bin/windows/warning.txt
+bin/windows/debug.txt
+
+bin/linux/error.txt
+bin/linux/warning.txt
+bin/linux/debug.txt
+
