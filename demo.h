@@ -39,14 +39,11 @@ private:
    SDL_Window *window;
    SDL_Renderer *renderer;
    SDL_Surface *surface;
+   SDL_Surface *image;
    Texture texture;
-   Texture player;
    SDL_Event Event;
+   int dino;
    Map map;
-   //The frames per second timer
-   LTimer fpsTimer;
-   //The frames per second cap timer
-   LTimer capTimer;
    enum EngineState
    {
       Waiting,//0
@@ -64,8 +61,9 @@ private:
    };
    
    EngineState engineState;
-   //GameState gameState;
+//   GameState gameState;
    bool initialize();
+   int r, g, b; 
    InputClass input;
    playerAgency player1;
    // playerClass Hero;
@@ -79,6 +77,7 @@ public:
    void update();
    void draw();
    void close();
+   SDL_Texture* loadTexture(std::string path);
 
    Uint32 GLOBAL_FRAME_COUNTER;
    Uint32 previousTicks;

@@ -39,3 +39,6 @@ bin/linux/error.txt
 bin/linux/warning.txt
 bin/linux/debug.txt
 
+
+*.exe
+*.exe
