@@ -2,8 +2,7 @@
 
 //There's a lot of commented out code that was for testing, just ignore it for now
 
-//To do: documentation, semi-elastic collisions, super-elastic collisions, 2-dimensional collisions of all types, different shape definitions,
-//friction, gravity/anti-gravity 'wells' (diminishing, non-diminishing, single-dimensional, radial)
+//To do:Different shape definitions, proper friction, gravity/anti-gravity 'wells' (diminishing, non-diminishing, single-dimensional, radial)
 
 #ifndef PHYSICS_H
 #define PHYSICS_H
@@ -13,50 +12,56 @@
 
 using namespace std;
 
+class Object;	//Forward declaration allowing Object to be referenced within Physics
+
 class Physics
 {
 	private:
 		//Private Static class variables
-		static double frame_Rate;
-		static double time_Of_Next_Collision;
+		static double frame_Rate;				//The number of times the Physics system should execute if the program continues at the same rate
+		//static double time_Of_Next_Collision;	//Not currently implemented
 
-		static double x_Gravity;
-		static double y_Gravity;
-		static double z_Gravity;
+		static double x_Gravity;	//The amount of acceleration that will be present on all mobile objects in the X direction; positive is right, negative is left
+		static double y_Gravity;	//The amount of acceleration that will be present on all mobile objects in the Y direction; positive is down, negative is up
+		static double z_Gravity;	//The amount of acceleration that will be present on all mobile objects in the Z direction; positive is down, negative is up
 
 		//Private member variables
-		double x_Length;
-		double y_Length;
-		double z_Length;
+		double x_Length;			//The length of the rectangle along the X axis
+		double y_Length;			//The length of the rectangle along the Y axis
+		double z_Length;			//The length of the rectangle along the Z axis
 
-		double x_Position;
-		double y_Position;
-		double z_Position;
+		double x_Position;			//The X position of the left side of a rectangle
+		double y_Position;			//The Y position of the top side of a rectangle
+		double z_Position;			//Currently not fully supported; will generally be used as a depth or layer
 
-		double x_Velocity;
-		double y_Velocity;
+		double x_Velocity;			//The speed and direction along the X axis the object would cover in 1 second
+		double y_Velocity;			//The speed and direction along the Y axis the object would cover in 1 second
 
-		double x_Acceleration;
-		double y_Acceleration;
+		double x_Acceleration;		//The rate at which the object's velocity along the X axis is changing per second
+		double y_Acceleration;		//The rate at which the object's velocity along the Y axis is changing per second
 
-		double x_Force;
-		double y_Force;
+		double x_Force;				//The rate at which the object's acceleration along the X axis is changing per second, divided by the mass of the object
+		double y_Force;				//The rate at which the object's acceleration along the Y axis is changing per second, divided by the mass of the object
 
-		double angle;
-		double elasticity;
-		double mass;
+		double angle;				//Not currently implemented; will be the angle the rectangle is rotated
+		double elasticity;			//How much an object will 'bounce' when there is a collision; should typically be between 0 and 1. The lower value of a pair is used in collision resolution
+		double mass;				//The weight of the object in Kilograms
 
-		vector<Physics*> objects_Collided_With_This_Frame;
+		std::vector<Physics*> objects_Collided_With_This_Frame;	//A vector of pointers to the Physics of Objects that the object has collided with in the current frame
 
 	public:
+		//Constructors
 		Physics();
 		Physics(double, double, double, double, double, double, double);
-		//Physics(double, double, double, double, double, double, double);
 		Physics(double, double, double, double, double, double, double, double, double, double, double, double, double);
 
+		//Static functions used in collision resolution
+		static void check_For_Collisions(vector<Physics*>&);
+		static void resolve_Collisions(Physics*, Physics*);
+
+		//Member functions
 		void move();
 		void half_Move();
-		void negative_Half_Move();
 		void accelerate();
 		//void accelerate(double, double);
 		//void accelerate(double, double, double);
@@ -65,17 +70,12 @@ class Physics
 		//void calculate_Forces(double, double);
 		void add_Force(double, double);
 		void apply_Forces();
+		void clear_Objects_Collided_With_This_Frame();
 
 		void clear_Object();
 		void display_Information();
 
-		//Static functions used in collision resolution
-		static void check_For_Collisions(vector<Physics*>&);
-		static void resolve_Collisions(Physics*, Physics*);
-
-		const static void display_Gravity();
-
-		//Getters and setters for private static class variables
+		//'Getters' and 'Setters' for private static class variables
 		const static double get_X_Gravity();
 		static void set_X_Gravity(double);
 
@@ -88,7 +88,7 @@ class Physics
 		const static double get_Frame_Rate();
 		static void set_Frame_Rate(double);
 
-		//Getters and setters for private members
+		//'Getters' and 'Setters' for private member variables
 		const double get_X_Length();
 		void set_X_Length(double);
 
@@ -130,6 +130,5 @@ class Physics
 
 		const vector<Physics*> get_Objects_Collided_With_This_Frame();
 		void set_Objects_Collided_With_This_Frame(vector<Physics*>);
-		void clear_Objects_Collided_With_This_Frame();
 };
 #endif

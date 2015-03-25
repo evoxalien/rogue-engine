@@ -3,6 +3,7 @@
 
 using namespace std;
 
+//Initialization of static Object members
 std::vector<Object*> Object::object_Pointer_Vector;
 std::vector<Physics*> Object::physics_Pointer_Vector;
 std::vector<std::vector<std::vector<Physics*>>> Object::physics_Segments;
@@ -13,6 +14,7 @@ int Object::number_Of_Y_Physics_Segments = 1;
 int Object::screen_X_Length = 1;
 int Object::screen_Y_Length = 1;
 
+//Default Object Constructor; assigns a default Physics to the Object and adds a pointer to the Object to the Object pointer vector and a pointer to the Physics to the Physics pointer vector
 Object::Object()
 {
 	(*this).physics = Physics();
@@ -21,6 +23,7 @@ Object::Object()
 	Object::object_Pointer_Vector.push_back(this);
 }
 
+//Object Constructor; if the initial Physics of an Object is known, passing it as an argument will create an Object with the same Physics
 Object::Object(Physics physics)
 {
 	(*this).physics = physics;
@@ -29,12 +32,17 @@ Object::Object(Physics physics)
 	Object::object_Pointer_Vector.push_back(this);
 }
 
+//Object Deconstructor; when an Object is deleted or goes out of scope, the Object pointer vector will swap the last element with the one deleted and remove the previous last element before deleting the Object from memory
 Object::~Object()
 {
-	Object::object_Pointer_Vector[(*this).object_Pointer_Vector_Index] = NULL;
-	Object::physics_Pointer_Vector[(*this).object_Pointer_Vector_Index] = NULL;
+	Object::object_Pointer_Vector[(*this).get_Object_Pointer_Vector_Index()] = Object::object_Pointer_Vector[Object::object_Pointer_Vector.size()];		//Changes pointer stored in the deconstructing object's index to be a pointer to the last object in the vector
+	Object::physics_Pointer_Vector[(*this).get_Object_Pointer_Vector_Index()] = Object::physics_Pointer_Vector[Object::physics_Pointer_Vector.size()];	//A similar change to the Physics pointers; will need to be modified in the future
+	(*Object::object_Pointer_Vector[(*this).get_Object_Pointer_Vector_Index()]).object_Pointer_Vector_Index = (*this).get_Object_Pointer_Vector_Index();//Changes the index of the object which previously had its pointer at the end to its new position in the vector 
+	Object::object_Pointer_Vector.pop_back();																											//Removes the last element of the object pointer vector since it's effectively been moved to a new index
+	Object::physics_Pointer_Vector.pop_back();																											//A similar change to the Physics pointers; will need to be modified in the future
 }
 
+//The function assigns the Physics of active Objects to the appropriate locations in the 2-dimensional Physics segments vectors for the current frame and calls Physics::check_For_Collisions to check for and resolve collisions inside the segments
 void Object::check_For_Collisions()
 {
 	int i = 0;
@@ -131,6 +139,7 @@ void Object::check_For_Collisions()
 	}
 }
 
+//Used for testing; displays useful information in the console log related to the Object's contents
 const void Object::display_Information()
 {
 	cout << "size of vector = " << Object::object_Pointer_Vector.size() << endl;
@@ -144,11 +153,8 @@ const void Object::display_Information()
 	}
 }
 
-const int Object::get_Object_Pointer_Vector_Index()
-{
-	return (*this).object_Pointer_Vector_Index;
-}
 
+//'Getters' and 'Setters' for static Object members
 void Object::set_Number_Of_X_Physics_Segments(int number_Of_X_Physics_Segments)
 {
 	Object::number_Of_X_Physics_Segments = number_Of_X_Physics_Segments;
@@ -174,7 +180,28 @@ void Object::set_Screen_X_Length(int screen_X_Length)
 	Object::screen_X_Length = screen_X_Length;
 }
 
+const int Object::get_Screen_X_Length()
+{
+	return Object::screen_X_Length;
+}
+
 void Object::set_Screen_Y_Length(int screen_Y_Length)
 {
 	Object::screen_Y_Length = screen_Y_Length;
+}
+
+const int Object::get_Screen_Y_Length()
+{
+	return Object::screen_Y_Length;
+}
+
+//'Getters' and 'Setters' for private member variables
+void Object::set_Object_Pointer_Vector_Index(int object_Pointer_Vector_Index)
+{
+	(*this).object_Pointer_Vector_Index = object_Pointer_Vector_Index;
+}
+
+const int Object::get_Object_Pointer_Vector_Index()
+{
+	return (*this).object_Pointer_Vector_Index;
 }
