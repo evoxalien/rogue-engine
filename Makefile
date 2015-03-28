@@ -1,6 +1,6 @@
 #OBJS specifies which files to compile as part of the project
 
-OBJS = physics.cpp object.cpp log.cpp main.cpp
+OBJS = main.cpp physics.cpp object.cpp log.cpp
 
 
 #CC specifies which compiler we're using

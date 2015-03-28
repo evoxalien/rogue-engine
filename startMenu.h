@@ -3,10 +3,8 @@
 #define STARTMENU_H_INCLUDED
 
 #include "SDLincludes.h"
-//#include "SDL.h"
 #include <stdio.h>
 #include <string>
-#include "inputDavid.h"
 #include "input.h"
 #include "Gamepad.h"
 #include "log.h"

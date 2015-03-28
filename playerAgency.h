@@ -3,7 +3,6 @@
 #define PLAYERAGENCY_H_INCLUDED
 
 #include "SDLincludes.h"
-//#include "SDL.h"
 #include <stdio.h>
 #include <string>
 #include "inputDavid.h"
@@ -97,7 +96,7 @@ public:
 };
 GameState gamestate;
 };
-#endif
+
 
 int playerAgency::intializePlayer(int playerIndex)
 {
@@ -391,3 +390,5 @@ void playerAgency::MenuChoices(SDL_Keycode e)
 //              //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
 //          }  
 // }
+
+#endif

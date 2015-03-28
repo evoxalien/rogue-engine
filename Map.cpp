@@ -1,3 +1,5 @@
+#ifndef MAP_CPP_
+#define MAP_CPP_
 #include "Map.h"
 #include <fstream>
 #include <sstream>
@@ -241,3 +243,4 @@ void Map::mapEditorUpdate(InputClass input)
 		}
 	}
 }
+#endif

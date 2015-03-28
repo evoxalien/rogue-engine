@@ -1,3 +1,5 @@
+#ifndef CAMERA_CPP_
+#define CAMERA_CPP_
 #include "Camera.h"
 
 //Constructor: 
@@ -95,3 +97,4 @@ void Camera::Update_Camera(int camX, int camY)
 	CheckBounds();
 
 }//End of Update
+#endif

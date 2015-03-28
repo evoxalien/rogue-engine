@@ -11,5 +11,6 @@ int main(int argc, char *argv[])
 
    theGame.execute();
    aMap.execute();
-
+   
+   return 0;
 }

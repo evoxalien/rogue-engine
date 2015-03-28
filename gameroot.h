@@ -2,31 +2,21 @@
 
 #define GAMEROOT_H_INCLUDED
 
-
-//#include "SDL.h"
 #include "SDLincludes.h"
 #include <iostream>
 #include <stdio.h>
 #include <string>
 #include <chrono>
-#include "inputDavid.h"
 #include "player.h"
 #include "log.h"
 #include "input.h"
-#include "playerAgency.h"
 #include "ltimer.h"
 #include "Texture.h"
 #include "Map.cpp"
-#include "playerClass.h"
 #include "startMenu.h"
-#include "Gamepad.h"
 //#include <thread>
 
 #define FPS_INTERVAL 1.0 //Seconds
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 720;
-const int SCREEN_FPS = 60;
-const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
 using namespace std;
 
@@ -35,10 +25,15 @@ class gameroot
 private:
    static double maximum_Frame_Rate;
    static double total_Time;
+   
+   const int SCREEN_WIDTH = 1024;
+   const int SCREEN_HEIGHT = 720;
+   const int SCREEN_FPS = 60;
+   const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
    static std::chrono::high_resolution_clock::time_point start_Of_Previous_Frame;
    static std::chrono::high_resolution_clock::time_point start_Of_Current_Frame;
    static std::chrono::duration<double> time_Of_Previous_Frame;
-
+   
    bool Running;
    SDL_Window *window;
    SDL_Renderer *renderer;
@@ -71,9 +66,6 @@ private:
    //GameState gameState;
    bool initialize();
    InputClass input;
-   playerAgency player1;
-   // playerClass Hero;
-   startMenu Main;
 
 public:
    gameroot(); 
@@ -114,13 +106,6 @@ gameroot::gameroot()
 //Initialize all the SDL
 bool gameroot::initialize()
 {
-   //intitalize the gamestate
-
-   player1.intializePlayer(0);
-   player1.gamestate=player1.StartMenu;
-   
-   
-   
 
    //Tests SDL components, important to call before other SDL operations
    //https://wiki.libsdl.org/SDL_Init
@@ -132,7 +117,7 @@ bool gameroot::initialize()
 
    //Calls and tests function to create SDL Window (documentation in link)
    //https://wiki.libsdl.org/SDL_CreateWindow
-   if((window = SDL_CreateWindow( "Rogue Engine Window Title Here", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN )) == NULL)
+   if((window = SDL_CreateWindow( "Rogue Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN )) == NULL)
    {
       printf ("Window Error: %s", SDL_GetError());
       return false;
@@ -234,15 +219,15 @@ void gameroot::OnEvent(SDL_Event *Event)
 //Does nothing. Math and physics later
 void gameroot::update()
 {
-	if(gameroot::time_Of_Previous_Frame.count() != 0)										//Avoid dividing by 0
-	{
-		Physics::set_Frame_Rate((1.0 / gameroot::time_Of_Previous_Frame.count()));			//Update Physics to know how long the previous frame took
-	}
-	else
-	{
-		Physics::set_Frame_Rate(gameroot::maximum_Frame_Rate);								//If the frame took an unregisterable amount of time, Physics uses the maximum frame rate for this frame
-	}
-	gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
+   if(gameroot::time_Of_Previous_Frame.count() != 0)										//Avoid dividing by 0
+   {
+      Physics::set_Frame_Rate((1.0 / gameroot::time_Of_Previous_Frame.count()));			//Update Physics to know how long the previous frame took
+   }
+   else
+   {
+      Physics::set_Frame_Rate(gameroot::maximum_Frame_Rate);								//If the frame took an unregisterable amount of time, Physics uses the maximum frame rate for this frame
+   }
+   gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
 
    debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
 
@@ -255,9 +240,7 @@ void gameroot::update()
 	  //Checking if X has been clicked
       OnEvent(&Event);
 	  
-	  //Update player buttons
-	  player1.playerButtonPress(input.getKeyDown());
-	  
+	    
 	}  
       
    std::chrono::high_resolution_clock::time_point time_Before_Function_Call = std::chrono::high_resolution_clock::now();				//Temporary timer for how long the Physics is taking
@@ -272,7 +255,6 @@ void gameroot::update()
          {
             engineState = Waiting;
             map.unfocus();
-            player1.gamestate = player1.StartMenu;
          }
       }
 
