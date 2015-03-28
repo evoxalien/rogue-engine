@@ -157,15 +157,6 @@ bool gameroot::initialize()
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
   
-
-   Object::set_Number_Of_X_Physics_Segments(64);		//64 is arbitrary, but will divide the level into 64 columns to improve the efficiency of collision detection
-   Object::set_Number_Of_Y_Physics_Segments(64);		//64 is arbitrary, but will divide the level into 64 rows to improve the efficiency of collision detection
-   Object::set_Screen_X_Length(SCREEN_WIDTH);			//Will be changing in the future to setLevelSize(struct level_Size, int level_Number) or moved to update in the loop
-   Object::set_Screen_Y_Length(SCREEN_HEIGHT);			//Will be included in setLevelSize in the future
-
-   Physics::set_Frame_Rate(gameroot::maximum_Frame_Rate);
-
-
    GLOBAL_FRAME_COUNTER = 0;
    fpsTimer.start();
    /*
@@ -219,14 +210,6 @@ void gameroot::OnEvent(SDL_Event *Event)
 //Does nothing. Math and physics later
 void gameroot::update()
 {
-   if(gameroot::time_Of_Previous_Frame.count() != 0)										//Avoid dividing by 0
-   {
-      Physics::set_Frame_Rate((1.0 / gameroot::time_Of_Previous_Frame.count()));			//Update Physics to know how long the previous frame took
-   }
-   else
-   {
-      Physics::set_Frame_Rate(gameroot::maximum_Frame_Rate);								//If the frame took an unregisterable amount of time, Physics uses the maximum frame rate for this frame
-   }
    gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
 
    debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
@@ -242,11 +225,6 @@ void gameroot::update()
 	  
 	    
 	}  
-      
-   std::chrono::high_resolution_clock::time_point time_Before_Function_Call = std::chrono::high_resolution_clock::now();				//Temporary timer for how long the Physics is taking
-   Object::check_For_Collisions();        //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
-   std::chrono::duration<double> duration_Of_Function_Call = std::chrono::high_resolution_clock::now() - time_Before_Function_Call;	//Temporary timer
-   //cout << "Duration of the function call, check_For_Collisions(), was: " << duration_Of_Function_Call.count() << " seconds." << endl;	//Temporary timer
       
       if(engineState == MapEditor)
       {
