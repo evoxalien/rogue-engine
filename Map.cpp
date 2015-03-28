@@ -7,8 +7,10 @@
 Map::Map()
 {
 	numPlatforms = 0;
+	textColor = {0, 0, 0, 0xFF};
 	camera.setBoundRect(0,0,5000,5000);
 	render = NULL;
+	drawText = false;
 }
 
 Map::~Map()
@@ -26,6 +28,11 @@ Map::~Map()
 bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 {
 	render = r;
+
+	textTexture.setRenderer(render);
+	textTexture.setFont("calibri", 500);
+	textTexture.loadTextRender("FUCK", textColor);
+	
 	ifstream inputFile;
 	inputFile.open(filePath);
 
@@ -91,6 +98,10 @@ void Map::unfocus()
 		platSelected[x] = false;
 		platforms[x].setColor(0xFF,0xFF,0xFF);
 	}
+	if(drawText)
+	{
+		textTexture.render(50, 50);
+	}
 }
 
 void Map::renderMap()
@@ -108,6 +119,11 @@ void Map::updateMap()
 
 void Map::mapEditorUpdate(InputClass input)
 {
+	//FUCK
+	if(input.getKeyDown() == SDLK_f)
+	{
+		drawText = !drawText;
+	}
 	//move camera with wasd
 	if(input.getKeyDown() == SDLK_w)
 	{
