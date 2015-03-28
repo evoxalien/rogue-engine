@@ -1,6 +1,6 @@
 #OBJS specifies which files to compile as part of the project
 
-OBJS = gameroot.cpp physics.cpp object.cpp log.cpp
+OBJS = main.cpp physics.cpp object.cpp log.cpp
 
 
 #CC specifies which compiler we're using
@@ -23,8 +23,8 @@ LINKER_FLAGS_W = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixe
 LINKER_FLAGS_L = -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -D LINUX
 
 #OBJ_NAME specifies the name of our exectuable
-OBJ_NAME_W = bin/windows/gameroot
-OBJ_NAME_L = bin/linux/gameroot
+OBJ_NAME_W = bin/windows/Rogue_Engine
+OBJ_NAME_L = bin/linux/Rogue_Engine
 
 #This is the target that compiles our executable
 all : $(OBJS)

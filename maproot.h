@@ -1,26 +1,24 @@
-#ifndef GAMEROOT_H_INCLUDED
+#ifndef MAPROOT_H_INCLUDED
 
-#define GAMEROOT_H_INCLUDED
+#define MAPROOT_H_INCLUDED
 
 #include "SDLincludes.h"
 #include <iostream>
 #include <stdio.h>
 #include <string>
 #include <chrono>
-#include "player.h"
 #include "log.h"
 #include "input.h"
 #include "ltimer.h"
 #include "Texture.h"
 #include "Map.cpp"
-#include "startMenu.h"
 //#include <thread>
 
 #define FPS_INTERVAL 1.0 //Seconds
 
 using namespace std;
 
-class gameroot
+class maproot
 {
 private:
    static double maximum_Frame_Rate;
@@ -34,41 +32,23 @@ private:
    static std::chrono::high_resolution_clock::time_point start_Of_Current_Frame;
    static std::chrono::duration<double> time_Of_Previous_Frame;
    
+
    bool Running;
    SDL_Window *window;
    SDL_Renderer *renderer;
-   SDL_Surface *surface;
-   Texture texture;
-   Texture player;
    SDL_Event Event;
    Map map;
    //The frames per second timer
    LTimer fpsTimer;
    //The frames per second cap timer
    LTimer capTimer;
-   enum EngineState
-   {
-      Waiting,//0
-      PlayingGame,//1
-      MapEditor,//2
-      StartMenu,//3
-      Loading,//4
-      leveledup,//5
-      Paused,//6
-      levelSelect,//7
-      all,//8
-      Red,//9
-      Green,//10
-      Blue//11
-   };
-   
-   EngineState engineState;
+  
    //GameState gameState;
    bool initialize();
    InputClass input;
-
+   
 public:
-   gameroot(); 
+   maproot(); 
    bool loadContent();
    int execute();
    void OnEvent(SDL_Event *Event);
@@ -84,29 +64,25 @@ public:
 
 };
 
-double gameroot::maximum_Frame_Rate = 120;		//Sets the maximum number of times the main game loop can execute in a single second
-double gameroot::total_Time = 0;				//The amount of time the game has run from the start of the program
-std::chrono::high_resolution_clock::time_point gameroot::start_Of_Previous_Frame = std::chrono::high_resolution_clock::now();	//The time point that the previous instance of the main game loop (A 'frame') began
-std::chrono::high_resolution_clock::time_point gameroot::start_Of_Current_Frame = gameroot::start_Of_Previous_Frame;			//The time point at which the currently active frame began
-std::chrono::duration<double> gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame);	//The length of time the previous frame took to complete
+double maproot::maximum_Frame_Rate = 120;		//Sets the maximum number of times the main game loop can execute in a single second
+double maproot::total_Time = 0;				//The amount of time the game has run from the start of the program
+std::chrono::high_resolution_clock::time_point maproot::start_Of_Previous_Frame = std::chrono::high_resolution_clock::now();	//The time point that the previous instance of the main game loop (A 'frame') began
+std::chrono::high_resolution_clock::time_point maproot::start_Of_Current_Frame = maproot::start_Of_Previous_Frame;			//The time point at which the currently active frame began
+std::chrono::duration<double> maproot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame);	//The length of time the previous frame took to complete
 
 
 //Simple initializes
-gameroot::gameroot()
+maproot::maproot()
 {
    Running = false;
    window = NULL;
    renderer = NULL;
-   surface = NULL;
-   engineState = Waiting;
-   
 }
 
 
 //Initialize all the SDL
-bool gameroot::initialize()
+bool maproot::initialize()
 {
-
    //Tests SDL components, important to call before other SDL operations
    //https://wiki.libsdl.org/SDL_Init
    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -117,7 +93,7 @@ bool gameroot::initialize()
 
    //Calls and tests function to create SDL Window (documentation in link)
    //https://wiki.libsdl.org/SDL_CreateWindow
-   if((window = SDL_CreateWindow( "Rogue Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN )) == NULL)
+   if((window = SDL_CreateWindow( "Rogue Engine Map Editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN )) == NULL)
    {
       printf ("Window Error: %s", SDL_GetError());
       return false;
@@ -138,14 +114,6 @@ bool gameroot::initialize()
    //set render draw color property
    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-   //tell texture the renderer to use
-   texture.setRenderer(renderer);
-   
-   player.setRenderer(renderer);
-
-   //initialize map from file
-   map.parseMapFile("maps/Map1.txt", renderer);
-
    //initialize image subsystem to load png files
    int imgFlags = IMG_INIT_PNG;
    if(!(IMG_Init(imgFlags) & imgFlags))
@@ -157,14 +125,6 @@ bool gameroot::initialize()
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
   
-
-   Object::set_Number_Of_X_Physics_Segments(64);		//64 is arbitrary, but will divide the level into 64 columns to improve the efficiency of collision detection
-   Object::set_Number_Of_Y_Physics_Segments(64);		//64 is arbitrary, but will divide the level into 64 rows to improve the efficiency of collision detection
-   Object::set_Screen_X_Length(SCREEN_WIDTH);			//Will be changing in the future to setLevelSize(struct level_Size, int level_Number) or moved to update in the loop
-   Object::set_Screen_Y_Length(SCREEN_HEIGHT);			//Will be included in setLevelSize in the future
-
-   Physics::set_Frame_Rate(gameroot::maximum_Frame_Rate);
-
 
    GLOBAL_FRAME_COUNTER = 0;
    fpsTimer.start();
@@ -180,25 +140,14 @@ bool gameroot::initialize()
 }
 
 //Load textures and other content here
-bool gameroot::loadContent()
+bool maproot::loadContent()
 {
 
-   if(!texture.loadTexture("../../images/dino.png"))
+   //initialize map from file
+   if(map.parseMapFile("maps/Map1.txt", renderer))
    {
-      error_log << "Texture failed to load.\n";
-      return false;
+      printf("Map file failed to load!!\n");
    }
-   texture.setWidth(SCREEN_WIDTH);
-   texture.setHeight(SCREEN_HEIGHT);
-   
-   if(!player.loadTexture("img/shapes/OrangeSquare.png"))
-   {
-      error_log << "PLayer Texture failed to load.\n";
-      return false;
-   }
-   player.setWidth(30);
-   player.setHeight(30);
-   
    
    return true;
 
@@ -207,7 +156,7 @@ bool gameroot::loadContent()
 //Event checking for game loop 
 //Handles Events such as clicks and button pushes
 //https://wiki.libsdl.org/SDL_Event
-void gameroot::OnEvent(SDL_Event *Event)
+void maproot::OnEvent(SDL_Event *Event)
 {
    //Check if event is the clicking of the exit (SDL_QUIT)
    if(Event->type == SDL_QUIT)
@@ -217,17 +166,9 @@ void gameroot::OnEvent(SDL_Event *Event)
 }
 
 //Does nothing. Math and physics later
-void gameroot::update()
+void maproot::update()
 {
-   if(gameroot::time_Of_Previous_Frame.count() != 0)										//Avoid dividing by 0
-   {
-      Physics::set_Frame_Rate((1.0 / gameroot::time_Of_Previous_Frame.count()));			//Update Physics to know how long the previous frame took
-   }
-   else
-   {
-      Physics::set_Frame_Rate(gameroot::maximum_Frame_Rate);								//If the frame took an unregisterable amount of time, Physics uses the maximum frame rate for this frame
-   }
-   gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
+	maproot::total_Time = maproot::total_Time + maproot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
 
    debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
 
@@ -240,29 +181,20 @@ void gameroot::update()
 	  //Checking if X has been clicked
       OnEvent(&Event);
 	  
-	    
-	}  
-      
+   }  
+   
+   //update current map
+   map.mapEditorUpdate(input);
+   
    std::chrono::high_resolution_clock::time_point time_Before_Function_Call = std::chrono::high_resolution_clock::now();				//Temporary timer for how long the Physics is taking
-   Object::check_For_Collisions();        //Will check through the physics pointer stored in the object class for collisions; will be changing in the future to move appropriate objects as well.
    std::chrono::duration<double> duration_Of_Function_Call = std::chrono::high_resolution_clock::now() - time_Before_Function_Call;	//Temporary timer
    //cout << "Duration of the function call, check_For_Collisions(), was: " << duration_Of_Function_Call.count() << " seconds." << endl;	//Temporary timer
       
-      if(engineState == MapEditor)
-      {
-         map.mapEditorUpdate(input);
-         if(input.getKeyDown() == SDLK_BACKSPACE)
-         {
-            engineState = Waiting;
-            map.unfocus();
-         }
-      }
-
 
 }
    
 //Draws to screen
-void gameroot::draw()
+void maproot::draw()
 {
    //Start cap Timer
    capTimer.start();
@@ -270,24 +202,7 @@ void gameroot::draw()
    //Clear screen
    SDL_RenderClear(renderer);
 
-   if(engineState == Waiting)
-   {
-      
-      texture.render(0,0);
-      player.render(0,0);
-      
-   }
-   else if(engineState == PlayingGame)
-   {
-      map.renderMap();
-   }
-   else if(engineState == MapEditor)
-   {
-      map.renderMap();
-   }
-   
-   //update screen
-   SDL_RenderPresent(renderer);
+   map.renderMap();
    
    ++GLOBAL_FRAME_COUNTER;   
 
@@ -303,7 +218,7 @@ void gameroot::draw()
 }
 
 //Actual game loop
-int gameroot::execute()
+int maproot::execute()
 {
    //checks all the SDL (see above)
    if(initialize() == false)
@@ -320,15 +235,15 @@ int gameroot::execute()
 
    while(Running)
    {
-      gameroot::start_Of_Current_Frame = std::chrono::high_resolution_clock::now();		//At the start of each frame, store the current time
-      gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(gameroot::start_Of_Current_Frame - gameroot::start_Of_Previous_Frame);	//Number of clock cycles between frames
+      maproot::start_Of_Current_Frame = std::chrono::high_resolution_clock::now();		//At the start of each frame, store the current time
+      maproot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(maproot::start_Of_Current_Frame - maproot::start_Of_Previous_Frame);	//Number of clock cycles between frames
 
 	  //update and redraw window
       update();
       draw();
 
       //std::this_thread::sleep_for(std::chrono::nanoseconds(/*calculate number of nanoseconds to wait based on maximum frame rate and time taken so far*/));
-      gameroot::start_Of_Previous_Frame = gameroot::start_Of_Current_Frame;				//At the end of each frame, store the start time of the current frame to the previous frame
+      maproot::start_Of_Previous_Frame = maproot::start_Of_Current_Frame;				//At the end of each frame, store the start time of the current frame to the previous frame
     }
 
    close() ;
@@ -336,12 +251,9 @@ int gameroot::execute()
 }
 
 //Free all the assets
-void gameroot::close()
+void maproot::close()
 {
-   texture.free();
-   player.free();
    SDL_DestroyRenderer(renderer);
-   SDL_FreeSurface(surface);
    SDL_DestroyWindow(window);
    SDL_Quit();
 }

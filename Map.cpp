@@ -1,3 +1,5 @@
+#ifndef MAP_CPP_
+#define MAP_CPP_
 #include "Map.h"
 #include <fstream>
 #include <sstream>
@@ -5,10 +7,8 @@
 Map::Map()
 {
 	numPlatforms = 0;
-	textColor = {0, 0, 0, 0xFF};
 	camera.setBoundRect(0,0,5000,5000);
 	render = NULL;
-	drawText = false;
 }
 
 Map::~Map()
@@ -26,11 +26,6 @@ Map::~Map()
 bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 {
 	render = r;
-
-	textTexture.setRenderer(render);
-	textTexture.setFont("calibri", 500);
-	textTexture.loadTextRender("FUCK", textColor);
-
 	ifstream inputFile;
 	inputFile.open(filePath);
 
@@ -104,10 +99,6 @@ void Map::renderMap()
 	{
 		platforms[x].render(platCoords[x*2] - camera.getCamX(), platCoords[x*2+1]- camera.getCamY());
 	}
-	if(drawText)
-	{
-		textTexture.render(50, 50);
-	}
 }
 
 void Map::updateMap()
@@ -117,12 +108,6 @@ void Map::updateMap()
 
 void Map::mapEditorUpdate(InputClass input)
 {
-	//FUCK
-	if(input.getKeyDown() == SDLK_f)
-	{
-		drawText = !drawText;
-	}
-
 	//move camera with wasd
 	if(input.getKeyDown() == SDLK_w)
 	{
@@ -258,3 +243,4 @@ void Map::mapEditorUpdate(InputClass input)
 		}
 	}
 }
+#endif

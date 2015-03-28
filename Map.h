@@ -9,9 +9,6 @@
 class Map
 {
 private:
-	bool drawText;
-	SDL_Color textColor;
-	Texture textTexture;
 	Texture platforms[100];
 	int platCoords[200];
 	bool platSelected[100];
