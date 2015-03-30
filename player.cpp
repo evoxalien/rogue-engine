@@ -1,8 +1,6 @@
 //Object -> Player cpp file
 #include "player.h"
 
-using namespace std;
-
 //Initialization of static Player members
 std::vector<Player*> Player::player_Pointer_Vector;
 
@@ -24,14 +22,14 @@ Player::~Player()
 //Used for testing; displays useful information in the console log related to the Player class
 const void Player::display_Information()
 {
-	cout << "size of vector = " << Player::player_Pointer_Vector.size() << endl;
-	cout << "capacity of vector = " << Player::player_Pointer_Vector.capacity() << endl;
-	cout << "max capacity of vector = " << Player::player_Pointer_Vector.max_size() << endl << endl;
+	std::cout << "size of vector = " << Player::player_Pointer_Vector.size() << std::endl;
+	std::cout << "capacity of vector = " << Player::player_Pointer_Vector.capacity() << std::endl;
+	std::cout << "max capacity of vector = " << Player::player_Pointer_Vector.max_size() << std::endl << std::endl;
 	for(int i = 0; i < Player::player_Pointer_Vector.size(); i++)
 	{
-		cout << endl << "Player index = " << (*Player::player_Pointer_Vector[i]).get_Player_Pointer_Vector_Index() << endl;
+		std::cout << std::endl << "Player index = " << (*Player::player_Pointer_Vector[i]).get_Player_Pointer_Vector_Index() << std::endl;
 	}
-	cout << endl;
+	std::cout << std::endl;
 }
 
 //'Getters' and 'Setters' for private member variables

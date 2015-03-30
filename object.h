@@ -3,22 +3,22 @@
 #define OBJECT_H
 #include <iostream>
 #include <vector>
+#include <cstdint>
 #include "behavior.h"
-
-using namespace std;
 
 class Object
 {
 	private:
 		//Private member variables
-		int object_Pointer_Vector_Index;			//The pointer's position in the static vector of object pointers
+		std::uint16_t object_Pointer_Vector_Index;			//The pointer's position in the static vector of object pointers, in the range of 0 to 65,535
 
 	public:
 		//Static class variables; currently public, may be made private in the future
-		static std::vector<Object*> object_Pointer_Vector;							//A vector with pointers to all Objects currently in memory
+		static std::vector<Object*> object_Pointer_Vector;							//A vector with pointers to all Objects currently in memory; the size should never exceed a length of 65,535 or pointers may be unintentionally overwritten and cause errors
 
 		//Constructors and Destructors
 		Object();			//Default Constructor
+		Object(Behavior);	//Constructor for when there is an already existing Behavior the Object should follow
 		~Object();			//Destructor
 
 		//Public member variables; may be made private in the future

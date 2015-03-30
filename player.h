@@ -3,8 +3,6 @@
 #define PLAYER_H
 #include "object.h"
 
-using namespace std;
-
 class Player : public Object
 {
 	private:
