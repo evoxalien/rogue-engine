@@ -17,7 +17,9 @@ class startMenu
 	InputClass input;
 public:
 	int MenuChoices(SDL_Keycode e, int gameState);
-	/* data */
+   void Update();
+   void Draw();
+
 };
 
 
@@ -81,5 +83,17 @@ int startMenu::MenuChoices(SDL_Keycode e, int gameState)
 
 }
 
+void startMenu::Update()
+{
+
+
+}
+
+
+void startMenu::Draw()
+{
+
+
+}
 
 #endif
