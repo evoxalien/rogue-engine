@@ -37,11 +37,9 @@ private:
    bool Running;
    SDL_Window *window;
    SDL_Renderer *renderer;
-   SDL_Surface *surface;
    Texture texture;
    Texture player;
    SDL_Event Event;
-   Map map;
    //The frames per second timer
    LTimer fpsTimer;
    //The frames per second cap timer
@@ -97,7 +95,6 @@ gameroot::gameroot()
    Running = false;
    window = NULL;
    renderer = NULL;
-   surface = NULL;
    engineState = Waiting;
    
 }
@@ -142,9 +139,6 @@ bool gameroot::initialize()
    texture.setRenderer(renderer);
    
    player.setRenderer(renderer);
-
-   //initialize map from file
-   map.parseMapFile("maps/Map1.txt", renderer);
 
    //initialize image subsystem to load png files
    int imgFlags = IMG_INIT_PNG;
@@ -228,12 +222,7 @@ void gameroot::update()
       
       if(engineState == MapEditor)
       {
-         map.mapEditorUpdate(input);
-         if(input.getKeyDown() == SDLK_BACKSPACE)
-         {
-            engineState = Waiting;
-            map.unfocus();
-         }
+         
       }
 
 
@@ -257,11 +246,11 @@ void gameroot::draw()
    }
    else if(engineState == PlayingGame)
    {
-      map.renderMap();
+      
    }
    else if(engineState == MapEditor)
    {
-      map.renderMap();
+      
    }
    
    //update screen
@@ -318,9 +307,12 @@ void gameroot::close()
 {
    texture.free();
    player.free();
+
    SDL_DestroyRenderer(renderer);
-   SDL_FreeSurface(surface);
    SDL_DestroyWindow(window);
+   
+   IMG_Quit();
+   TTF_Quit();
    SDL_Quit();
 }
 
