@@ -128,11 +128,6 @@ class Texture
 		//Deallocates texture
 		void free()
 		{
-			if(font != NULL)
-			{
-				TTF_CloseFont(font);
-				TTF_Quit();
-			}
 			if(texture != NULL)
 				SDL_DestroyTexture(texture);
 			texture = NULL;

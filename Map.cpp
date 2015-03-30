@@ -110,6 +110,8 @@ void Map::renderMap()
 	{
 		platforms[x].render(platCoords[x*2] - camera.getCamX(), platCoords[x*2+1]- camera.getCamY());
 	}
+	if(drawText)
+		textTexture.render(0,0);
 }
 
 void Map::updateMap()
