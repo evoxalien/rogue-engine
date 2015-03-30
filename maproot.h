@@ -144,7 +144,7 @@ bool maproot::loadContent()
 {
 
    //initialize map from file
-   if(map.parseMapFile("maps/Map1.txt", renderer))
+   if(!map.parseMapFile("maps/Map1.txt", renderer))
    {
       printf("Map file failed to load!!\n");
    }
@@ -179,12 +179,11 @@ void maproot::update()
       input.update(Event);
 	  
 	  //Checking if X has been clicked
-      OnEvent(&Event);
-	  
-   }  
+      OnEvent(&Event);  
    
-   //update current map
-   map.mapEditorUpdate(input);
+      //update current map
+      map.mapEditorUpdate(input);
+   }
    
    std::chrono::high_resolution_clock::time_point time_Before_Function_Call = std::chrono::high_resolution_clock::now();				//Temporary timer for how long the Physics is taking
    std::chrono::duration<double> duration_Of_Function_Call = std::chrono::high_resolution_clock::now() - time_Before_Function_Call;	//Temporary timer
@@ -203,6 +202,8 @@ void maproot::draw()
    SDL_RenderClear(renderer);
 
    map.renderMap();
+
+   SDL_RenderPresent(renderer);
    
    ++GLOBAL_FRAME_COUNTER;   
 

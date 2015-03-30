@@ -139,7 +139,7 @@ void Map::mapEditorUpdate(InputClass input)
 	}
 	if(input.getKeyDown() == SDLK_d)
 	{
-		camera.Update_Camera(camera.getCamX() + 1, camera.getCamY() - 1);
+		camera.Update_Camera(camera.getCamX() + 1, camera.getCamY());
 	}
 
 	//export current map with space key
