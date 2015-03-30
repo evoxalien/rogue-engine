@@ -11,17 +11,14 @@
 
 	#include "SDL2/SDL.h"
 	#include "SDL2/SDL_image.h"
-<<<<<<< Updated upstream
 	#include "SDL2/SDL_ttf.h"
 
-#endif
-=======
 #endif
 
 #ifdef MAC
 
 	#include <SDL2/SDL.h>
 	#include <SDL2/SDL_image.h>
+    #include <SDL2/SDL_ttf.h>
 
 #endif
->>>>>>> Stashed changes
