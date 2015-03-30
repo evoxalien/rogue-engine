@@ -18,9 +18,15 @@ LIBRARY_PATHS = -Lmingw_dev_lib\lib
 #COMPILER_FLAGS = -w -Wl,-subsystem,windows
 COMPILER_FLAGS = -std=c++11
 
+#Mac Library Path
+MACSTUFF =  -I/usr/local/include/ -L/usr/local/lib
+
+
+
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS_W = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -D WINDOWS
 LINKER_FLAGS_L = -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -D LINUX
+LINKER_FLAGS_M = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -D LINUX
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME_W = bin/windows/Rogue_Engine
@@ -32,3 +38,6 @@ all : $(OBJS)
 
 linux : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS_L) -o $(OBJ_NAME_L)
+
+mac : $(OBJS)
+	$(CC) $(OBJS) $(COMPILER_FLAGS) $(MACSTUFF) $(LINKER_FLAGS_L) -D MAC  -o $(OBJ_NAME_L)
