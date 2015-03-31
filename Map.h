@@ -6,6 +6,9 @@
 #include "input.h"
 #include "Camera.cpp"
 #include <stdlib.h>
+#include <iostream>
+
+const int PLATMAX = 100;
 
 class Map
 {
@@ -13,12 +16,15 @@ private:
 	bool drawText;
 	SDL_Color textColor;
 	Texture textTexture;
-	Texture platforms[100];
+	Texture platforms[PLATMAX];
 	int platCoords[200];
-	bool platSelected[100];
+	bool platSelected[PLATMAX];
 	int numPlatforms;
 	Camera camera;
 	SDL_Renderer* render;
+
+	int moveStep;
+
 	enum CursorState
 	{
 		Testing,
@@ -27,6 +33,7 @@ private:
 
 	CursorState cState;
 	std::string keyboardInput;
+
 
 public:
 	Map();

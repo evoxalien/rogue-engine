@@ -11,7 +11,9 @@ Map::Map()
 	camera.setBoundRect(0,0,5000,5000);
 	render = NULL;
 	drawText = false;
+	moveStep = 1;
 	cState = Testing;
+
 }
 
 Map::~Map()
@@ -133,19 +135,19 @@ void Map::mapEditorUpdate(InputClass input)
 		//move camera with wasd
 		if(input.getKeyDown() == SDLK_w)
 		{
-			camera.Update_Camera(camera.getCamX(), camera.getCamY() - 1);
+			camera.Update_Camera(camera.getCamX(), camera.getCamY() - moveStep);
 		}
 		if(input.getKeyDown() == SDLK_s)
 		{
-			camera.Update_Camera(camera.getCamX(), camera.getCamY() + 1);
+			camera.Update_Camera(camera.getCamX(), camera.getCamY() + moveStep);
 		}
 		if(input.getKeyDown() == SDLK_a)
 		{
-			camera.Update_Camera(camera.getCamX() - 1, camera.getCamY());
+			camera.Update_Camera(camera.getCamX() - moveStep, camera.getCamY());
 		}
 		if(input.getKeyDown() == SDLK_d)
 		{
-			camera.Update_Camera(camera.getCamX() + 1, camera.getCamY());
+			camera.Update_Camera(camera.getCamX() + moveStep, camera.getCamY());
 		}
 
 		//export current map with space key
@@ -162,7 +164,7 @@ void Map::mapEditorUpdate(InputClass input)
 			{
 				if(platSelected[x])
 				{
-					platCoords[x*2+1]--;
+					platCoords[x*2+1] -= moveStep;
 				}
 			}
 		}
@@ -172,7 +174,7 @@ void Map::mapEditorUpdate(InputClass input)
 			{
 				if(platSelected[x])
 				{
-					platCoords[x*2+1]++;
+					platCoords[x*2+1] += moveStep;
 				}
 			}
 		}
@@ -182,7 +184,7 @@ void Map::mapEditorUpdate(InputClass input)
 			{
 				if(platSelected[x])
 				{
-					platCoords[x*2]++;
+					platCoords[x*2] += moveStep;
 				}
 			}
 		}
@@ -192,55 +194,76 @@ void Map::mapEditorUpdate(InputClass input)
 			{
 				if(platSelected[x])
 				{
-					platCoords[x*2]--;
+					platCoords[x*2] -= moveStep;
 				}
 			}
 		}
+
+	//Change the move speed of platforms
+		if(input.getKeyDown() == SDLK_MINUS)
+	{ // Move things slower!!
+		moveStep--;
+		if(moveStep <= 0)
+			moveStep = 1;
+		cout << "Key - Pressed" << endl;
+	}
+	
+	if(input.getKeyDown() == SDLK_EQUALS)
+	{ //Move things faster!
+		moveStep++;
+		if(moveStep > 10)
+			moveStep = 10;
+		cout << "Key = Pressed" << endl;
+	}
 
 		//add new platform with p key
-		if(input.getKeyDown() == SDLK_p)
-		{
-			platforms[numPlatforms].setRenderer(render);
-			platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
-			platforms[numPlatforms].setWidth(100);
-			platforms[numPlatforms].setHeight(100);
-			platSelected[numPlatforms] = false;
-			platCoords[numPlatforms*2] = input.getMouseX();
-			platCoords[numPlatforms*2+1] = input.getMouseY();
-			numPlatforms++;
-		}
+	if(input.getKeyDown() == SDLK_p && numPlatforms < PLATMAX)
+	{
+		platforms[numPlatforms].setRenderer(render);
+		platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
+		platforms[numPlatforms].setWidth(100);
+		platforms[numPlatforms].setHeight(100);
+		platSelected[numPlatforms] = false;
+		platCoords[numPlatforms*2] = input.getMouseX();
+		platCoords[numPlatforms*2+1] = input.getMouseY();
+		numPlatforms++;
+	}
+
 
 		//remove platform with r key, mouse must be over platform
-		if(input.getKeyDown() == SDLK_r)
+	if(input.getKeyDown() == SDLK_r)
+	{
+		int x = mouseOverPlat(input);
+		if(x != -1)
 		{
-			int x = mouseOverPlat(input);
-			if(x != -1)
+			for(int y = x; y < numPlatforms; y++)
 			{
-				for(int y = x; y < numPlatforms; y++)
-				{
-					platforms[y] = platforms[y+1];
-					platSelected[y] = platSelected[y+1];
-					platCoords[y*2] = platCoords[(y+1)*2];
-					platCoords[y*2+1] = platCoords[(y+1)*2+1];
-				}
-				numPlatforms--;
-				x--;
+				platforms[y] = platforms[y+1];
+				platSelected[y] = platSelected[y+1];
+				platCoords[y*2] = platCoords[(y+1)*2];
+				platCoords[y*2+1] = platCoords[(y+1)*2+1];
 			}
+			numPlatforms--;
+			x--;
 		}
+	}
 
 		//select platforms with left mouse button
-		if(input.getMouseButton(1))
+	if(input.getMouseButton(1))
+	{
+		int x = mouseOverPlat(input);
+		if(x != -1)
 		{
-			int x = mouseOverPlat(input);
-			if(x != -1)
-			{
-				platSelected[x] = true;
-				platforms[x].setColor(0x77,0x77,0x77);
-			}
+			platSelected[x] = true;
+			platforms[x].setColor(0x77,0x77,0x77);
 		}
+	}
 
 		//deselect platforms with right mouse button
-		if(input.getMouseButton(3))
+	if(input.getMouseButton(3))
+	{
+		int x = mouseOverPlat(input);
+		if(x != -1)
 		{
 			int x = mouseOverPlat(input);
 			if(x != -1)
