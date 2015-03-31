@@ -21,7 +21,17 @@ private:
 	int numPlatforms;
 	Camera camera;
 	SDL_Renderer* render;
+
 	int moveStep;
+
+	enum CursorState
+	{
+		Testing,
+		Select
+	};
+
+	CursorState cState;
+
 
 public:
 	Map();
@@ -32,6 +42,7 @@ public:
 	void mapEditorUpdate(InputClass input);
 	void unfocus();
 	void exportMapFile(Uint32 timeStamp);
+	int mouseOverPlat(InputClass input);
 };
 
 #endif
