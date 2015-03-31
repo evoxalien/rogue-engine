@@ -1,7 +1,0 @@
-3
-quad 0 0 1280 720
-img/shapes/dontbeweird.png
-quad 0 500 200 30
-img/shapes/OrangeSquare.png
-quad 300 400 200 30
-img/shapes/OrangeSquare.png

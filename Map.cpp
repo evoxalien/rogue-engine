@@ -118,6 +118,11 @@ void Map::updateMap()
 
 void Map::mapEditorUpdate(InputClass input)
 {
+	switch(input.getKeyDown())
+	{
+		case SDLK_0 : cState = Testing; break;
+		case SDLK_1 : cState = Select; break;
+	}
 	if(cState == Testing)
 	{
 		//FUCK
@@ -243,11 +248,52 @@ void Map::mapEditorUpdate(InputClass input)
 				platSelected[x] = false;
 				platforms[x].setColor(0xFF,0xFF,0xFF);
 			}
-		}
+		}	
 	}
 	if(cState == Select)
 	{
+		if(input.getMouseButton(3))
+		{
+			int x = mouseOverPlat(input);
+			if(x != -1)
+			{
+				platSelected[x] = true;
+				keyboardInput = "";
+				SDL_StartTextInput();
+			}
+		}
 
+		if(SDL_IsTextInputActive())
+		{
+			if(input.getKeyDown() == SDLK_BACKSPACE)
+			{
+				if(keyboardInput.length() > 0)
+				{
+					keyboardInput.pop_back();
+				}
+			}
+
+			if(input.getKeyDown() == SDLK_RETURN)
+			{
+				if(atoi(keyboardInput.c_str()) != 0)
+				{
+					for(int x = 0; x < numPlatforms; x++)
+					{
+						if(platSelected[x])
+						{
+							platSelected[x] = false;
+							platforms[x].setWidth(atoi(keyboardInput.c_str()));
+							SDL_StopTextInput();
+						}
+					}
+				}
+			}
+		}
+
+		if(input.getEvent().type == SDL_TEXTINPUT)
+		{
+			keyboardInput += input.getEvent().text.text;
+		}
 	}
 }
 

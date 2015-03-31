@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "input.h"
 #include "Camera.cpp"
+#include <stdlib.h>
 
 class Map
 {
@@ -25,6 +26,7 @@ private:
 	};
 
 	CursorState cState;
+	std::string keyboardInput;
 
 public:
 	Map();
