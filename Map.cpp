@@ -11,6 +11,7 @@ Map::Map()
 	camera.setBoundRect(0,0,5000,5000);
 	render = NULL;
 	drawText = false;
+	moveStep = 1;
 }
 
 Map::~Map()
@@ -158,7 +159,7 @@ void Map::mapEditorUpdate(InputClass input)
 		{
 			if(platSelected[x])
 			{
-				platCoords[x*2+1]--;
+				platCoords[x*2+1] -= moveStep;
 			}
 		}
 	}
@@ -168,7 +169,7 @@ void Map::mapEditorUpdate(InputClass input)
 		{
 			if(platSelected[x])
 			{
-				platCoords[x*2+1]++;
+				platCoords[x*2+1] += moveStep;
 			}
 		}
 	}
@@ -178,7 +179,7 @@ void Map::mapEditorUpdate(InputClass input)
 		{
 			if(platSelected[x])
 			{
-				platCoords[x*2]++;
+				platCoords[x*2] += moveStep;
 			}
 		}
 	}
@@ -188,13 +189,31 @@ void Map::mapEditorUpdate(InputClass input)
 		{
 			if(platSelected[x])
 			{
-				platCoords[x*2]--;
+				platCoords[x*2] -= moveStep;
 			}
 		}
 	}
 
+
+	//Change the move speed of platforms
+	if(input.getKeyDown() == SDLK_MINUS)
+	{ // Move things slower!!
+		moveStep--;
+		if(moveStep <= 0)
+			moveStep = 1;
+		cout << "Key - Pressed" << endl;
+	}
+	
+	if(input.getKeyDown() == SDLK_EQUALS)
+	{ //Move things faster!
+		moveStep++;
+		if(moveStep > 10)
+			moveStep = 10;
+		cout << "Key = Pressed" << endl;
+	}
+
 	//add new platform with p key
-	if(input.getKeyDown() == SDLK_p)
+	if(input.getKeyDown() == SDLK_p && numPlatforms < PLATMAX)
 	{
 		platforms[numPlatforms].setRenderer(render);
 		platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
