@@ -130,19 +130,19 @@ void Map::mapEditorUpdate(InputClass input)
 		//move camera with wasd
 		if(input.getKeyDown() == SDLK_w)
 		{
-			camera.Update_Camera(camera.getCamX(), camera.getCamY() - 1);
+			camera.Update_Camera(camera.getCamX(), camera.getCamY() - moveStep);
 		}
 		if(input.getKeyDown() == SDLK_s)
 		{
-			camera.Update_Camera(camera.getCamX(), camera.getCamY() + 1);
+			camera.Update_Camera(camera.getCamX(), camera.getCamY() + moveStep);
 		}
 		if(input.getKeyDown() == SDLK_a)
 		{
-			camera.Update_Camera(camera.getCamX() - 1, camera.getCamY());
+			camera.Update_Camera(camera.getCamX() - moveStep, camera.getCamY());
 		}
 		if(input.getKeyDown() == SDLK_d)
 		{
-			camera.Update_Camera(camera.getCamX() + 1, camera.getCamY());
+			camera.Update_Camera(camera.getCamX() + moveStep, camera.getCamY());
 		}
 
 		//export current map with space key
