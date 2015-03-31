@@ -126,7 +126,7 @@ void Map::mapEditorUpdate(InputClass input)
 		case SDLK_1 : cState = Select; break;
 	}
 	if(cState == Testing)
-	{
+    {
 		//FUCK
 		if(input.getKeyDown() == SDLK_f)
 		{
@@ -318,6 +318,7 @@ void Map::mapEditorUpdate(InputClass input)
 			keyboardInput += input.getEvent().text.text;
 		}
 	}
+    }
 }
 
 int Map::mouseOverPlat(InputClass input)
