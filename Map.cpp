@@ -11,6 +11,7 @@ Map::Map()
 	camera.setBoundRect(0,0,5000,5000);
 	render = NULL;
 	drawText = false;
+	cState = Testing;
 }
 
 Map::~Map()
@@ -98,10 +99,6 @@ void Map::unfocus()
 		platSelected[x] = false;
 		platforms[x].setColor(0xFF,0xFF,0xFF);
 	}
-	if(drawText)
-	{
-		textTexture.render(50, 50);
-	}
 }
 
 void Map::renderMap()
@@ -121,100 +118,98 @@ void Map::updateMap()
 
 void Map::mapEditorUpdate(InputClass input)
 {
-	//FUCK
-	if(input.getKeyDown() == SDLK_f)
+	if(cState == Testing)
 	{
-		drawText = !drawText;
-	}
-	//move camera with wasd
-	if(input.getKeyDown() == SDLK_w)
-	{
-		camera.Update_Camera(camera.getCamX(), camera.getCamY() - 1);
-	}
-	if(input.getKeyDown() == SDLK_s)
-	{
-		camera.Update_Camera(camera.getCamX(), camera.getCamY() + 1);
-	}
-	if(input.getKeyDown() == SDLK_a)
-	{
-		camera.Update_Camera(camera.getCamX() - 1, camera.getCamY());
-	}
-	if(input.getKeyDown() == SDLK_d)
-	{
-		camera.Update_Camera(camera.getCamX() + 1, camera.getCamY());
-	}
-
-	//export current map with space key
-	if(input.getKeyDown() == SDLK_SPACE)
-	{
-		Uint32 timeStamp = input.getEvent().key.timestamp;
-		exportMapFile(timeStamp);
-	}
-
-	//move currently selected platforms with arrow keys
-	if(input.getKeyDown() == SDLK_UP)
-	{
-		for(int x = 0; x < numPlatforms; x++)
+		//FUCK
+		if(input.getKeyDown() == SDLK_f)
 		{
-			if(platSelected[x])
+			drawText = !drawText;
+		}
+		//move camera with wasd
+		if(input.getKeyDown() == SDLK_w)
+		{
+			camera.Update_Camera(camera.getCamX(), camera.getCamY() - 1);
+		}
+		if(input.getKeyDown() == SDLK_s)
+		{
+			camera.Update_Camera(camera.getCamX(), camera.getCamY() + 1);
+		}
+		if(input.getKeyDown() == SDLK_a)
+		{
+			camera.Update_Camera(camera.getCamX() - 1, camera.getCamY());
+		}
+		if(input.getKeyDown() == SDLK_d)
+		{
+			camera.Update_Camera(camera.getCamX() + 1, camera.getCamY());
+		}
+
+		//export current map with space key
+		if(input.getKeyDown() == SDLK_SPACE)
+		{
+			Uint32 timeStamp = input.getEvent().key.timestamp;
+			exportMapFile(timeStamp);
+		}
+
+		//move currently selected platforms with arrow keys
+		if(input.getKeyDown() == SDLK_UP)
+		{
+			for(int x = 0; x < numPlatforms; x++)
 			{
-				platCoords[x*2+1]--;
+				if(platSelected[x])
+				{
+					platCoords[x*2+1]--;
+				}
 			}
 		}
-	}
-	if(input.getKeyDown() == SDLK_DOWN)
-	{
-		for(int x = 0; x < numPlatforms; x++)
+		if(input.getKeyDown() == SDLK_DOWN)
 		{
-			if(platSelected[x])
+			for(int x = 0; x < numPlatforms; x++)
 			{
-				platCoords[x*2+1]++;
+				if(platSelected[x])
+				{
+					platCoords[x*2+1]++;
+				}
 			}
 		}
-	}
-	if(input.getKeyDown() == SDLK_RIGHT)
-	{
-		for(int x = 0; x < numPlatforms; x++)
+		if(input.getKeyDown() == SDLK_RIGHT)
 		{
-			if(platSelected[x])
+			for(int x = 0; x < numPlatforms; x++)
 			{
-				platCoords[x*2]++;
+				if(platSelected[x])
+				{
+					platCoords[x*2]++;
+				}
 			}
 		}
-	}
-	if(input.getKeyDown() == SDLK_LEFT)
-	{
-		for(int x = 0; x < numPlatforms; x++)
+		if(input.getKeyDown() == SDLK_LEFT)
 		{
-			if(platSelected[x])
+			for(int x = 0; x < numPlatforms; x++)
 			{
-				platCoords[x*2]--;
+				if(platSelected[x])
+				{
+					platCoords[x*2]--;
+				}
 			}
 		}
-	}
 
-	//add new platform with p key
-	if(input.getKeyDown() == SDLK_p)
-	{
-		platforms[numPlatforms].setRenderer(render);
-		platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
-		platforms[numPlatforms].setWidth(100);
-		platforms[numPlatforms].setHeight(100);
-		platSelected[numPlatforms] = false;
-		platCoords[numPlatforms*2] = input.getMouseX();
-		platCoords[numPlatforms*2+1] = input.getMouseY();
-		numPlatforms++;
-	}
-
-	//remove platform with r key, mouse must be over platform
-	if(input.getKeyDown() == SDLK_r)
-	{
-		for(int x = 1; x < numPlatforms; x++)
+		//add new platform with p key
+		if(input.getKeyDown() == SDLK_p)
 		{
-			if(input.getMouseX() + camera.getCamX() >= platCoords[x*2] &&
-				input.getMouseX() + camera.getCamX() <= platCoords[x*2] + platforms[x].getWidth() &&
-				input.getMouseY() + camera.getCamY() >= platCoords[x*2+1] &&
-				input.getMouseY() + camera.getCamY() <= platCoords[x*2+1] + platforms[x].getHeight())
+			platforms[numPlatforms].setRenderer(render);
+			platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
+			platforms[numPlatforms].setWidth(100);
+			platforms[numPlatforms].setHeight(100);
+			platSelected[numPlatforms] = false;
+			platCoords[numPlatforms*2] = input.getMouseX();
+			platCoords[numPlatforms*2+1] = input.getMouseY();
+			numPlatforms++;
+		}
+
+		//remove platform with r key, mouse must be over platform
+		if(input.getKeyDown() == SDLK_r)
+		{
+			int x = mouseOverPlat(input);
+			if(x != -1)
 			{
 				for(int y = x; y < numPlatforms; y++)
 				{
@@ -227,38 +222,47 @@ void Map::mapEditorUpdate(InputClass input)
 				x--;
 			}
 		}
-	}
 
-	//select platforms with left mouse button
-	if(input.getMouseButton(1))
-	{
-		for(int x = 1; x < numPlatforms; x++)
+		//select platforms with left mouse button
+		if(input.getMouseButton(1))
 		{
-			if(input.getMouseX() + camera.getCamX() >= platCoords[x*2] &&
-				input.getMouseX() + camera.getCamX() <= platCoords[x*2] + platforms[x].getWidth() &&
-				input.getMouseY() + camera.getCamY() >= platCoords[x*2+1] &&
-				input.getMouseY() + camera.getCamY() <= platCoords[x*2+1] + platforms[x].getHeight())
+			int x = mouseOverPlat(input);
+			if(x != -1)
 			{
 				platSelected[x] = true;
 				platforms[x].setColor(0x77,0x77,0x77);
 			}
 		}
-	}
 
-	//deselect platforms with right mouse button
-	if(input.getMouseButton(3))
-	{
-		for(int x = 1; x < numPlatforms; x++)
+		//deselect platforms with right mouse button
+		if(input.getMouseButton(3))
 		{
-			if(input.getMouseX() + camera.getCamX() >= platCoords[x*2] &&
-				input.getMouseX() + camera.getCamX() <= platCoords[x*2] + platforms[x].getWidth() &&
-				input.getMouseY() + camera.getCamY() >= platCoords[x*2+1] &&
-				input.getMouseY() + camera.getCamY() <= platCoords[x*2+1] + platforms[x].getHeight())
+			int x = mouseOverPlat(input);
+			if(x != -1)
 			{
 				platSelected[x] = false;
 				platforms[x].setColor(0xFF,0xFF,0xFF);
 			}
 		}
 	}
+	if(cState == Select)
+	{
+
+	}
+}
+
+int Map::mouseOverPlat(InputClass input)
+{
+	for(int x = numPlatforms - 1; x > 0; x--)
+	{
+		if(input.getMouseX() + camera.getCamX() >= platCoords[x*2] &&
+			input.getMouseX() + camera.getCamX() <= platCoords[x*2] + platforms[x].getWidth() &&
+			input.getMouseY() + camera.getCamY() >= platCoords[x*2+1] &&
+			input.getMouseY() + camera.getCamY() <= platCoords[x*2+1] + platforms[x].getHeight())
+		{
+			return x;
+		}
+	}
+	return -1;
 }
 #endif
