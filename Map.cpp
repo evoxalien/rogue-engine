@@ -199,79 +199,80 @@ void Map::mapEditorUpdate(InputClass input)
 			}
 		}
 
-	//Change the move speed of platforms
-		if(input.getKeyDown() == SDLK_MINUS)
-	{ // Move things slower!!
-		moveStep--;
-		if(moveStep <= 0)
-			moveStep = 1;
-		cout << "Key - Pressed" << endl;
-	}
-	
-	if(input.getKeyDown() == SDLK_EQUALS)
-	{ //Move things faster!
-		moveStep++;
-		if(moveStep > 10)
-			moveStep = 10;
-		cout << "Key = Pressed" << endl;
-	}
-
-		//add new platform with p key
-	if(input.getKeyDown() == SDLK_p && numPlatforms < PLATMAX)
-	{
-		platforms[numPlatforms].setRenderer(render);
-		platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
-		platforms[numPlatforms].setWidth(100);
-		platforms[numPlatforms].setHeight(100);
-		platSelected[numPlatforms] = false;
-		platCoords[numPlatforms*2] = input.getMouseX();
-		platCoords[numPlatforms*2+1] = input.getMouseY();
-		numPlatforms++;
-	}
-
-
-		//remove platform with r key, mouse must be over platform
-	if(input.getKeyDown() == SDLK_r)
-	{
-		int x = mouseOverPlat(input);
-		if(x != -1)
-		{
-			for(int y = x; y < numPlatforms; y++)
-			{
-				platforms[y] = platforms[y+1];
-				platSelected[y] = platSelected[y+1];
-				platCoords[y*2] = platCoords[(y+1)*2];
-				platCoords[y*2+1] = platCoords[(y+1)*2+1];
-			}
-			numPlatforms--;
-			x--;
+		//Change the move speed of platforms
+			if(input.getKeyDown() == SDLK_MINUS)
+		{ // Move things slower!!
+			moveStep--;
+			if(moveStep <= 0)
+				moveStep = 1;
+			cout << "Key - Pressed" << endl;
 		}
-	}
-
-		//select platforms with left mouse button
-	if(input.getMouseButton(1))
-	{
-		int x = mouseOverPlat(input);
-		if(x != -1)
-		{
-			platSelected[x] = true;
-			platforms[x].setColor(0x77,0x77,0x77);
+		
+		if(input.getKeyDown() == SDLK_EQUALS)
+		{ //Move things faster!
+			moveStep++;
+			if(moveStep > 10)
+				moveStep = 10;
+			cout << "Key = Pressed" << endl;
 		}
-	}
 
-		//deselect platforms with right mouse button
-	if(input.getMouseButton(3))
-	{
-		int x = mouseOverPlat(input);
-		if(x != -1)
+			//add new platform with p key
+		if(input.getKeyDown() == SDLK_p && numPlatforms < PLATMAX)
+		{
+			platforms[numPlatforms].setRenderer(render);
+			platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
+			platforms[numPlatforms].setWidth(100);
+			platforms[numPlatforms].setHeight(100);
+			platSelected[numPlatforms] = false;
+			platCoords[numPlatforms*2] = input.getMouseX();
+			platCoords[numPlatforms*2+1] = input.getMouseY();
+			numPlatforms++;
+		}
+
+
+			//remove platform with r key, mouse must be over platform
+		if(input.getKeyDown() == SDLK_r)
 		{
 			int x = mouseOverPlat(input);
 			if(x != -1)
 			{
-				platSelected[x] = false;
-				platforms[x].setColor(0xFF,0xFF,0xFF);
+				for(int y = x; y < numPlatforms; y++)
+				{
+					platforms[y] = platforms[y+1];
+					platSelected[y] = platSelected[y+1];
+					platCoords[y*2] = platCoords[(y+1)*2];
+					platCoords[y*2+1] = platCoords[(y+1)*2+1];
+				}
+				numPlatforms--;
+				x--;
 			}
-		}	
+		}
+
+			//select platforms with left mouse button
+		if(input.getMouseButton(1))
+		{
+			int x = mouseOverPlat(input);
+			if(x != -1)
+			{
+				platSelected[x] = true;
+				platforms[x].setColor(0x77,0x77,0x77);
+			}
+		}
+
+			//deselect platforms with right mouse button
+		if(input.getMouseButton(3))
+		{
+			int x = mouseOverPlat(input);
+			if(x != -1)
+			{
+				int x = mouseOverPlat(input);
+				if(x != -1)
+				{
+					platSelected[x] = false;
+					platforms[x].setColor(0xFF,0xFF,0xFF);
+				}
+			}	
+		}
 	}
 	if(cState == Select)
 	{
@@ -318,7 +319,6 @@ void Map::mapEditorUpdate(InputClass input)
 			keyboardInput += input.getEvent().text.text;
 		}
 	}
-    }
 }
 
 int Map::mouseOverPlat(InputClass input)
