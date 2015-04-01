@@ -9,7 +9,7 @@ Object::Object()
 {
 	(*this).object_Pointer_Vector_Index = Object::object_Pointer_Vector.size();
 	Object::object_Pointer_Vector.push_back(this);
-	(*this).behavior.set_Containing_Object_Pointer(this);
+	(*this).behavior.set_Containing_Object_Pointer_Vector_Index((*this).object_Pointer_Vector_Index);
 }
 
 Object::Object(Behavior behavior)
@@ -17,7 +17,7 @@ Object::Object(Behavior behavior)
 	(*this).object_Pointer_Vector_Index = Object::object_Pointer_Vector.size();
 	Object::object_Pointer_Vector.push_back(this);
 	(*this).behavior = behavior;
-	(*this).behavior.set_Containing_Object_Pointer(this);
+	(*this).behavior.set_Containing_Object_Pointer_Vector_Index((*this).object_Pointer_Vector_Index);
 }
 
 //Object Deconstructor; when an Object is deleted or goes out of scope, the Object pointer vector will swap the last element with the one deleted and remove the previous last element before deleting the Object from memory

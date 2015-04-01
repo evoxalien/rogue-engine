@@ -27,9 +27,9 @@ class Behavior
 {
 	private:
 		//Private member variables
-		Behavior_States behavior_State;		//An Object's current state in reference to the Player; for example, whether they are oblivious to the player being near or are hostile towards them
-		Behavior_Patterns behavior_Pattern;	//An Object's generic style of action; for example, an enemy or neutral NPC
-		Object* containing_Object_Pointer;	//A pointer to the Object in which the member of Behavior resides
+		Behavior_States behavior_State;							//An Object's current state in reference to the Player; for example, whether they are oblivious to the player being near or are hostile towards them
+		Behavior_Patterns behavior_Pattern;						//An Object's generic style of action; for example, an enemy or neutral NPC
+		std::uint16_t containing_Object_Pointer_Vector_Index;	//The index of the Object in which the Behavior member resides inside of the static Object Pointer Vector in the Object class
 
 	public:
 		//Constructor
@@ -54,8 +54,8 @@ class Behavior
 		void set_Behavior_Pattern(Behavior_Patterns);
 		const Behavior_Patterns get_Behavior_Pattern();
 
-		void set_Containing_Object_Pointer(Object*);
-		const Object* get_Containing_Object_Pointer();
+		void set_Containing_Object_Pointer_Vector_Index(uint16_t);
+		const uint16_t get_Containing_Object_Pointer_Vector_Index();
 };
 
 #include "object.h"		//Object and its components need to have headers fully defined for Behavior function definitions

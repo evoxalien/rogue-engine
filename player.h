@@ -7,7 +7,7 @@ class Player : public Object
 {
 	private:
 		//Private member variables
-		int player_Pointer_Vector_Index;			//The pointer's position in the static vector of player pointers
+		uint16_t player_Pointer_Vector_Index;			//The pointer's position in the static vector of player pointers
 
 	public:
 		//Static class variables; currently public, may be made private in the future
