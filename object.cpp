@@ -7,25 +7,38 @@ std::vector<Object*> Object::object_Pointer_Vector;
 //Default Object Constructor; adds a pointer to the Object to the Object pointer vector
 Object::Object()
 {
-	(*this).object_Pointer_Vector_Index = Object::object_Pointer_Vector.size();
+	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
 	Object::object_Pointer_Vector.push_back(this);
-	(*this).behavior.set_Containing_Object_Pointer_Vector_Index((*this).object_Pointer_Vector_Index);
 }
 
 Object::Object(Behavior behavior)
 {
-	(*this).object_Pointer_Vector_Index = Object::object_Pointer_Vector.size();
-	Object::object_Pointer_Vector.push_back(this);
 	(*this).behavior = behavior;
-	(*this).behavior.set_Containing_Object_Pointer_Vector_Index((*this).object_Pointer_Vector_Index);
+	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
+	Object::object_Pointer_Vector.push_back(this);
 }
+
+//Object::Object(Statistics statistics)
+//{
+//	(*this).statistics = statistics;
+//	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
+//	Object::object_Pointer_Vector.push_back(this);
+//}
+
+//Object::Object(Behavior behavior, Statistics statistics)
+//{
+//	(*this).behavior = behavior;
+//	(*this).statistics = statistics;
+//	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
+//	Object::object_Pointer_Vector.push_back(this);
+//}
 
 //Object Deconstructor; when an Object is deleted or goes out of scope, the Object pointer vector will swap the last element with the one deleted and remove the previous last element before deleting the Object from memory
 Object::~Object()
 {
-	Object::object_Pointer_Vector[(*this).get_Object_Pointer_Vector_Index()] = Object::object_Pointer_Vector[Object::object_Pointer_Vector.size() - 1];	//Changes pointer stored in the deconstructing Object's index to be a pointer to the last Object in the vector
-	(*Object::object_Pointer_Vector[(*this).get_Object_Pointer_Vector_Index()]).object_Pointer_Vector_Index = (*this).get_Object_Pointer_Vector_Index();//Changes the index of the Object which previously had its pointer at the end to its new position in the vector 
-	Object::object_Pointer_Vector.pop_back();																											//Removes the last element of the Object pointer vector since it's effectively been moved to a new index
+	Object::object_Pointer_Vector[(*this).get_Object_Pointer_Vector_Index()] = Object::object_Pointer_Vector[Object::object_Pointer_Vector.size() - 1];		//Changes pointer stored in the deconstructing Object's index to be a pointer to the last Object in the vector
+	(*Object::object_Pointer_Vector[(*this).get_Object_Pointer_Vector_Index()]).set_Object_Pointer_Vector_Index((*this).get_Object_Pointer_Vector_Index());	//Changes the index of the Object which previously had its pointer at the end to its new position in the vector 
+	Object::object_Pointer_Vector.pop_back();																												//Removes the last element of the Object pointer vector since it's effectively been moved to a new index
 }
 
 //Used for testing; displays useful information in the console log related to the Object class
@@ -41,13 +54,16 @@ const void Object::display_Information()
 	std::cout << std::endl;
 }
 
-//'Getters' and 'Setters' for private member variables
-void Object::set_Object_Pointer_Vector_Index(int object_Pointer_Vector_Index)
+//Updates necessary Object members to store the index within the static Object pointer vector of the Object that they are contained within
+void Object::set_Object_Pointer_Vector_Index(std::uint16_t object_Pointer_Vector_Index)
 {
-	(*this).object_Pointer_Vector_Index = object_Pointer_Vector_Index;
+	(*this).behavior.set_Containing_Object_Pointer_Vector_Index(object_Pointer_Vector_Index);
+	//(*this).statistics.set_Containing_Object_Pointer_Vector_Index(object_Pointer_Vector);
+	//(*this).animation.set_Containing_Object_Pointer_Vector_Index(object_Pointer_Vector);
 }
 
-const int Object::get_Object_Pointer_Vector_Index()
+//Rather than storing an additional index within Object itself, a member which already requires the index is accessed for the necessary index of the Object within the static Object pointer vector
+const std::uint16_t Object::get_Object_Pointer_Vector_Index()
 {
-	return (*this).object_Pointer_Vector_Index;
+	return (*this).behavior.get_Containing_Object_Pointer_Vector_Index();
 }

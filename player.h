@@ -7,7 +7,7 @@ class Player : public Object
 {
 	private:
 		//Private member variables
-		uint16_t player_Pointer_Vector_Index;			//The pointer's position in the static vector of player pointers
+		std::uint16_t player_Pointer_Vector_Index;			//The pointer's position in the static vector of player pointers; will be stored in input later
 
 	public:
 		//Static class variables; currently public, may be made private in the future
@@ -23,8 +23,9 @@ class Player : public Object
 		//Static functions
 		const static void display_Information();			//For testing
 
+		//Member functions
 		//'Getters' and 'Setters' for private member variables
-		void set_Player_Pointer_Vector_Index(int);
-		const int get_Player_Pointer_Vector_Index();
+		void set_Player_Pointer_Vector_Index(std::uint16_t);
+		const std::uint16_t get_Player_Pointer_Vector_Index();
 };
 #endif

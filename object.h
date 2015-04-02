@@ -10,7 +10,6 @@ class Object
 {
 	private:
 		//Private member variables
-		std::uint16_t object_Pointer_Vector_Index;			//The pointer's position in the static vector of object pointers, in the range of 0 to 65,535
 
 	public:
 		//Static class variables; currently public, may be made private in the future
@@ -23,13 +22,13 @@ class Object
 
 		//Public member variables; may be made private in the future
 		Behavior behavior;									//A member which holds information regarding the state of an Object and what it should be doing, if anything
-		//Stats stats; 										//Unknown name at the moment, this will contain game attributes such as hit points, defense, damage, etc.
+		//Statistics statistics; 							//Unknown name at the moment, this will contain game attributes such as hit points, defense, damage, etc.
 
 		//Static functions
 		const static void display_Information();			//For testing
 
-		//'Getters' and 'Setters' for private member variables
-		void set_Object_Pointer_Vector_Index(int);
-		const int get_Object_Pointer_Vector_Index();
+		//Member functions
+		void set_Object_Pointer_Vector_Index(std::uint16_t);	//Updates necessary Object members to store the index within the static Object pointer vector of the Object that they are contained within
+		const std::uint16_t get_Object_Pointer_Vector_Index();	//Rather than storing an additional index within Object itself, a member which already requires the index (behavior) is accessed for the necessary index of the Object within the static Object pointer vector
 };
 #endif
