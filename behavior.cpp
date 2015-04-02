@@ -216,15 +216,15 @@ void Behavior::display_Information()
 	std::cout << "behavior_Pattern = " << static_cast<int>((*this).behavior_Pattern) << std::endl;
 	std::cout << "containing_Object_Pointer_Vector_Index = " << (*this).containing_Object_Pointer_Vector_Index << std::endl;
 	std::cout << "Object::object_Pointer_Vector[(*this).containing_Object_Pointer_Vector_Index] = " << Object::object_Pointer_Vector[(*this).containing_Object_Pointer_Vector_Index] << std::endl;
-	std::cout << "Size of behavior_State = " << sizeof((*this).behavior_State) << std::endl;
-	std::cout << "Size of behavior_Pattern = " << sizeof((*this).behavior_Pattern) << std::endl;
-	std::cout << "Size of containing_Object_Pointer_Vector_Index = " << sizeof((*this).containing_Object_Pointer_Vector_Index) << std::endl;
-	std::cout << "Size of Object::object_Pointer_Vector[(*(*this).containing_Object_Pointer_Vector_Index)] = " << sizeof(*(Object::object_Pointer_Vector[(*this).containing_Object_Pointer_Vector_Index])) << std::endl;
-	std::cout << "Size of Object = " << sizeof(Object) << std::endl;
-	std::cout << "Size of Behavior = " << sizeof(Behavior) << std::endl;
-	std::cout << "Size of int = " << sizeof(int) << std::endl;
-	std::cout << "Size of this = " << sizeof(this) << std::endl;
-	std::cout << "Size of (*this) = " << sizeof((*this)) << std::endl;
+//	std::cout << "Size of behavior_State = " << sizeof((*this).behavior_State) << std::endl;
+//	std::cout << "Size of behavior_Pattern = " << sizeof((*this).behavior_Pattern) << std::endl;
+//	std::cout << "Size of containing_Object_Pointer_Vector_Index = " << sizeof((*this).containing_Object_Pointer_Vector_Index) << std::endl;
+//	std::cout << "Size of Object::object_Pointer_Vector[(*(*this).containing_Object_Pointer_Vector_Index)] = " << sizeof(*(Object::object_Pointer_Vector[(*this).containing_Object_Pointer_Vector_Index])) << std::endl;
+//	std::cout << "Size of Object = " << sizeof(Object) << std::endl;
+//	std::cout << "Size of Behavior = " << sizeof(Behavior) << std::endl;
+//	std::cout << "Size of int = " << sizeof(int) << std::endl;
+//	std::cout << "Size of this = " << sizeof(this) << std::endl;
+//	std::cout << "Size of (*this) = " << sizeof((*this)) << std::endl;
 	std::cout << std::endl;
 }
 
