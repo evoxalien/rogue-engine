@@ -7,7 +7,7 @@ OBJS = main.cpp object.cpp player.cpp log.cpp behavior.cpp
 CC = g++
 
 #INCLUDE_PATHS specifies the additional include paths we'll need
-INCLUDE_PATHS = -Imingw_dev_lib\include\SDL2
+INCLUDE_PATHS = -Imingw_dev_lib\include\SDL2 -Imingw_dev_lib\include\Box2D -Imingw_dev_lib\include
 
 #LIBRARY_PATHS specifies the additional library paths we'll need
 LIBRARY_PATHS = -Lmingw_dev_lib\lib
