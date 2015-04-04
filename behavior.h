@@ -3,8 +3,6 @@
 #define BEHAVIOR_H
 #include <cstdint>
 
-class Object;								//Forward reference of Object class to allow an Object pointer to be stored in Behavior instances, giving Behavior access to Physics and Statistics used to determine actions
-
 enum class Behavior_States : std::uint8_t	//Various states that an Object can be in
 {
 	Unaware,								//The Object is unaware of the Player
@@ -25,6 +23,8 @@ enum class Behavior_Patterns : std::uint8_t	//Various patterns an Object can fol
 
 class Behavior
 {
+	friend class Object;
+
 	private:
 		//Private member variables
 		Behavior_States behavior_State;							//An Object's current state in reference to the Player; for example, whether they are oblivious to the player being near or are hostile towards them
@@ -48,16 +48,16 @@ class Behavior
 		void display_Information();						//For testing
 
 		//'Getters' and 'Setters' for private member variables
-		void set_Behavior_State(Behavior_States);
+		void set_Behavior_State(const Behavior_States);
 		const Behavior_States get_Behavior_State();
 
-		void set_Behavior_Pattern(Behavior_Patterns);
+		void set_Behavior_Pattern(const Behavior_Patterns);
 		const Behavior_Patterns get_Behavior_Pattern();
 
-		void set_Containing_Object_Pointer_Vector_Index(uint16_t);
-		const uint16_t get_Containing_Object_Pointer_Vector_Index();
+		void set_Containing_Object_Pointer_Vector_Index(const std::uint16_t);
+		const std::uint16_t get_Containing_Object_Pointer_Vector_Index();
 };
 
-#include "object.h"		//Object and its components need to have headers fully defined for Behavior function definitions
+#include "object.h"		//Object and its components need to have headers fully defined for some Behavior function definitions
 
 #endif

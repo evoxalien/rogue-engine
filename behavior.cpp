@@ -1,11 +1,12 @@
 //Behavior cpp file
 #include "behavior.h"
 
-//Default Behavior Constructor
+//Default Behavior constructor
 Behavior::Behavior()
 {
 	(*this).behavior_State = Behavior_States::Unaware;
 	(*this).behavior_Pattern = Behavior_Patterns::Neutral;
+
 	(*this).containing_Object_Pointer_Vector_Index = 0;
 }
 
@@ -14,6 +15,7 @@ Behavior::Behavior(Behavior_Patterns behavior_Pattern)
 {
 	(*this).behavior_State = Behavior_States::Unaware;
 	(*this).behavior_Pattern = behavior_Pattern;
+
 	(*this).containing_Object_Pointer_Vector_Index = 0;
 }
 
@@ -22,6 +24,7 @@ Behavior::Behavior(Behavior_States behavior_State, Behavior_Patterns behavior_Pa
 {
 	(*this).behavior_State = behavior_State;
 	(*this).behavior_Pattern = behavior_Pattern;
+
 	(*this).containing_Object_Pointer_Vector_Index = 0;
 }
 
@@ -229,7 +232,7 @@ void Behavior::display_Information()
 }
 
 //'Getters' and 'Setters' for private member variables
-void Behavior::set_Behavior_State(Behavior_States behavior_State)
+void Behavior::set_Behavior_State(const Behavior_States behavior_State)
 {
 	(*this).behavior_State = behavior_State;
 }
@@ -239,7 +242,7 @@ const Behavior_States Behavior::get_Behavior_State()
 	return (*this).behavior_State;
 }
 
-void Behavior::set_Behavior_Pattern(Behavior_Patterns behavior_Pattern)
+void Behavior::set_Behavior_Pattern(const Behavior_Patterns behavior_Pattern)
 {
 	(*this).behavior_Pattern = behavior_Pattern;
 }
@@ -248,12 +251,12 @@ const Behavior_Patterns Behavior::get_Behavior_Pattern()
 	return (*this).behavior_Pattern;
 }
 
-void Behavior::set_Containing_Object_Pointer_Vector_Index(uint16_t containing_Object_Pointer_Vector_Index)
+void Behavior::set_Containing_Object_Pointer_Vector_Index(const std::uint16_t containing_Object_Pointer_Vector_Index)
 {
 	(*this).containing_Object_Pointer_Vector_Index = containing_Object_Pointer_Vector_Index;
 }
 
-const uint16_t Behavior::get_Containing_Object_Pointer_Vector_Index()
+const std::uint16_t Behavior::get_Containing_Object_Pointer_Vector_Index()
 {
 	return (*this).containing_Object_Pointer_Vector_Index;
 }

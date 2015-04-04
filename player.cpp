@@ -4,7 +4,7 @@
 //Initialization of static Player members
 std::vector<Player*> Player::player_Pointer_Vector;
 
-//Default Player Constructor; adds a pointer to the Player to the Player pointer vector
+//Default Player constructor; adds a pointer to the Player to the Player pointer vector
 Player::Player()
 {
 	(*this).set_Player_Pointer_Vector_Index(static_cast<std::uint16_t>(Player::player_Pointer_Vector.size()));
@@ -40,7 +40,7 @@ const void Player::display_Information()
 }
 
 //'Getters' and 'Setters' for private member variables
-void Player::set_Player_Pointer_Vector_Index(std::uint16_t player_Pointer_Vector_Index)
+void Player::set_Player_Pointer_Vector_Index(const std::uint16_t player_Pointer_Vector_Index)
 {
 	(*this).player_Pointer_Vector_Index = player_Pointer_Vector_Index;
 	//(*this).input.set_Containing_Player_Pointer_Vector_Index(player_Pointer_Vector_Index);
