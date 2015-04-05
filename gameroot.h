@@ -14,11 +14,26 @@
 #include "Texture.h"
 #include "Map.cpp"
 #include "startMenu.h"
+#include "Box2D.h"
 //#include <thread>
 
 #define FPS_INTERVAL 1.0 //Seconds
 
 using namespace std;
+
+//This is the code to declare a "world" in Box2D that creates all 
+//objects/bodies as well as applies gravity and other properties.
+//Have fun Andrew
+/*
+b2Vec2 gravity(0.0f, -10.0f);
+b2World world(gravity);
+b2BodyDef groundBodyDef;
+groundBodyDef.position.Set(0.0f, -10.0f);
+b2Body* groundBody = world.CreateBody(&groundBodyDef);
+b2PolygonShape groundBox;
+groundBox.SetAsBox(50.0f, 10.0f);
+groundBody->CreateFixture(&groundBox, 0.0f);
+*/
 
 class gameroot
 {
@@ -64,7 +79,8 @@ private:
    //GameState gameState;
    bool initialize();
    InputClass input;
-
+  
+ 
 public:
    gameroot(); 
    bool loadContent();
@@ -103,7 +119,6 @@ gameroot::gameroot()
 //Initialize all the SDL
 bool gameroot::initialize()
 {
-
    //Tests SDL components, important to call before other SDL operations
    //https://wiki.libsdl.org/SDL_Init
    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
