@@ -15,6 +15,7 @@
 #include "Map.cpp"
 #include "startMenu.h"
 #include "Box2D.h"
+#include "playerClass.h"
 //#include <thread>
 
 #define FPS_INTERVAL 1.0 //Seconds
@@ -53,7 +54,7 @@ private:
    SDL_Window *window;
    SDL_Renderer *renderer;
    Texture texture;
-   Texture player;
+   // Texture playerTexture;
    SDL_Event Event;
    //The frames per second timer
    LTimer fpsTimer;
@@ -61,22 +62,34 @@ private:
    LTimer capTimer;
    enum EngineState
    {
-      Waiting,//0
-      PlayingGame,//1
-      MapEditor,//2
-      StartMenu,//3
-      Loading,//4
-      leveledup,//5
-      Paused,//6
-      levelSelect,//7
-      all,//8
-      Red,//9
-      Green,//10
-      Blue//11
+      Loading, //0
+      RootMenu, //1
+      EngineStartMenu, //2
+      EngineSettingMenu, //3
+      EngineMenu1, //4
+      EngineMenu2, //5
+      EngineMen3, //6
+      MapEditor, //7
+      MapEditorMenu1, //8
+      MapEditorMenu2, //9
+      GameRootMenu, //10
+      GameSettingMenu, //11
+      GameMenu1, //12
+      GameMenu2, //13
+      GameMenu3, //14
+      GameLoading, //15
+      GamePlaying1, //16
+      GamePlaying2, //17
+      GameMultiplayer, //18
+      Test1, //19
+      Test2, //20
+      Test3 //21
    };
    
    EngineState engineState;
    //GameState gameState;
+   int EngineActiveState;
+   playerClass Hero;
    bool initialize();
    InputClass input;
   
@@ -111,7 +124,7 @@ gameroot::gameroot()
    Running = false;
    window = NULL;
    renderer = NULL;
-   engineState = Waiting;
+   engineState = Loading;
    
 }
 
@@ -153,7 +166,7 @@ bool gameroot::initialize()
    //tell texture the renderer to use
    texture.setRenderer(renderer);
    
-   player.setRenderer(renderer);
+   Hero.playerTexture.setRenderer(renderer);
 
    //initialize image subsystem to load png files
    int imgFlags = IMG_INIT_PNG;
@@ -175,6 +188,8 @@ bool gameroot::initialize()
    fps_frames = 0; //frames passed since the last recorded fps.
    */
 
+   Hero.playerInitalize(1);
+
    
    return true;
 }
@@ -191,13 +206,13 @@ bool gameroot::loadContent()
    texture.setWidth(SCREEN_WIDTH);
    texture.setHeight(SCREEN_HEIGHT);
    
-   if(!player.loadTexture("img/shapes/OrangeSquare.png"))
+   if(!Hero.playerTexture.loadTexture("img/shapes/OrangeSquare.png"))
    {
-      error_log << "PLayer Texture failed to load.\n";
+      error_log << "PLayerTexture Texture failed to load.\n";
       return false;
    }
-   player.setWidth(30);
-   player.setHeight(30);
+   Hero.playerTexture.setWidth(30);
+   Hero.playerTexture.setHeight(30);
    
    
    return true;
@@ -219,6 +234,7 @@ void gameroot::OnEvent(SDL_Event *Event)
 //Does nothing. Math and physics later
 void gameroot::update()
 {
+   EngineActiveState=engineState;
    gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
 
    debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
@@ -232,14 +248,17 @@ void gameroot::update()
 	  //Checking if X has been clicked
       OnEvent(&Event);
 	  
-	    
-	}  
+   }  
       
       if(engineState == MapEditor)
       {
          
       }
-
+      if(engineState == GamePlaying1)
+      {
+         Hero.playerKeyPress(input.getKeyDown());
+         Hero.playerUpdate();
+      }
 
 }
    
@@ -252,14 +271,14 @@ void gameroot::draw()
    //Clear screen
    SDL_RenderClear(renderer);
 
-   if(engineState == Waiting)
+   if(engineState == Loading)
    {
       
       texture.render(0,0);
-      player.render(0,0);
+      Hero.playerTexture.render(0,0);
       
    }
-   else if(engineState == PlayingGame)
+   else if(engineState == GameRootMenu)
    {
       
    }
@@ -321,7 +340,7 @@ int gameroot::execute()
 void gameroot::close()
 {
    texture.free();
-   player.free();
+   Hero.playerTexture.free();
 
    SDL_DestroyRenderer(renderer);
    SDL_DestroyWindow(window);

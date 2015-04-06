@@ -70,7 +70,7 @@ private:
 	// struct instances 
 	PlayerControlsKeyboard playerControlsKeyboard;
 	PlayerControlsGamePad playerControlsGamePad;
-	Gamepad gamepad;
+	GamePad gamepad;
 
 	string playerName;
 	int    playerIndex;
@@ -92,23 +92,25 @@ public:
 	void playerDraw();
 	void playerButtonPress(SDL_Keycode e);
 	void playerKeyPress(SDL_Keycode e);
+	int  playerInitalize(int playerIndexPassed);
+	void  UpdateControls();
 	/* data */
+	Texture playerTexture;
 };
 
 
 int playerClass::playerInitalize(int playerIndexPassed)
 {
+	ifstream inputFile;
 	playerIndex=playerIndexPassed;
 	if (playerIndex==1)//player 1 file
 	{
 	   //parse the file
-	   ifstream inputFile;
 	   inputFile.open("playerConfig/Player1Script.txt");
 	}
 	if (playerIndex==2)//player 2 file
 	{
 		//parse the file
-	   ifstream inputFile;
 	   inputFile.open("playerConfig/Player2Script.txt");
 	}
 
@@ -140,24 +142,24 @@ int playerClass::playerInitalize(int playerIndexPassed)
 	}
 	if (playerInputMode=="Gamepad")// loads SDL_GameControllerButton type
 	{
-		inputFile >> CurrentData;	
-		inputFile >> playerControlsGamePad.playerActivate;
-		inputFile >> CurrentData;  
-		inputFile >> playerControlsGamePad.playerBack;
-		inputFile >> CurrentData;
-		inputFile >> playerControlsGamePad.playerUp;
-		inputFile >> CurrentData;
-		inputFile >> playerControlsGamePad.playerDown;
-		inputFile >> CurrentData;
-		inputFile >> playerControlsGamePad.playerLeft;
-		inputFile >> CurrentData;
-		inputFile >> playerControlsGamePad.playerRight;
-		inputFile >> CurrentData;
-		inputFile >> playerControlsGamePad.playerJump;
-		inputFile >> CurrentData;
-		inputFile >> playerControlsGamePad.playerPause;
-		inputFile >> CurrentData;
-		inputFile >> playerControlsGamePad.playerExit;
+		// inputFile >> CurrentData;	
+		// inputFile >> playerControlsGamePad.playerActivate;
+		// inputFile >> CurrentData;  
+		// inputFile >> playerControlsGamePad.playerBack;
+		// inputFile >> CurrentData;
+		// inputFile >> playerControlsGamePad.playerUp;
+		// inputFile >> CurrentData;
+		// inputFile >> playerControlsGamePad.playerDown;
+		// inputFile >> CurrentData;
+		// inputFile >> playerControlsGamePad.playerLeft;
+		// inputFile >> CurrentData;
+		// inputFile >> playerControlsGamePad.playerRight;
+		// inputFile >> CurrentData;
+		// inputFile >> playerControlsGamePad.playerJump;
+		// inputFile >> CurrentData;
+		// inputFile >> playerControlsGamePad.playerPause;
+		// inputFile >> CurrentData;
+		// inputFile >> playerControlsGamePad.playerExit;
 	}
 	inputFile >> CurrentData;
 	inputFile >> playerName;
@@ -166,7 +168,7 @@ int playerClass::playerInitalize(int playerIndexPassed)
 
 }
 
-void playerClass::playerButtonPress()
+void playerClass::playerButtonPress(SDL_Keycode e)
 { 
 //game pad controls
 	if (playerInputMode=="Gamepad")
@@ -273,26 +275,30 @@ void playerClass::UpdateGamePad()
       {
         if (playerIndex-1 == 1)
         {
-          Up = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerUp);
-          Down = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerDown);
-          Left = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerLeft);
-          Right = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerRight);
-          Start = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerPause);
-          Back = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerExit);
-          LeftShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
-          RightShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
-          AButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerActivate);
-          BButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerBack);
-          XButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerJump);
-          YButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_Y);
-          StickX = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTX);
-          StickY = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTY);
+          gamepad.Up = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerUp);
+          gamepad.Down = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerDown);
+          gamepad.Left = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerLeft);
+          gamepad.Right = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerRight);
+          gamepad.Start = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerPause);
+          gamepad.Back = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerExit);
+          gamepad.LeftShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+          gamepad.RightShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+          gamepad.AButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerActivate);
+          gamepad.BButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerBack);
+          gamepad.XButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerJump);
+          gamepad.YButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_Y);
+          gamepad.StickX = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTX);
+          gamepad.StickY = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTY);
         }
         
       }
 
 }
 
+void playerClass::playerUpdate()
+{
+
+}
 
 
 #endif
