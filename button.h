@@ -29,6 +29,7 @@ public:
    void setY(int yIn);
    void setPos(int xIn, int yIn);
    void setText(string textIn);
+   bool setFont(string fontChoice);
    void setTextColor(Uint8 rIn, Uint8 gIn, Uint8 bIn);
    void setButtonColor(Uint8 rIn, Uint8 gIn, Uint8 bIn);
    void setFontSize(int size);
@@ -181,6 +182,10 @@ button::button(SDL_Renderer *rendererIn, string tempText,int xIn, int yIn,int wI
    
    text = tempText;
    textBox = { xIn, yIn, wIn, hIn};
+   buttonBox.box.x = xIn;
+   buttonBox.box.y = yIn;
+   buttonBox.box.w = wIn;
+   buttonBox.box.h = hIn;
    textColor = {0, 0, 0};
    buttonBox.setColor(255, 0, 0);
    rendererCopy = rendererIn;
@@ -208,7 +213,6 @@ void button::setRenderer(SDL_Renderer *rendererIn)
 {
    rendererCopy = rendererIn;
    buttonBox.setRenderer(rendererCopy);
-   printf("renderer pointer coppied!\n");
    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
    if(textSurface == NULL )
    {
@@ -263,6 +267,9 @@ void button::setText(string textIn)
 {
    text = textIn;
    
+    if(rendererCopy == NULL)
+      return;
+   
    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
    if(textSurface == NULL )
    {
@@ -280,9 +287,49 @@ void button::setText(string textIn)
    SDL_FreeSurface(textSurface);
 }
 
+bool button::setFont(string fontChoice)
+{
+   fontChoice = fontChoice + ".ttf";
+   font = TTF_OpenFont(fontChoice.c_str() , 28);
+   if(font == NULL)
+   {
+      printf("font not found, using default font!!\n");
+	  font = TTF_OpenFont( "calibri.ttf", 28);
+      if(font == NULL)
+         printf("default font not found!!\n");
+		 
+      return false;
+   }
+   
+   if(rendererCopy == NULL)
+      return true;
+   
+   
+   SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
+   if(textSurface == NULL )
+   {
+      printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+   }
+   
+   textTexture = SDL_CreateTextureFromSurface(rendererCopy, textSurface );
+   if(textTexture == NULL )
+   {
+      printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+   }
+   
+   SDL_SetTextureColorMod(textTexture, textColor.r, textColor.g, textColor.b);
+   
+   SDL_FreeSurface(textSurface);
+   
+   return true;
+}
+
 void button::setTextColor(Uint8 rIn, Uint8 gIn, Uint8 bIn)
 {
    textColor = {rIn, gIn, bIn};
+   
+   if(rendererCopy == NULL)
+      return;
    
    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
    if(textSurface == NULL )
@@ -309,6 +356,9 @@ void button::setButtonColor(Uint8 rIn, Uint8 gIn, Uint8 bIn)
 void button::setFontSize(int size)
 {
    font = TTF_OpenFont( "calibri.ttf", size);
+   
+    if(rendererCopy == NULL)
+      return;
    
    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
    if(textSurface == NULL )
@@ -365,7 +415,7 @@ bool button::draw(SDL_Renderer *rendererIn)
    if(buttonTexture == NULL)
    {
       buttonBox.drawSquare(rendererIn);
-	  SDL_RenderCopyEx(rendererCopy, textTexture, NULL, &textBox, 0.0, NULL, SDL_FLIP_NONE);
+	  SDL_RenderCopyEx(rendererIn, textTexture, NULL, &textBox, 0.0, NULL, SDL_FLIP_NONE);
 	  return true;
    }
    else
