@@ -3,6 +3,8 @@
 #include "Map.h"
 #include <fstream>
 #include <sstream>
+#include <string>
+#include <stdlib.h>
 
 Map::Map()
 {
@@ -13,7 +15,6 @@ Map::Map()
 	drawText = false;
 	moveStep = 1;
 	cState = Testing;
-
 }
 
 Map::~Map()
@@ -23,6 +24,14 @@ Map::~Map()
 		for(int x = 0; x < numPlatforms; x++)
 		{
 			platforms[x].free();
+		}
+	}
+
+	if(rightClickMenuText != NULL)
+	{
+		for(int x = 0; x < 10; x++)
+		{
+			rightClickMenuText[x].free();
 		}
 	}
 
@@ -107,15 +116,121 @@ void Map::renderMap()
 {
 	for(int x = 0; x < numPlatforms; x++)
 	{
-		platforms[x].render(platCoords[x*2] - camera.getCamX(), platCoords[x*2+1]- camera.getCamY());
+		platforms[x].render(platCoords[x*2] - camera.getCamX(), platCoords[x*2+1] - camera.getCamY());
 	}
 	if(drawText)
 		textTexture.render(0,0);
+	if(rightClickMenuShown)
+		displayPlatMenu();
 }
 
 void Map::updateMap()
 {
 	
+}
+
+void Map::createPlatMenu(int plat)
+{
+	int index = 0;
+	std::stringstream ss;
+	rightClickMenuText[index].setRenderer(render);
+	rightClickMenuText[index].setFont("calibri", 20);
+	rightClickMenuText[index].loadTextRender("Texture File", textColor);
+	index++;
+
+	rightClickMenuText[index].setRenderer(render);
+	rightClickMenuText[index].setFont("calibri", 20);
+	rightClickMenuText[index].loadTextRender(platforms[plat].getFilePath(), textColor);
+	index++;
+
+	rightClickMenuText[index].setRenderer(render);
+	rightClickMenuText[index].setFont("calibri", 20);
+	rightClickMenuText[index].loadTextRender("X Coordinate", textColor);
+	index++;
+
+	rightClickMenuText[index].setRenderer(render);
+	rightClickMenuText[index].setFont("calibri", 20);
+	ss << platCoords[plat*2];
+	rightClickMenuText[index].loadTextRender(ss.str(), textColor);
+	ss.str(std::string());
+	index++;
+
+	rightClickMenuText[index].setRenderer(render);
+	rightClickMenuText[index].setFont("calibri", 20);
+	rightClickMenuText[index].loadTextRender("Y Coordinate", textColor);
+	index++;
+
+	rightClickMenuText[index].setRenderer(render);
+	rightClickMenuText[index].setFont("calibri", 20);
+	ss << platCoords[plat*2+1];
+	rightClickMenuText[index].loadTextRender(ss.str(), textColor);
+	ss.str(std::string());
+	index++;
+
+	rightClickMenuText[index].setRenderer(render);
+	rightClickMenuText[index].setFont("calibri", 20);
+	rightClickMenuText[index].loadTextRender("Width", textColor);
+	index++;
+
+	rightClickMenuText[index].setRenderer(render);
+	rightClickMenuText[index].setFont("calibri", 20);
+	ss << platforms[plat].getWidth();
+	rightClickMenuText[index].loadTextRender(ss.str(), textColor);
+	ss.str(std::string());
+	index++;
+
+	rightClickMenuText[index].setRenderer(render);
+	rightClickMenuText[index].setFont("calibri", 20);
+	rightClickMenuText[index].loadTextRender("Height", textColor);
+	index++;
+
+	rightClickMenuText[index].setRenderer(render);
+	rightClickMenuText[index].setFont("calibri", 20);
+	ss << platforms[plat].getHeight();
+	rightClickMenuText[index].loadTextRender(ss.str(), textColor);
+	ss.str(std::string());
+}
+
+void Map::destroyPlatMenu()
+{
+	for(int x = 0; x < 10; x++)
+	{
+		rightClickMenuText[x].free();
+	}
+}
+
+void Map::displayPlatMenu()
+{
+	for(int x = 0; x < 10; x++)
+	{
+		rightClickMenuText[x].render(menuX, menuY + x * 20);
+	}
+}
+
+void Map::rightClickAction(InputClass input)
+{
+	if(input.getMouseButton(3))
+	{
+		if(!rightClickMenuShown)
+		{
+			int x = mouseOverPlat(input);
+			if(x > 0)
+			{
+				menuX = input.getMouseX();
+				menuY = input.getMouseY();
+				rightClickMenuShown = true;
+				createPlatMenu(x);
+			}
+		}
+	}
+	if(input.getMouseButton(1))
+	{
+		if(rightClickMenuShown)
+		{
+			rightClickMenuShown = false;
+			destroyPlatMenu();
+		}
+	}
 }
 
 void Map::mapEditorUpdate(InputClass input)
@@ -124,6 +239,7 @@ void Map::mapEditorUpdate(InputClass input)
 	{
 		case SDLK_0 : cState = Testing; break;
 		case SDLK_1 : cState = Select; break;
+		case SDLK_2 : cState = Info; break;
 	}
 	if(cState == Testing)
     {
@@ -318,6 +434,10 @@ void Map::mapEditorUpdate(InputClass input)
 		{
 			keyboardInput += input.getEvent().text.text;
 		}
+	}
+	if(cState == Info)
+	{
+		rightClickAction(input);
 	}
 }
 
