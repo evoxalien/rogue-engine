@@ -46,6 +46,7 @@ private:
    //GameState gameState;
    bool initialize();
    InputClass input;
+   InputClass previousInput;
    
 public:
    maproot(); 
@@ -182,7 +183,9 @@ void maproot::update()
       OnEvent(&Event);  
    
       //update current map
-      map.mapEditorUpdate(input);
+      map.mapEditorUpdate(input, previousInput);
+
+      previousInput.update(Event);
    }
    
    std::chrono::high_resolution_clock::time_point time_Before_Function_Call = std::chrono::high_resolution_clock::now();				//Temporary timer for how long the Physics is taking

@@ -202,34 +202,201 @@ void Map::displayPlatMenu()
 	}
 }
 
-void Map::processKeyboard(InputClass input)
+void Map::processKeyboard(InputClass input, InputClass prevInput)
 {
 	switch(cState)
 	{
-		case Testing : break;
-		case Select : break;
-		case Info : break; 
+		case Testing :
+			//move camera with wasd
+			if(input.getKeyDown() == SDLK_w)
+			{
+				camera.Update_Camera(camera.getCamX(), camera.getCamY() - moveStep);
+			}
+			if(input.getKeyDown() == SDLK_s)
+			{
+				camera.Update_Camera(camera.getCamX(), camera.getCamY() + moveStep);
+			}
+			if(input.getKeyDown() == SDLK_a)
+			{
+				camera.Update_Camera(camera.getCamX() - moveStep, camera.getCamY());
+			}
+			if(input.getKeyDown() == SDLK_d)
+			{
+				camera.Update_Camera(camera.getCamX() + moveStep, camera.getCamY());
+			}
+
+			//export current map with space key
+			if(input.getKeyDown() == SDLK_SPACE)
+			{
+				Uint32 timeStamp = input.getEvent().key.timestamp;
+				exportMapFile(timeStamp);
+			}
+
+			//move currently selected platforms with arrow keys
+			if(input.getKeyDown() == SDLK_UP)
+			{
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						platCoords[x*2+1] -= moveStep;
+					}
+				}
+			}
+			if(input.getKeyDown() == SDLK_DOWN)
+			{
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						platCoords[x*2+1] += moveStep;
+					}
+				}
+			}
+			if(input.getKeyDown() == SDLK_RIGHT)
+			{
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						platCoords[x*2] += moveStep;
+					}
+				}
+			}
+			if(input.getKeyDown() == SDLK_LEFT)
+			{
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						platCoords[x*2] -= moveStep;
+					}
+				}
+			}
+
+			//Change the move speed of platforms
+			if(input.getKeyDown() == SDLK_MINUS)
+			{ // Move things slower!!
+				moveStep--;
+				if(moveStep <= 0)
+					moveStep = 1;
+				cout << "Key - Pressed" << endl;
+			}
+			
+			if(input.getKeyDown() == SDLK_EQUALS)
+			{ //Move things faster!
+				moveStep++;
+				if(moveStep > 10)
+					moveStep = 10;
+				cout << "Key = Pressed" << endl;
+			}
+
+				//add new platform with p key
+			if(input.getKeyDown() == SDLK_p && numPlatforms < PLATMAX)
+			{
+				platforms[numPlatforms].setRenderer(render);
+				platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
+				platforms[numPlatforms].setWidth(100);
+				platforms[numPlatforms].setHeight(100);
+				platSelected[numPlatforms] = false;
+				platCoords[numPlatforms*2] = input.getMouseX();
+				platCoords[numPlatforms*2+1] = input.getMouseY();
+				numPlatforms++;
+			}
+
+
+				//remove platform with r key, mouse must be over platform
+			if(input.getKeyDown() == SDLK_r)
+			{
+				int x = mouseOverPlat(input);
+				if(x != -1)
+				{
+					for(int y = x; y < numPlatforms; y++)
+					{
+						platforms[y] = platforms[y+1];
+						platSelected[y] = platSelected[y+1];
+						platCoords[y*2] = platCoords[(y+1)*2];
+						platCoords[y*2+1] = platCoords[(y+1)*2+1];
+					}
+					numPlatforms--;
+					x--;
+				}
+			}
+		break;
+		case Select :
+			if(SDL_IsTextInputActive())
+			{
+				if(input.getKeyDown() == SDLK_BACKSPACE)
+				{
+					if(keyboardInput.length() > 0)
+					{
+						keyboardInput.pop_back();
+					}
+				}
+
+				if(input.getKeyDown() == SDLK_RETURN)
+				{
+					if(atoi(keyboardInput.c_str()) != 0)
+					{
+						for(int x = 0; x < numPlatforms; x++)
+						{
+							if(platSelected[x])
+							{
+								platSelected[x] = false;
+								platforms[x].setWidth(atoi(keyboardInput.c_str()));
+								SDL_StopTextInput();
+							}
+						}
+					}
+				}
+			}
+
+			if(input.getEvent().type == SDL_TEXTINPUT)
+			{
+				keyboardInput += input.getEvent().text.text;
+			}
+		break;
+		case Info :
+		break; 
 	}
 }
 
-void Map::processMouse(InputClass input)
+void Map::processMouse(InputClass input, InputClass prevInput)
 {
-	leftClickAction(input);
-	rightClickAction(input);
+	leftClickAction(input, prevInput);
+	rightClickAction(input, prevInput);
 }
 
-void Map::rightClickAction(InputClass input)
+void Map::rightClickAction(InputClass input, InputClass prevInput)
 {
 	if(input.getMouseButton(3))
 	{
 		if(cState == Testing)
 		{
-
+			int x = mouseOverPlat(input);
+			if(x != -1)
+			{
+				int x = mouseOverPlat(input);
+				if(x != -1)
+				{
+					platSelected[x] = false;
+					platforms[x].setColor(0xFF,0xFF,0xFF);
+				}
+			}
 		}
 		else
 		if(cState == Select)
 		{
-
+			if(input.getMouseButton(3))
+			{
+				int x = mouseOverPlat(input);
+				if(x != -1)
+				{
+					platSelected[x] = true;
+					keyboardInput = "";
+					SDL_StartTextInput();
+				}
+			}
 		}
 		else
 		if(cState == Info)
@@ -249,18 +416,24 @@ void Map::rightClickAction(InputClass input)
 	}
 }
 
-void Map::leftClickAction(InputClass input)
+void Map::leftClickAction(InputClass input, InputClass prevInput)
 {
 	if(input.getMouseButton(1))
 	{
 		if(cState == Testing)
 		{
-
+			//select platforms with left mouse button
+			int x = mouseOverPlat(input);
+			if(x != -1)
+			{
+				platSelected[x] = true;
+				platforms[x].setColor(0x77,0x77,0x77);
+			}
 		}
 		else
 		if(cState == Select)
 		{
-
+			
 		}
 		else
 		if(cState == Info)
@@ -274,7 +447,7 @@ void Map::leftClickAction(InputClass input)
 	}
 }
 
-void Map::mapEditorUpdate(InputClass input)
+void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 {
 	switch(input.getKeyDown())
 	{
@@ -282,200 +455,10 @@ void Map::mapEditorUpdate(InputClass input)
 		case SDLK_1 : cState = Select; break;
 		case SDLK_2 : cState = Info; break;
 	}
-	if(cState == Testing)
-    {
-		//move camera with wasd
-		if(input.getKeyDown() == SDLK_w)
-		{
-			camera.Update_Camera(camera.getCamX(), camera.getCamY() - moveStep);
-		}
-		if(input.getKeyDown() == SDLK_s)
-		{
-			camera.Update_Camera(camera.getCamX(), camera.getCamY() + moveStep);
-		}
-		if(input.getKeyDown() == SDLK_a)
-		{
-			camera.Update_Camera(camera.getCamX() - moveStep, camera.getCamY());
-		}
-		if(input.getKeyDown() == SDLK_d)
-		{
-			camera.Update_Camera(camera.getCamX() + moveStep, camera.getCamY());
-		}
+	
+	processKeyboard(input, prevInput);
 
-		//export current map with space key
-		if(input.getKeyDown() == SDLK_SPACE)
-		{
-			Uint32 timeStamp = input.getEvent().key.timestamp;
-			exportMapFile(timeStamp);
-		}
-
-		//move currently selected platforms with arrow keys
-		if(input.getKeyDown() == SDLK_UP)
-		{
-			for(int x = 0; x < numPlatforms; x++)
-			{
-				if(platSelected[x])
-				{
-					platCoords[x*2+1] -= moveStep;
-				}
-			}
-		}
-		if(input.getKeyDown() == SDLK_DOWN)
-		{
-			for(int x = 0; x < numPlatforms; x++)
-			{
-				if(platSelected[x])
-				{
-					platCoords[x*2+1] += moveStep;
-				}
-			}
-		}
-		if(input.getKeyDown() == SDLK_RIGHT)
-		{
-			for(int x = 0; x < numPlatforms; x++)
-			{
-				if(platSelected[x])
-				{
-					platCoords[x*2] += moveStep;
-				}
-			}
-		}
-		if(input.getKeyDown() == SDLK_LEFT)
-		{
-			for(int x = 0; x < numPlatforms; x++)
-			{
-				if(platSelected[x])
-				{
-					platCoords[x*2] -= moveStep;
-				}
-			}
-		}
-
-		//Change the move speed of platforms
-			if(input.getKeyDown() == SDLK_MINUS)
-		{ // Move things slower!!
-			moveStep--;
-			if(moveStep <= 0)
-				moveStep = 1;
-			cout << "Key - Pressed" << endl;
-		}
-		
-		if(input.getKeyDown() == SDLK_EQUALS)
-		{ //Move things faster!
-			moveStep++;
-			if(moveStep > 10)
-				moveStep = 10;
-			cout << "Key = Pressed" << endl;
-		}
-
-			//add new platform with p key
-		if(input.getKeyDown() == SDLK_p && numPlatforms < PLATMAX)
-		{
-			platforms[numPlatforms].setRenderer(render);
-			platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
-			platforms[numPlatforms].setWidth(100);
-			platforms[numPlatforms].setHeight(100);
-			platSelected[numPlatforms] = false;
-			platCoords[numPlatforms*2] = input.getMouseX();
-			platCoords[numPlatforms*2+1] = input.getMouseY();
-			numPlatforms++;
-		}
-
-
-			//remove platform with r key, mouse must be over platform
-		if(input.getKeyDown() == SDLK_r)
-		{
-			int x = mouseOverPlat(input);
-			if(x != -1)
-			{
-				for(int y = x; y < numPlatforms; y++)
-				{
-					platforms[y] = platforms[y+1];
-					platSelected[y] = platSelected[y+1];
-					platCoords[y*2] = platCoords[(y+1)*2];
-					platCoords[y*2+1] = platCoords[(y+1)*2+1];
-				}
-				numPlatforms--;
-				x--;
-			}
-		}
-
-			//select platforms with left mouse button
-		if(input.getMouseButton(1))
-		{
-			int x = mouseOverPlat(input);
-			if(x != -1)
-			{
-				platSelected[x] = true;
-				platforms[x].setColor(0x77,0x77,0x77);
-			}
-		}
-
-			//deselect platforms with right mouse button
-		if(input.getMouseButton(3))
-		{
-			int x = mouseOverPlat(input);
-			if(x != -1)
-			{
-				int x = mouseOverPlat(input);
-				if(x != -1)
-				{
-					platSelected[x] = false;
-					platforms[x].setColor(0xFF,0xFF,0xFF);
-				}
-			}	
-		}
-	}
-	if(cState == Select)
-	{
-		if(input.getMouseButton(3))
-		{
-			int x = mouseOverPlat(input);
-			if(x != -1)
-			{
-				platSelected[x] = true;
-				keyboardInput = "";
-				SDL_StartTextInput();
-			}
-		}
-
-		if(SDL_IsTextInputActive())
-		{
-			if(input.getKeyDown() == SDLK_BACKSPACE)
-			{
-				if(keyboardInput.length() > 0)
-				{
-					keyboardInput.pop_back();
-				}
-			}
-
-			if(input.getKeyDown() == SDLK_RETURN)
-			{
-				if(atoi(keyboardInput.c_str()) != 0)
-				{
-					for(int x = 0; x < numPlatforms; x++)
-					{
-						if(platSelected[x])
-						{
-							platSelected[x] = false;
-							platforms[x].setWidth(atoi(keyboardInput.c_str()));
-							SDL_StopTextInput();
-						}
-					}
-				}
-			}
-		}
-
-		if(input.getEvent().type == SDL_TEXTINPUT)
-		{
-			keyboardInput += input.getEvent().text.text;
-		}
-	}
-	if(cState == Info)
-	{
-		rightClickAction(input);
-		leftClickAction(input);
-	}
+	processMouse(input, prevInput);
 }
 
 int Map::mouseOverPlat(InputClass input)

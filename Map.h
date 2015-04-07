@@ -51,11 +51,11 @@ public:
 	void createPlatMenu(int plat);
 	void destroyPlatMenu();
 	void displayPlatMenu();
-	void processKeyboard(InputClass input);
-	void processMouse(InputClass input);
-	void rightClickAction(InputClass input);
-	void leftClickAction(InputClass input);
-	void mapEditorUpdate(InputClass input);
+	void processKeyboard(InputClass input, InputClass prevInput);
+	void processMouse(InputClass input, InputClass prevInput);
+	void rightClickAction(InputClass input, InputClass prevInput);
+	void leftClickAction(InputClass input, InputClass prevInput);
+	void mapEditorUpdate(InputClass input, InputClass prevInput);
 	void unfocus();
 	void exportMapFile(Uint32 timeStamp);
 	int mouseOverPlat(InputClass input);
