@@ -36,6 +36,7 @@ class Texture
 		~Texture()
 		{
 			free();
+			TTF_Quit();
 		}
 
 		void setRenderer(SDL_Renderer* render)

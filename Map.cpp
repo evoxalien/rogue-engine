@@ -40,10 +40,6 @@ Map::~Map()
 bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 {
 	render = r;
-
-	textTexture.setRenderer(render);
-	textTexture.setFont("calibri", 500);
-	textTexture.loadTextRender("FUCK", textColor);
 	
 	ifstream inputFile;
 	inputFile.open(filePath);
@@ -118,8 +114,7 @@ void Map::renderMap()
 	{
 		platforms[x].render(platCoords[x*2] - camera.getCamX(), platCoords[x*2+1] - camera.getCamY());
 	}
-	if(drawText)
-		textTexture.render(0,0);
+		
 	if(rightClickMenuShown)
 		displayPlatMenu();
 }
@@ -207,28 +202,74 @@ void Map::displayPlatMenu()
 	}
 }
 
+void Map::processKeyboard(InputClass input)
+{
+	switch(cState)
+	{
+		case Testing : break;
+		case Select : break;
+		case Info : break; 
+	}
+}
+
+void Map::processMouse(InputClass input)
+{
+	leftClickAction(input);
+	rightClickAction(input);
+}
+
 void Map::rightClickAction(InputClass input)
 {
 	if(input.getMouseButton(3))
 	{
-		if(!rightClickMenuShown)
+		if(cState == Testing)
 		{
-			int x = mouseOverPlat(input);
-			if(x > 0)
+
+		}
+		else
+		if(cState == Select)
+		{
+
+		}
+		else
+		if(cState == Info)
+		{
+			if(!rightClickMenuShown)
 			{
-				menuX = input.getMouseX();
-				menuY = input.getMouseY();
-				rightClickMenuShown = true;
-				createPlatMenu(x);
+				int x = mouseOverPlat(input);
+				if(x > 0)
+				{
+					menuX = input.getMouseX();
+					menuY = input.getMouseY();
+					rightClickMenuShown = true;
+					createPlatMenu(x);
+				}
 			}
 		}
 	}
+}
+
+void Map::leftClickAction(InputClass input)
+{
 	if(input.getMouseButton(1))
 	{
-		if(rightClickMenuShown)
+		if(cState == Testing)
 		{
-			rightClickMenuShown = false;
-			destroyPlatMenu();
+
+		}
+		else
+		if(cState == Select)
+		{
+
+		}
+		else
+		if(cState == Info)
+		{
+			if(rightClickMenuShown)
+			{
+				rightClickMenuShown = false;
+				destroyPlatMenu();
+			}
 		}
 	}
 }
@@ -243,11 +284,6 @@ void Map::mapEditorUpdate(InputClass input)
 	}
 	if(cState == Testing)
     {
-		//FUCK
-		if(input.getKeyDown() == SDLK_f)
-		{
-			drawText = !drawText;
-		}
 		//move camera with wasd
 		if(input.getKeyDown() == SDLK_w)
 		{
@@ -438,6 +474,7 @@ void Map::mapEditorUpdate(InputClass input)
 	if(cState == Info)
 	{
 		rightClickAction(input);
+		leftClickAction(input);
 	}
 }
 
