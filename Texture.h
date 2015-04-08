@@ -59,6 +59,8 @@ class Texture
 		//Loads image at specified path
 		bool loadTexture(std::string path)
 		{
+			free();
+
 		   //final surface to return
 		   SDL_Texture* newTexture = NULL;
 		   

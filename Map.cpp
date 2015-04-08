@@ -212,10 +212,17 @@ void Map::displayPlatMenu()
 	}
 }
 
+/**************************************
+
+Keyboard input processing
+
+***************************************/
+
 void Map::processKeyboard(InputClass input, InputClass prevInput)
 {
 	switch(cState)
 	{
+		//Cursor state is Testing
 		case Testing :
 			//move camera with wasd
 			if(input.getKeyDown() == SDLK_w)
@@ -336,6 +343,7 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 				}
 			}
 		break;
+		//Cursor State is Select
 		case Select :
 			if(SDL_IsTextInputActive())
 			{
@@ -369,6 +377,7 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 				keyboardInput += input.getEvent().text.text;
 			}
 		break;
+		//Cursor state is Info
 		case Info :
 			if(SDL_IsTextInputActive())
 			{
@@ -384,7 +393,25 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 				{
 					switch(menuIndex)
 					{
-						case 0 : break;
+						case 0 : 
+						for(int x = 0; x < numPlatforms; x++)
+						{
+							if(platSelected[x])
+							{
+								platSelected[x] = false;
+								string s = platforms[x].getFilePath();
+								int w = platforms[x].getWidth();
+								int h = platforms[x].getHeight();
+								if(!platforms[x].loadTexture(keyboardInput))
+								{
+									platforms[x].loadTexture(s);
+								}
+								platforms[x].setWidth(w);
+								platforms[x].setHeight(h);
+								SDL_StopTextInput();
+							}
+						}
+						break;
 						case 1 : 
 						if(atoi(keyboardInput.c_str()) != 0)
 						{
@@ -453,11 +480,20 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 	}
 }
 
+/********************************************************
+
+Mouse input processing
+
+********************************************************/
+
 void Map::processMouse(InputClass input, InputClass prevInput)
 {
 	leftClickAction(input, prevInput);
 	rightClickAction(input, prevInput);
 }
+
+
+///////////// Right click processing //////////////////////////
 
 void Map::rightClickAction(InputClass input, InputClass prevInput)
 {
@@ -514,6 +550,8 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 	}
 }
 
+////////////// Left click processing ///////////////////////////
+
 void Map::leftClickAction(InputClass input, InputClass prevInput)
 {
 	if(input.getMouseButton(1))
@@ -547,7 +585,12 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 					{
 						if(mouseOverRect(input, menuChoiceRects[x]))
 						{
-							menuIndex = x;
+							if(SDL_IsTextInputActive())
+							{
+								SDL_StopTextInput();
+							}
+							menuIndex = x/2;
+							printf("Menu item %d chosen\n", menuIndex);
 							keyboardInput = "";
 							SDL_StartTextInput();
 							break;
@@ -556,6 +599,10 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 				}
 				else
 				{
+					if(SDL_IsTextInputActive())
+					{
+						SDL_StopTextInput();
+					}
 					rightClickMenuShown = false;
 					destroyPlatMenu();
 				}
