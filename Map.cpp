@@ -217,7 +217,7 @@ void Map::displayPlatMenu()
 {
 	for(int x = 0; x < 10; x++)
 	{
-		rightClickMenuText[x].render(menuX - camera.getCamX(), menuY + x * 20 - camera.getCamY());
+		rightClickMenuText[x].render(menuChoiceRects[x].x - camera.getCamX(), menuChoiceRects[x].y - camera.getCamY());
 	}
 }
 
