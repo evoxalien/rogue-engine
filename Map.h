@@ -28,6 +28,9 @@ private:
 	SDL_Renderer* render;
 	int menuX;
 	int menuY;
+	SDL_Rect fullMenuRect;
+	SDL_Rect menuChoiceRects[10];
+	int menuIndex;
 
 	int moveStep;
 
@@ -48,7 +51,7 @@ public:
 	bool parseMapFile(std::string filePath,SDL_Renderer* render);
 	void renderMap();
 	void updateMap();
-	void createPlatMenu(int plat);
+	void createPlatMenu(int plat, SDL_Rect menuRect);
 	void destroyPlatMenu();
 	void displayPlatMenu();
 	void processKeyboard(InputClass input, InputClass prevInput);
@@ -58,7 +61,7 @@ public:
 	void mapEditorUpdate(InputClass input, InputClass prevInput);
 	void unfocus();
 	void exportMapFile(Uint32 timeStamp);
-	int mouseOverPlat(InputClass input);
+	bool mouseOverRect(InputClass input, SDL_Rect rect);
 };
 
 #endif

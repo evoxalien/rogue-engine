@@ -124,8 +124,18 @@ void Map::updateMap()
 	
 }
 
-void Map::createPlatMenu(int plat)
+void Map::createPlatMenu(int plat, SDL_Rect menuRect)
 {
+	fullMenuRect = menuRect;
+
+	for(int x = 0; x < 10; x++)
+	{
+		menuChoiceRects[x].x = fullMenuRect.x;
+		menuChoiceRects[x].y = fullMenuRect.y + x*20;
+		menuChoiceRects[x].w = 300;
+		menuChoiceRects[x].h = 20;
+	}
+
 	int index = 0;
 	std::stringstream ss;
 	rightClickMenuText[index].setRenderer(render);
@@ -198,7 +208,7 @@ void Map::displayPlatMenu()
 {
 	for(int x = 0; x < 10; x++)
 	{
-		rightClickMenuText[x].render(menuX, menuY + x * 20);
+		rightClickMenuText[x].render(menuX - camera.getCamX(), menuY + x * 20 - camera.getCamY());
 	}
 }
 
@@ -308,18 +318,21 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 				//remove platform with r key, mouse must be over platform
 			if(input.getKeyDown() == SDLK_r)
 			{
-				int x = mouseOverPlat(input);
-				if(x != -1)
+				for(int x = numPlatforms - 1; x > 0; x--)
 				{
-					for(int y = x; y < numPlatforms; y++)
+					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 					{
-						platforms[y] = platforms[y+1];
-						platSelected[y] = platSelected[y+1];
-						platCoords[y*2] = platCoords[(y+1)*2];
-						platCoords[y*2+1] = platCoords[(y+1)*2+1];
+						for(int y = x; y < numPlatforms; y++)
+						{
+							platforms[y] = platforms[y+1];
+							platSelected[y] = platSelected[y+1];
+							platCoords[y*2] = platCoords[(y+1)*2];
+							platCoords[y*2+1] = platCoords[(y+1)*2+1];
+						}
+						numPlatforms--;
+						x--;
+						break;
 					}
-					numPlatforms--;
-					x--;
 				}
 			}
 		break;
@@ -357,6 +370,85 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 			}
 		break;
 		case Info :
+			if(SDL_IsTextInputActive())
+			{
+				if(input.getKeyDown() == SDLK_BACKSPACE)
+				{
+					if(keyboardInput.length() > 0)
+					{
+						keyboardInput.pop_back();
+					}
+				}
+
+				if(input.getKeyDown() == SDLK_RETURN)
+				{
+					switch(menuIndex)
+					{
+						case 0 : break;
+						case 1 : 
+						if(atoi(keyboardInput.c_str()) != 0)
+						{
+							for(int x = 0; x < numPlatforms; x++)
+							{
+								if(platSelected[x])
+								{
+									platSelected[x] = false;
+									platCoords[x*2] = atoi(keyboardInput.c_str());
+									SDL_StopTextInput();
+								}
+							}
+						}
+						break;
+						case 2 :
+						if(atoi(keyboardInput.c_str()) != 0)
+						{
+							for(int x = 0; x < numPlatforms; x++)
+							{
+								if(platSelected[x])
+								{
+									platSelected[x] = false;
+									platCoords[x*2+1] = atoi(keyboardInput.c_str());
+									SDL_StopTextInput();
+								}
+							}
+						}
+						break;
+						case 3 : 
+						if(atoi(keyboardInput.c_str()) != 0)
+						{
+							for(int x = 0; x < numPlatforms; x++)
+							{
+								if(platSelected[x])
+								{
+									platSelected[x] = false;
+									platforms[x].setWidth(atoi(keyboardInput.c_str()));
+									SDL_StopTextInput();
+								}
+							}
+						}
+						break;
+						case 4 :
+						if(atoi(keyboardInput.c_str()) != 0)
+						{
+							for(int x = 0; x < numPlatforms; x++)
+							{
+								if(platSelected[x])
+								{
+									platSelected[x] = false;
+									platforms[x].setHeight(atoi(keyboardInput.c_str()));
+									SDL_StopTextInput();
+								}
+							}
+						}
+						break;
+					}
+				}
+			}
+
+			if(input.getEvent().type == SDL_TEXTINPUT)
+			{
+				keyboardInput += input.getEvent().text.text;
+			}
 		break; 
 	}
 }
@@ -373,14 +465,13 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 	{
 		if(cState == Testing)
 		{
-			int x = mouseOverPlat(input);
-			if(x != -1)
+			for(int x = numPlatforms - 1; x > 0; x--)
 			{
-				int x = mouseOverPlat(input);
-				if(x != -1)
+				if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 				{
 					platSelected[x] = false;
 					platforms[x].setColor(0xFF,0xFF,0xFF);
+					break;
 				}
 			}
 		}
@@ -389,12 +480,15 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 		{
 			if(input.getMouseButton(3))
 			{
-				int x = mouseOverPlat(input);
-				if(x != -1)
+				for(int x = numPlatforms - 1; x > 0; x--)
 				{
-					platSelected[x] = true;
-					keyboardInput = "";
-					SDL_StartTextInput();
+					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+					{
+						platSelected[x] = true;
+						keyboardInput = "";
+						SDL_StartTextInput();
+						break;
+					}
 				}
 			}
 		}
@@ -403,13 +497,17 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 		{
 			if(!rightClickMenuShown)
 			{
-				int x = mouseOverPlat(input);
-				if(x > 0)
+				for(int x = numPlatforms - 1; x > 0; x--)
 				{
-					menuX = input.getMouseX();
-					menuY = input.getMouseY();
-					rightClickMenuShown = true;
-					createPlatMenu(x);
+					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+					{
+						platSelected[x] = true;
+						menuX = input.getMouseX();
+						menuY = input.getMouseY();
+						rightClickMenuShown = true;
+						createPlatMenu(x, {input.getMouseX(), input.getMouseY(), 500, 500});
+						break;
+					}
 				}
 			}
 		}
@@ -423,11 +521,14 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 		if(cState == Testing)
 		{
 			//select platforms with left mouse button
-			int x = mouseOverPlat(input);
-			if(x != -1)
+			for(int x = numPlatforms - 1; x > 0; x--)
 			{
-				platSelected[x] = true;
-				platforms[x].setColor(0x77,0x77,0x77);
+				if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+				{
+					platSelected[x] = true;
+					platforms[x].setColor(0x77,0x77,0x77);
+					break;
+				}
 			}
 		}
 		else
@@ -440,8 +541,24 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 		{
 			if(rightClickMenuShown)
 			{
-				rightClickMenuShown = false;
-				destroyPlatMenu();
+				if(mouseOverRect(input, fullMenuRect))
+				{
+					for(int x = 0; x < 10; x++)
+					{
+						if(mouseOverRect(input, menuChoiceRects[x]))
+						{
+							menuIndex = x;
+							keyboardInput = "";
+							SDL_StartTextInput();
+							break;
+						}
+					}
+				}
+				else
+				{
+					rightClickMenuShown = false;
+					destroyPlatMenu();
+				}
 			}
 		}
 	}
@@ -461,18 +578,15 @@ void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 	processMouse(input, prevInput);
 }
 
-int Map::mouseOverPlat(InputClass input)
+bool Map::mouseOverRect(InputClass input, SDL_Rect rect)
 {
-	for(int x = numPlatforms - 1; x > 0; x--)
+	if(input.getMouseX() + camera.getCamX() >= rect.x &&
+		input.getMouseX() + camera.getCamX() <= rect.x + rect.w &&
+		input.getMouseY() + camera.getCamY() >= rect.y &&
+		input.getMouseY() + camera.getCamY() <= rect.y + rect.h)
 	{
-		if(input.getMouseX() + camera.getCamX() >= platCoords[x*2] &&
-			input.getMouseX() + camera.getCamX() <= platCoords[x*2] + platforms[x].getWidth() &&
-			input.getMouseY() + camera.getCamY() >= platCoords[x*2+1] &&
-			input.getMouseY() + camera.getCamY() <= platCoords[x*2+1] + platforms[x].getHeight())
-		{
-			return x;
-		}
+		return true;
 	}
-	return -1;
+	return false;
 }
 #endif
