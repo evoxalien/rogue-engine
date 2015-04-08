@@ -51,7 +51,7 @@ public:
 	bool parseMapFile(std::string filePath,SDL_Renderer* render);
 	void renderMap();
 	void updateMap();
-	void createPlatMenu(int plat, SDL_Rect menuRect);
+	void createPlatMenu(int plat, int x, int y);
 	void destroyPlatMenu();
 	void displayPlatMenu();
 	void processKeyboard(InputClass input, InputClass prevInput);
