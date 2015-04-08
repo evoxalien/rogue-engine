@@ -45,6 +45,9 @@ public:
 
 };
 
+//Defualt constructor. button is at (0,0) with calibri font by default
+//Unable to draw without a renderer passed in at draw time or before hand
+//default text is "button"
 button::button()
 {
    if(!TTF_WasInit())
@@ -56,7 +59,7 @@ button::button()
    }
    
    buttonTexture = NULL;
-   font = TTF_OpenFont( "calibri.ttf", 28);
+   font = TTF_OpenFont( "calibri.ttf", 500);
    if(font == NULL)
       printf("font not found!!\n");
    
@@ -67,6 +70,8 @@ button::button()
    rendererCopy = NULL;
 }
 
+//Initialize button with a texture for pretty buttons
+//with pictures instead of text
 button::button(SDL_Texture *buttonTextureIn)
 {
    if(!TTF_WasInit())
@@ -78,7 +83,7 @@ button::button(SDL_Texture *buttonTextureIn)
    }
    
    buttonTexture = buttonTextureIn;
-   font = TTF_OpenFont( "calibri.ttf", 28);
+   font = TTF_OpenFont( "calibri.ttf", 500);
    if(font == NULL)
       printf("font not found!!\n");
    
@@ -89,6 +94,7 @@ button::button(SDL_Texture *buttonTextureIn)
    rendererCopy = NULL;
 }
 
+//Initialize button with renderer so that draw can be called
 button::button(SDL_Renderer *rendererIn)
 {
    if(!TTF_WasInit())
@@ -100,7 +106,7 @@ button::button(SDL_Renderer *rendererIn)
    }
    
    buttonTexture = NULL;
-   font = TTF_OpenFont( "calibri.ttf", 28);
+   font = TTF_OpenFont( "calibri.ttf", 500);
    if(font == NULL)
       printf("font not found!!\n");
 
@@ -127,7 +133,7 @@ button::button(SDL_Renderer *rendererIn)
    SDL_FreeSurface(textSurface);
 }
 
-
+//Initialize button with renderer and text to display
 button::button(SDL_Renderer *rendererIn, string tempText)
 {
    if(!TTF_WasInit())
@@ -139,7 +145,7 @@ button::button(SDL_Renderer *rendererIn, string tempText)
    }
    
    buttonTexture = NULL;
-   font = TTF_OpenFont( "calibri.ttf", 28);
+   font = TTF_OpenFont( "calibri.ttf", 500);
    if(font == NULL)
       printf("font not found!!\n");
    
@@ -165,6 +171,7 @@ button::button(SDL_Renderer *rendererIn, string tempText)
    SDL_FreeSurface(textSurface);
 }
 
+//Initialize button with renderer, text to display, position, and demisions
 button::button(SDL_Renderer *rendererIn, string tempText,int xIn, int yIn,int wIn,int hIn)
 {
    if(!TTF_WasInit())
@@ -176,7 +183,7 @@ button::button(SDL_Renderer *rendererIn, string tempText,int xIn, int yIn,int wI
    }
    
    buttonTexture = NULL;
-   font = TTF_OpenFont( "calibri.ttf", 28);
+   font = TTF_OpenFont( "calibri.ttf", 500);
    if(font == NULL)
       printf("font not found!!\n");
    
@@ -209,6 +216,7 @@ button::button(SDL_Renderer *rendererIn, string tempText,int xIn, int yIn,int wI
    SDL_FreeSurface(textSurface);
 }
 
+//Function to set renderer for button after being declared
 void button::setRenderer(SDL_Renderer *rendererIn)
 {
    rendererCopy = rendererIn;
@@ -230,30 +238,35 @@ void button::setRenderer(SDL_Renderer *rendererIn)
    SDL_FreeSurface(textSurface);
 }
 
+//Set width of button, pretty simple
 void button::setWidth(int wIn)
 {
    textBox.w = wIn;
    buttonBox.box.w = wIn;
 }
 
+//Set height of button, pretty simple
 void button::setHeight(int hIn)
 {
    textBox.h = hIn;
    buttonBox.box.h = hIn;
 }
 
+//Set x position of button
 void button::setX(int xIn)
 {
    textBox.x = xIn;
    buttonBox.box.x = xIn;
 }
 
+//Set y position of button
 void button::setY(int yIn)
 {
    textBox.y = yIn;
    buttonBox.box.y = yIn;
 }
 
+//Set the position of the button in terms of x and y
 void button::setPos(int xIn, int yIn)
 {
    textBox.x = xIn;
@@ -263,6 +276,7 @@ void button::setPos(int xIn, int yIn)
    buttonBox.box.y = yIn;
 }
 
+//Set the text for the button to display
 void button::setText(string textIn)
 {
    text = textIn;
@@ -287,14 +301,16 @@ void button::setText(string textIn)
    SDL_FreeSurface(textSurface);
 }
 
+//Sets the font the button will use, sets to default font "calibri"
+//if it fails and returns false
 bool button::setFont(string fontChoice)
 {
    fontChoice = fontChoice + ".ttf";
-   font = TTF_OpenFont(fontChoice.c_str() , 28);
+   font = TTF_OpenFont(fontChoice.c_str() , 500);
    if(font == NULL)
    {
       printf("font not found, using default font!!\n");
-	  font = TTF_OpenFont( "calibri.ttf", 28);
+	  font = TTF_OpenFont( "calibri.ttf", 500);
       if(font == NULL)
          printf("default font not found!!\n");
 		 
@@ -324,6 +340,7 @@ bool button::setFont(string fontChoice)
    return true;
 }
 
+//sets the RBG based color for the text of the button
 void button::setTextColor(Uint8 rIn, Uint8 gIn, Uint8 bIn)
 {
    textColor = {rIn, gIn, bIn};
@@ -348,11 +365,13 @@ void button::setTextColor(Uint8 rIn, Uint8 gIn, Uint8 bIn)
    SDL_FreeSurface(textSurface);
 }
 
+//Sets the color for the button itself
 void button::setButtonColor(Uint8 rIn, Uint8 gIn, Uint8 bIn)
 {
    buttonBox.setColor(rIn, gIn, bIn);
 }
 
+//Sets the size of the font used. large numbers suggested
 void button::setFontSize(int size)
 {
    font = TTF_OpenFont( "calibri.ttf", size);
@@ -377,6 +396,7 @@ void button::setFontSize(int size)
    SDL_FreeSurface(textSurface);
 }
 
+//Returns true if x and y passed in are within the button
 bool button::isClicked(int x, int y)
 {
    if(x > textBox.x && x < (textBox.x + textBox.w))
@@ -386,11 +406,15 @@ bool button::isClicked(int x, int y)
    return false;
 }
 
+//Sets the buttons texture. Using this will take the place of
+//The text and colored box
 void button::setButtonTexture(SDL_Texture *buttonTextureIn)
 {
    buttonTexture = buttonTextureIn;
 }
 
+//function to draw button if renderer has been assigned to
+//the button. If no renderer was set, function returns false
 bool button::draw()
 {
    if(rendererCopy == NULL)
@@ -409,6 +433,7 @@ bool button::draw()
    }
 }
 
+//Function to draw button onto any renderer passed in.
 bool button::draw(SDL_Renderer *rendererIn)
 {
 
