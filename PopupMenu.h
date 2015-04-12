@@ -1,5 +1,5 @@
-#ifndef MAP_H_
-#define MAP_H_
+#ifndef POPUPMENU_H_
+#define POPUPMENU_H_
 
 #include "SDLincludes.h"
 #include "Texture.h"
@@ -11,16 +11,45 @@ const int ENTRYMAX = 100;
 class PopupMenu
 {
 private:
+	int menuX, menuY;
 	Texture entryTexts[ENTRYMAX];
 	shape easyShapes;
 	button entryButtons[ENTRYMAX];
+	SDL_Render* renderer;
 
 public:
 	PopupMenu();
 	~PopupMenu();
-	addMenuEntry();
-	addMenuButton();
-	displayMenu();
+	void addMenuEntry();
+	void addMenuButton();
+	void displayMenu();
 };
+
+PopupMenu::PopupMenu(SDL_Render* render)
+{
+	menuX = 0;
+	menuY = 0;
+	renderer = render;
+}
+
+PopupMenu::~PopupMenu()
+{
+
+}
+
+void PopupMenu::addMenuEntry()
+{
+
+}
+
+void PopupMenu::addMenuButton()
+{
+
+}
+
+void PopupMenu::displayMenu()
+{
+
+}
 
 #endif
