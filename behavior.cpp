@@ -1,4 +1,4 @@
-//Behavior cpp file
+//Behavior cpp file; friend of Object
 #include "behavior.h"
 
 //Default Behavior constructor

@@ -1,4 +1,4 @@
-//Behavior header file
+//Behavior header file; friend of Object
 #ifndef BEHAVIOR_H
 #define BEHAVIOR_H
 #include <cstdint>

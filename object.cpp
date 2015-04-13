@@ -12,6 +12,29 @@ Object::Object()
 	Object::object_Pointer_Vector.push_back(this);
 }
 
+Object::Object(const float x_Position, const float y_Position, const float x_Half_Length, const float y_Half_Length, const float density, const float friction, const bool is_Dynamic_Body, b2World* world)
+{
+	std::cout << "Object(Physics components)" << std::endl;
+
+	b2BodyDef body_Definition;
+	if(is_Dynamic_Body == true)
+	{
+		body_Definition.type = b2_dynamicBody;
+	}
+	body_Definition.position.Set(x_Position, y_Position);
+	(*this).physics = (*world).CreateBody(&body_Definition);
+	b2PolygonShape shape;
+	shape.SetAsBox(x_Half_Length, y_Half_Length);
+	b2FixtureDef fixture_Definition;
+	fixture_Definition.shape = &shape;
+	fixture_Definition.density = density;
+	fixture_Definition.friction = friction;
+	(*(*this).physics).CreateFixture(&fixture_Definition);
+
+	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
+	Object::object_Pointer_Vector.push_back(this);
+}
+
 //Constructor for when Behavior is known; adds a pointer to the Object to the Object pointer vector and stores the index in necessary members so they can access their data
 Object::Object(const Behavior behavior)
 {
