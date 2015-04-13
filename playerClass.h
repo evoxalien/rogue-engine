@@ -8,6 +8,8 @@
 #include <string>
 #include "inputDavid.h"
 #include "input.h"
+#include "Animation.cpp"
+#include "Texture.h"
 // #include "Gamepad.h"
 #include <stdint.h>
 
@@ -48,7 +50,7 @@ private:
 		SDL_GameControllerButton playerJump;
 		SDL_GameControllerButton playerExit;
 	};
-	struct GamePad //holds the flags of the buttons that are being pressed
+	struct PlayerAction //holds the flags of the buttons that are being pressed
 	{
 		bool  Up;
 		bool  Down;
@@ -70,12 +72,11 @@ private:
 	// struct instances 
 	PlayerControlsKeyboard playerControlsKeyboard;
 	PlayerControlsGamePad playerControlsGamePad;
-	GamePad gamepad;
+	PlayerAction Actions;
 
 	string playerName;
 	int    playerIndex;
 	int    playerHealth;
-	int    playerMovementSpeed;
 	string playerInputMode;
 
 public:
@@ -84,17 +85,25 @@ public:
 	int    playerY;
 	int    playerW;
 	int    playerH;
+	int    currentFrameX;
+	int    currentFrameY;
+	float  playerMovementSpeed;
+	bool   playerDirection; // true = facing left false facing Right
+	Animation playerAnimation;
+	void InitSprite(SDL_Renderer* gRenderer);
+	void loadSpriteContent();
 	void SDLOpenGameControllers();
 	void SDLCloseGameControllers();
 	void UpdateGamePad();
 	void playerInitalizeControls(int playerIndexPassed);
-	void playerUpdate();
+	void playerUpdate(int gameTime);
 	void playerDraw();
 	void playerButtonPress(SDL_Keycode e);
 	void playerKeyPress(SDL_Keycode e);
 	int  playerInitalize(int playerIndexPassed);
-	void  UpdateControls();
-	/* data */
+	void UpdateControls();
+	void LoadSpriteContent();
+	void playerKeyRelease(SDL_Keycode e);
 	Texture playerTexture;
 };
 
@@ -165,33 +174,43 @@ int playerClass::playerInitalize(int playerIndexPassed)
 	inputFile >> playerName;
 	inputFile >> CurrentData;
 	inputFile >> playerHealth;
+	LoadSpriteContent();
+}
 
+
+void playerClass::InitSprite(SDL_Renderer* gRenderer)
+{
+	playerAnimation.Initialize(playerX, playerY, 8, 8);
+	playerAnimation.Image.setRenderer(gRenderer);
+}
+
+void playerClass::LoadSpriteContent()
+{
+	playerAnimation.LoadImage("playerConfig/PLayerScript.txt");
 }
 
 void playerClass::playerButtonPress(SDL_Keycode e)
 { 
-//game pad controls
-	if (playerInputMode=="Gamepad")
-	{
-		if (gamepad.Up)
-		{
-			playerY++; 
-		}
-		if (gamepad.Down)
-		{
-			playerY--; 
-		}
-		if (gamepad.Right)
-		{
-			playerX++; 
-		}
-		if (gamepad.Left)
-		{
-			playerX--; 
-		}
-	}
-	whiteBoxRect.x = playerX;
-	whiteBoxRect.y = playerY;
+// game pad controls
+
+            if(e== SDLK_DOWN)
+            {
+                Actions.Up=true;       
+            }
+            else if ( e== SDLK_UP)
+            {
+                Actions.Down=true;            
+            }
+            else if (e== SDLK_RIGHT)
+            {
+                Actions.Right=true; 
+            }
+            else if (e== SDLK_LEFT)
+            {
+                Actions.Left=true; 
+            }
+	// whiteBoxRect.x = playerX;
+	// whiteBoxRect.y = playerY;
 }
 void playerClass::playerKeyPress(SDL_Keycode e)
 { 
@@ -199,24 +218,61 @@ void playerClass::playerKeyPress(SDL_Keycode e)
 	{
 		if (e==playerControlsKeyboard.playerUp)
 		{
-		    playerY++; 
+		    Actions.Up=true;
 		}
 		if (e==playerControlsKeyboard.playerDown)
 		{
-		    playerY--; 
+		    Actions.Down=true;
 		}
 		if (e==playerControlsKeyboard.playerRight)
 		{
-		    playerX++; 
+		    Actions.Right=true; 
 		}
 		if (e==playerControlsKeyboard.playerLeft)
 		{
-		    playerX--; 
+		    Actions.Left=true; 
 		}
 	}
-	whiteBoxRect.x = playerX;
-	whiteBoxRect.y = playerY;
 }
+void playerClass::playerKeyRelease(SDL_Keycode e)
+{ 
+	if (playerInputMode=="Keyboard")
+	{
+		if (e==playerControlsKeyboard.playerUp)
+		{
+		    Actions.Up=false;
+		}
+		if (e==playerControlsKeyboard.playerDown)
+		{
+		    Actions.Down=false;
+		}
+		if (e==playerControlsKeyboard.playerRight)
+		{
+		    Actions.Right=false; 
+		}
+		if (e==playerControlsKeyboard.playerLeft)
+		{
+		    Actions.Left=false; 
+		}
+		if(e== SDLK_DOWN)
+        {
+            Actions.Up=false;       
+        }
+        else if ( e== SDLK_UP)
+        {
+            Actions.Down=false;            
+        }
+        else if (e== SDLK_RIGHT)
+        {
+            Actions.Right=false; 
+        }
+        else if (e== SDLK_LEFT)
+        {
+            Actions.Left=false; 
+        }
+	}
+}
+
 void playerClass::UpdateControls()
 {
 //update the controls //change them in menu
@@ -275,30 +331,82 @@ void playerClass::UpdateGamePad()
       {
         if (playerIndex-1 == 1)
         {
-          gamepad.Up = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerUp);
-          gamepad.Down = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerDown);
-          gamepad.Left = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerLeft);
-          gamepad.Right = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerRight);
-          gamepad.Start = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerPause);
-          gamepad.Back = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerExit);
-          gamepad.LeftShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
-          gamepad.RightShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
-          gamepad.AButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerActivate);
-          gamepad.BButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerBack);
-          gamepad.XButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerJump);
-          gamepad.YButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_Y);
-          gamepad.StickX = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTX);
-          gamepad.StickY = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTY);
+          Actions.Up = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerUp);
+          Actions.Down = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerDown);
+          Actions.Left = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerLeft);
+          Actions.Right = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerRight);
+          Actions.Start = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerPause);
+          Actions.Back = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerExit);
+          Actions.LeftShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+          Actions.RightShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+          Actions.AButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerActivate);
+          Actions.BButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerBack);
+          Actions.XButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerJump);
+          Actions.YButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_Y);
+          Actions.StickX = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTX);
+          Actions.StickY = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTY);
         }
         
       }
 
 }
 
-void playerClass::playerUpdate()
+void playerClass::playerUpdate(int gameTime)
 {
+	//Animation Tracking
+	playerAnimation.setActive(true);
+    
+    currentFrameX = playerAnimation.getFrameX();
+	
+	if(Actions.Down==true)
+	{
+		playerY += playerMovementSpeed;// * ((float)gameTime%6000);
+		if (playerDirection) //true facing left false facing right
+		{
+			currentFrameY = 1;          
+		}else{
+			currentFrameY = 0;
+		}
+	}
+	else if (Actions.Up==true)
+	{
+		playerY -= playerMovementSpeed; //* ((float)gameTime%6000);
+		if (playerDirection) //true facing left false facing right
+		{
+			currentFrameY = 5;          
+		}else{
+			currentFrameY = 4;
+		}              
+	}
+	else if (Actions.Right==true)
+	{
+		playerX += playerMovementSpeed;// * ((float)gameTime%6000);
+		playerDirection=false;
+		currentFrameY = 2;
+	}
+	else if (Actions.Left==true)
+	{
+		playerX -= playerMovementSpeed;// * ((float)gameTime%6000);
+		playerDirection=true;
+		currentFrameY = 1;
+	}
+	else
+	{
+		playerAnimation.setActive(false);
+		currentFrameX = 0;
+	}
+    //Smooth the Animation Transitions
+    playerAnimation.setPosition(playerX,playerY);
+    playerAnimation.setCurrentFrame(currentFrameX,currentFrameY);
+    
+    //Update of the Animations depending on Game Time
+    playerAnimation.Update(gameTime);
 
 }
 
 
+void playerClass::playerDraw()
+{
+		playerAnimation.Draw();
+}
 #endif

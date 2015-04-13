@@ -4,13 +4,13 @@ SDLK_z
 Back
 SDLK_c
 Up
-SDLK_UP
+SDLK_w
 Down
-SDLK_DOWN
+SDLK_s
 Left
-SDLK_LEFT
+SDLK_a
 Right
-SDLK_RIGHT
+SDLK_d
 Jump
 SDLK_x
 Health

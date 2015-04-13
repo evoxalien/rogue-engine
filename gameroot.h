@@ -189,7 +189,8 @@ bool gameroot::initialize()
    */
 
    Hero.playerInitalize(1);
-
+   Hero.InitSprite(renderer);
+   // Hero.LoadSpriteContent();
    
    return true;
 }
@@ -257,7 +258,8 @@ void gameroot::update()
       if(engineState == GamePlaying1)
       {
          Hero.playerKeyPress(input.getKeyDown());
-         Hero.playerUpdate();
+         Hero.playerKeyRelease(input.getKeyUp());
+         Hero.playerUpdate(fpsTimer.getTicks());
       }
 
 }
@@ -282,9 +284,9 @@ void gameroot::draw()
    {
       
    }
-   else if(engineState == MapEditor)
+   else if(engineState == GamePlaying1)
    {
-      
+      Hero.playerDraw();   
    }
    
    //update screen
