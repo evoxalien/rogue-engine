@@ -35,12 +35,13 @@ Map::~Map()
 		}
 	}
 
+	cursorTextTexture.free();
 }
 
 bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 {
 	render = r;
-	
+
 	ifstream inputFile;
 	inputFile.open(filePath);
 
@@ -69,6 +70,10 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 			platforms[x].setHeight(h);
 		}
 	}
+
+	cursorTextTexture.setRenderer(render);
+	cursorTextTexture.setFont("calibri", 12);
+	cursorTextTexture.loadTextRender("  Testing", textColor);
 
 	inputFile.close();
 
@@ -117,6 +122,8 @@ void Map::renderMap()
 		
 	if(rightClickMenuShown)
 		displayPlatMenu();
+
+	cursorTextTexture.render(cursorX, cursorY);
 }
 
 void Map::updateMap()
@@ -546,6 +553,13 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 				{
 					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 					{
+						for(int y = 0; y < numPlatforms; y++)
+						{
+							if(platSelected[y])
+							{
+								platSelected[y] = false;
+							}
+						}
 						platSelected[x] = true;
 						menuX = input.getMouseX();
 						menuY = input.getMouseY();
@@ -623,10 +637,19 @@ void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 {
 	switch(input.getKeyDown())
 	{
-		case SDLK_0 : cState = Testing; break;
-		case SDLK_1 : cState = Select; break;
-		case SDLK_2 : cState = Info; break;
+		case SDLK_0 : cState = Testing;
+			cursorTextTexture.loadTextRender("  Testing", textColor);
+			break;
+		case SDLK_1 : cState = Select;
+			cursorTextTexture.loadTextRender("  Select", textColor);
+			break;
+		case SDLK_2 : cState = Info;
+			cursorTextTexture.loadTextRender("  Info", textColor);
+			break;
 	}
+
+	cursorX = input.getMouseX();
+	cursorY = input.getMouseY();
 	
 	processKeyboard(input, prevInput);
 

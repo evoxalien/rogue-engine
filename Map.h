@@ -19,7 +19,7 @@ private:
 	Texture rightClickMenuText[10];
 	bool drawText;
 	SDL_Color textColor;
-	Texture textTexture;
+	Texture cursorTextTexture;
 	Texture platforms[PLATMAX];
 	int platCoords[PLATMAX * 2];
 	bool platSelected[PLATMAX];
@@ -28,6 +28,8 @@ private:
 	SDL_Renderer* render;
 	int menuX;
 	int menuY;
+	int cursorX;
+	int cursorY;
 	SDL_Rect fullMenuRect;
 	SDL_Rect menuChoiceRects[10];
 	int menuIndex;
