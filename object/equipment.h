@@ -1,9 +1,7 @@
 //Equipment header file; friend of Object class
 #ifndef EQUIPMENT_H
 #define EQUIPMENT_H
-#include <iostream>
 #include <vector>
-#include <cstdint>
 #include "item.h"
 
 class Equipment

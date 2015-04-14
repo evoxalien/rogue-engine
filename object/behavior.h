@@ -1,7 +1,6 @@
 //Behavior header file; friend of Object
 #ifndef BEHAVIOR_H
 #define BEHAVIOR_H
-#include <cstdint>
 
 enum class Behavior_States : std::uint8_t	//Various states that an Object can be in
 {
@@ -57,7 +56,5 @@ class Behavior
 		void set_Containing_Object_Pointer_Vector_Index(const std::uint16_t);
 		const std::uint16_t get_Containing_Object_Pointer_Vector_Index();
 };
-
-#include "object.h"		//Object and its components need to have headers fully defined for some Behavior function definitions
 
 #endif

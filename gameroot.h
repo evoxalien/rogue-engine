@@ -3,18 +3,16 @@
 #define GAMEROOT_H_INCLUDED
 
 #include "SDLincludes.h"
-#include <iostream>
 #include <stdio.h>
 #include <string>
 #include <chrono>
-#include "player.h"
+#include "object/player.h"			//Includes Object header files and all Object component header files, including Box2D's, along with <iostream>, <vector>, and <cstdint>
 #include "log.h"
 #include "input.h"
 #include "ltimer.h"
 #include "Texture.h"
 #include "Map.cpp"
 #include "startMenu.h"
-#include "Box2D.h"
 #include "playerClass.h"
 //#include <thread>
 

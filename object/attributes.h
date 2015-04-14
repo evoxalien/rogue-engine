@@ -1,7 +1,6 @@
 //Attributes header file; friend of Object class
 #ifndef ATTRIBUTES_H
 #define ATTRIBUTES_H
-#include <cstdint>
 
 class Attributes
 {
@@ -220,7 +219,5 @@ class Attributes
 		void set_Evasion(const float);
 		const float get_Evasion();
 };
-
-#include "object.h"		//Object and its components need to have headers fully defined for some Attribute function definitions
 
 #endif

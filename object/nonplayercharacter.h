@@ -1,9 +1,8 @@
 //nonplayercharacter.h
 #ifndef NONPLAYERCHARACTER_H
 #define NONPLAYERCHARACTER_H
-#include "nonplayercharacter.h"
 
-using namespace std;
+#include "object.h"
 
 class NonPlayerCharacter : public Object
 {

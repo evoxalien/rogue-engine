@@ -3,26 +3,50 @@
 
 //Initialization of static Object members
 std::vector<Object*> Object::object_Pointer_Vector;
+b2World* Object::active_World_Pointer = nullptr;
+b2BodyDef Object::box2D_Body_Definition;
 
 //Default Object constructor; adds a pointer to the Object to the Object pointer vector
 Object::Object()
 {
 	std::cout << "Object()" << std::endl;
+	(*this).physics = nullptr;
+
 	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
 	Object::object_Pointer_Vector.push_back(this);
 }
 
-Object::Object(const float x_Position, const float y_Position, const float x_Half_Length, const float y_Half_Length, const float density, const float friction, const bool is_Dynamic_Body, b2World* world)
+//
+Object::Object(const float x_Position, const float y_Position, const float angle_In_Radians, const int body_Type, const bool check_For_Dynamic_Tunneling, const bool use_Fixed_Rotation, const float linear_Damping, const float angular_Damping, const float gravity_Scale, const bool allow_Physics_Sleep, const bool initialize_Awake, const bool initialize_Active, const float density, const float friction, const float x_Half_Length, const float y_Half_Length)
 {
 	std::cout << "Object(Physics components)" << std::endl;
 
-	b2BodyDef body_Definition;
-	if(is_Dynamic_Body == true)
+	Object::box2D_Body_Definition.position.Set(x_Position, y_Position);
+	Object::box2D_Body_Definition.angle = angle_In_Radians;
+	if(body_Type == 0)
 	{
-		body_Definition.type = b2_dynamicBody;
+		Object::box2D_Body_Definition.type = b2_staticBody;
 	}
-	body_Definition.position.Set(x_Position, y_Position);
-	(*this).physics = (*world).CreateBody(&body_Definition);
+	else if(body_Type == 1)
+	{
+		Object::box2D_Body_Definition.type = b2_kinematicBody;
+	}
+	else
+	{
+		Object::box2D_Body_Definition.type = b2_dynamicBody;
+		Object::box2D_Body_Definition.bullet = check_For_Dynamic_Tunneling;
+	}
+	Object::box2D_Body_Definition.fixedRotation = use_Fixed_Rotation;
+	Object::box2D_Body_Definition.linearDamping = linear_Damping;
+	Object::box2D_Body_Definition.angularDamping = angular_Damping;
+	Object::box2D_Body_Definition.gravityScale = gravity_Scale;
+	Object::box2D_Body_Definition.allowSleep = allow_Physics_Sleep;
+	Object::box2D_Body_Definition.awake = initialize_Awake;
+	Object::box2D_Body_Definition.active = initialize_Active;
+	Object::box2D_Body_Definition.userData = this;
+
+	(*this).physics = (*Object::active_World_Pointer).CreateBody(&box2D_Body_Definition);	//Create an instance of a Box2D body in the Box2D World with the definition provided from the paramaters
+
 	b2PolygonShape shape;
 	shape.SetAsBox(x_Half_Length, y_Half_Length);
 	b2FixtureDef fixture_Definition;
@@ -38,6 +62,7 @@ Object::Object(const float x_Position, const float y_Position, const float x_Hal
 //Constructor for when Behavior is known; adds a pointer to the Object to the Object pointer vector and stores the index in necessary members so they can access their data
 Object::Object(const Behavior behavior)
 {
+	(*this).physics = nullptr;
 	(*this).behavior = behavior;
 
 	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
@@ -47,6 +72,7 @@ Object::Object(const Behavior behavior)
 //Constructor for when Attributes are known; adds a pointer to the Object to the Object pointer vector and stores the index in necessary members so they can access their data
 Object::Object(const Attributes attributes)
 {
+	(*this).physics = nullptr;
 	(*this).attributes = attributes;		//Requires testing
 
 	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
@@ -56,6 +82,7 @@ Object::Object(const Attributes attributes)
 //Constructor for when Behavior and Attributes are known; adds a pointer to the Object to the Object pointer vector and stores the index in necessary members so they can access their data
 Object::Object(const Behavior behavior, const Attributes attributes)
 {
+	(*this).physics = nullptr;
 	(*this).behavior = behavior;
 	(*this).attributes = attributes;		//Requires testing
 
@@ -89,7 +116,15 @@ Object::Object(Object&& object)
 Object::~Object()
 {
 	std::cout << "Object pointed at index: " << (*this).get_Object_Pointer_Vector_Index() << " is being destroyed." << std::endl;
-	(*this).behavior.act();
+
+	if((*this).physics != nullptr)
+	{
+		(*Object::active_World_Pointer).DestroyBody(physics);
+		(*this).physics = nullptr;
+	}
+
+	(*this).behavior.act();	//For testing, to be removed
+
 	Object::object_Pointer_Vector[(*this).get_Object_Pointer_Vector_Index()] = Object::object_Pointer_Vector[Object::object_Pointer_Vector.size() - 1];		//Changes pointer stored in the deconstructing Object's index to be a pointer to the last Object in the vector
 	(*Object::object_Pointer_Vector[(*this).get_Object_Pointer_Vector_Index()]).set_Object_Pointer_Vector_Index((*this).get_Object_Pointer_Vector_Index());	//Changes the index of the Object which previously had its pointer at the end to its new position in the vector 
 	Object::object_Pointer_Vector.pop_back();																												//Removes the last element of the Object pointer vector since it's effectively been moved to a new index
@@ -106,6 +141,16 @@ const void Object::display_Information()
 		std::cout << std::endl << "Object index = " << (*Object::object_Pointer_Vector[i]).get_Object_Pointer_Vector_Index() << std::endl;
 	}
 	std::cout << std::endl;
+}
+
+const b2World* Object::get_Active_World_Pointer()
+{
+	return Object::active_World_Pointer;
+}
+
+void Object::set_Active_World_Pointer(b2World* active_World_Pointer)
+{
+	Object::active_World_Pointer = active_World_Pointer;
 }
 
 //Overloads the copy assignment operator, '=' with a normal Object as the target, to avoid changing the index contained in the appropriate members which reference the pointer to the containing Object in the Object pointer vector

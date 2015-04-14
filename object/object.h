@@ -1,13 +1,10 @@
 //Object header file
 #ifndef OBJECT_H
 #define OBJECT_H
-#include <iostream>
-#include <vector>
-#include <cstdint>
-#include "Box2D.h"
+#include "Box2D/Box2D.h"	//Includes all main Box2D headers
 #include "behavior.h"
 #include "attributes.h"
-#include "equipment.h"
+#include "equipment.h"		//Includes <vector> and "item.h", which includes <iostream> and <cstdint>
 //#include "inventory.h"
 //#include "status_effects.h"
 
@@ -22,9 +19,11 @@ class Object
 	private:
 		//Private static class variables
 		static std::vector<Object*> object_Pointer_Vector;	//A vector with pointers to all Objects currently in memory; the size should never exceed a length of 65,535 or pointers may be unintentionally overwritten and cause errors
+		static b2World* active_World_Pointer;				//A pointer to the Box2D World in which active Objects are located
+		static b2BodyDef box2D_Body_Definition;				//A static Box2D Physics Body member which is used in Object creation; constructor paramaters are used to define member values that are sent to the active Box2D World
 
 		//Private member variables; some members may be moving to derived classes or may become protected instead of private
-		b2Body* physics;
+		b2Body* physics;							//A pointer to the Box2D body which holds information related to Physics
 		Behavior behavior;							//A member which holds information regarding the state of an Object and what it should be doing, if anything
 		Attributes attributes; 						//A member which holds information related to game attributes such as hit points, defense, damage, etc.
 		Equipment equipment;						//A member which holds information on Items which are contributing to a variety of the Object's game attributes
@@ -34,7 +33,7 @@ class Object
 	public:
 		//Constructors and Destructors
 		Object();									//Default constructor
-		Object(const float, const float, const float, const float, const float, const float, const bool, b2World*);
+		Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const float);
 		Object(const Behavior);						//Constructor for when there is an already existing Behavior the Object should follow
 		Object(const Attributes);					//Constructor for when the Attributes of an Object is known
 		Object(const Behavior, const Attributes);	//Constructor for when both the Behavior and Attributes of the Object are known
@@ -44,6 +43,9 @@ class Object
 
 		//Static functions
 		const static void display_Information();	//For testing
+
+		const static b2World* get_Active_World_Pointer();
+		static void set_Active_World_Pointer(b2World*);
 
 		//Overloaded functions
 		Object& operator=(const Object&);			//Overloads the assignment operator, '=', to avoid changing the index contained in the appropriate members which reference the pointer to the containing Object in the Object pointer vector
