@@ -268,19 +268,14 @@ const float Attributes::get_Effective_Evasion()
 }
 
 //'Getters' and 'Setters' for private member variables
-void Attributes::set_Containing_Object_Pointer_Vector_Index(const std::uint16_t containing_Object_Pointer_Vector_Index)
-{
-	(*this).containing_Object_Pointer_Vector_Index = containing_Object_Pointer_Vector_Index;
-}
-
 const std::uint16_t Attributes::get_Containing_Object_Pointer_Vector_Index()
 {
 	return (*this).containing_Object_Pointer_Vector_Index;
 }
 
-void Attributes::set_Strength(const float strength)
+void Attributes::set_Containing_Object_Pointer_Vector_Index(const std::uint16_t containing_Object_Pointer_Vector_Index)
 {
-	(*this).strength = strength;
+	(*this).containing_Object_Pointer_Vector_Index = containing_Object_Pointer_Vector_Index;
 }
 
 const float Attributes::get_Strength()
@@ -288,9 +283,9 @@ const float Attributes::get_Strength()
 	return (*this).strength;
 }
 
-void Attributes::set_Dexterity(const float dexterity)
+void Attributes::set_Strength(const float strength)
 {
-	(*this).dexterity = dexterity;
+	(*this).strength = strength;
 }
 
 const float Attributes::get_Dexterity()
@@ -298,9 +293,9 @@ const float Attributes::get_Dexterity()
 	return (*this).dexterity;
 }
 
-void Attributes::set_Endurance(const float endurance)
+void Attributes::set_Dexterity(const float dexterity)
 {
-	(*this).endurance = endurance;
+	(*this).dexterity = dexterity;
 }
 
 const float Attributes::get_Endurance()
@@ -308,9 +303,9 @@ const float Attributes::get_Endurance()
 	return (*this).endurance;
 }
 
-void Attributes::set_Intelligence(const float intelligence)
+void Attributes::set_Endurance(const float endurance)
 {
-	(*this).intelligence = intelligence;
+	(*this).endurance = endurance;
 }
 
 const float Attributes::get_Intelligence()
@@ -318,9 +313,9 @@ const float Attributes::get_Intelligence()
 	return (*this).intelligence;
 }
 
-void Attributes::set_Perception(const float perception)
+void Attributes::set_Intelligence(const float intelligence)
 {
-	(*this).perception = perception;
+	(*this).intelligence = intelligence;
 }
 
 const float Attributes::get_Perception()
@@ -328,9 +323,9 @@ const float Attributes::get_Perception()
 	return (*this).perception;
 }
 
-void Attributes::set_Experience(const float experience)
+void Attributes::set_Perception(const float perception)
 {
-	(*this).experience = experience;
+	(*this).perception = perception;
 }
 
 const float Attributes::get_Experience()
@@ -338,9 +333,9 @@ const float Attributes::get_Experience()
 	return (*this).experience;
 }
 
-void Attributes::set_Level(const float level)
+void Attributes::set_Experience(const float experience)
 {
-	(*this).level = level;
+	(*this).experience = experience;
 }
 
 const float Attributes::get_Level()
@@ -348,9 +343,9 @@ const float Attributes::get_Level()
 	return (*this).level;
 }
 
-void Attributes::set_Carrying_Capacity(const float carrying_Capacity)
+void Attributes::set_Level(const float level)
 {
-	(*this).carrying_Capacity = carrying_Capacity;
+	(*this).level = level;
 }
 
 const float Attributes::get_Carrying_Capacity()
@@ -358,9 +353,9 @@ const float Attributes::get_Carrying_Capacity()
 	return (*this).carrying_Capacity;
 }
 
-void Attributes::set_Amount_Carried(const float amount_Carried)
+void Attributes::set_Carrying_Capacity(const float carrying_Capacity)
 {
-	(*this).amount_Carried = amount_Carried;
+	(*this).carrying_Capacity = carrying_Capacity;
 }
 
 const float Attributes::get_Amount_Carried()
@@ -368,9 +363,9 @@ const float Attributes::get_Amount_Carried()
 	return (*this).amount_Carried;
 }
 
-void Attributes::set_Vision_Range(const float vision_Range)
+void Attributes::set_Amount_Carried(const float amount_Carried)
 {
-	(*this).vision_Range = vision_Range;
+	(*this).amount_Carried = amount_Carried;
 }
 
 const float Attributes::get_Vision_Range()
@@ -378,9 +373,9 @@ const float Attributes::get_Vision_Range()
 	return (*this).vision_Range;
 }
 
-void Attributes::set_Hearing_Range(const float hearing_Range)
+void Attributes::set_Vision_Range(const float vision_Range)
 {
-	(*this).hearing_Range = hearing_Range;
+	(*this).vision_Range = vision_Range;
 }
 
 const float Attributes::get_Hearing_Range()
@@ -388,9 +383,9 @@ const float Attributes::get_Hearing_Range()
 	return (*this).hearing_Range;
 }
 
-void Attributes::set_Physical_Attack_Range(const float physical_Attack_Range)
+void Attributes::set_Hearing_Range(const float hearing_Range)
 {
-	(*this).physical_Attack_Range = physical_Attack_Range;
+	(*this).hearing_Range = hearing_Range;
 }
 
 const float Attributes::get_Physical_Attack_Range()
@@ -398,9 +393,9 @@ const float Attributes::get_Physical_Attack_Range()
 	return (*this).physical_Attack_Range;
 }
 
-void Attributes::set_Physical_Damage(const float physical_Damage)
+void Attributes::set_Physical_Attack_Range(const float physical_Attack_Range)
 {
-	(*this).physical_Damage = physical_Damage;
+	(*this).physical_Attack_Range = physical_Attack_Range;
 }
 
 const float Attributes::get_Physical_Damage()
@@ -408,9 +403,9 @@ const float Attributes::get_Physical_Damage()
 	return (*this).physical_Damage;
 }
 
-void Attributes::set_Rate_Of_Physical_Attacks(const float rate_Of_Physical_Attacks)
+void Attributes::set_Physical_Damage(const float physical_Damage)
 {
-	(*this).rate_Of_Physical_Attacks = rate_Of_Physical_Attacks;
+	(*this).physical_Damage = physical_Damage;
 }
 
 const float Attributes::get_Rate_Of_Physical_Attacks()
@@ -418,9 +413,9 @@ const float Attributes::get_Rate_Of_Physical_Attacks()
 	return (*this).rate_Of_Physical_Attacks;
 }
 
-void Attributes::set_Physical_Accuracy(const float physical_Accuracy)
+void Attributes::set_Rate_Of_Physical_Attacks(const float rate_Of_Physical_Attacks)
 {
-	(*this).physical_Accuracy = physical_Accuracy;
+	(*this).rate_Of_Physical_Attacks = rate_Of_Physical_Attacks;
 }
 
 const float Attributes::get_Physical_Accuracy()
@@ -428,9 +423,9 @@ const float Attributes::get_Physical_Accuracy()
 	return (*this).physical_Accuracy;
 }
 
-void Attributes::set_Magical_Attack_Range(const float magical_Attack_Range)
+void Attributes::set_Physical_Accuracy(const float physical_Accuracy)
 {
-	(*this).magical_Attack_Range = magical_Attack_Range;
+	(*this).physical_Accuracy = physical_Accuracy;
 }
 
 const float Attributes::get_Magical_Attack_Range()
@@ -438,9 +433,9 @@ const float Attributes::get_Magical_Attack_Range()
 	return (*this).magical_Attack_Range;
 }
 
-void Attributes::set_Magical_Damage(const float magical_Damage)
+void Attributes::set_Magical_Attack_Range(const float magical_Attack_Range)
 {
-	(*this).magical_Damage = magical_Damage;
+	(*this).magical_Attack_Range = magical_Attack_Range;
 }
 
 const float Attributes::get_Magical_Damage()
@@ -448,9 +443,9 @@ const float Attributes::get_Magical_Damage()
 	return (*this).magical_Damage;
 }
 
-void Attributes::set_Rate_Of_Magical_Attacks(const float rate_Of_Magical_Attacks)
+void Attributes::set_Magical_Damage(const float magical_Damage)
 {
-	(*this).rate_Of_Magical_Attacks = rate_Of_Magical_Attacks;
+	(*this).magical_Damage = magical_Damage;
 }
 
 const float Attributes::get_Rate_Of_Magical_Attacks()
@@ -458,9 +453,9 @@ const float Attributes::get_Rate_Of_Magical_Attacks()
 	return (*this).rate_Of_Magical_Attacks;
 }
 
-void Attributes::set_Magical_Accuracy(const float magical_Accuracy)
+void Attributes::set_Rate_Of_Magical_Attacks(const float rate_Of_Magical_Attacks)
 {
-	(*this).magical_Accuracy = magical_Accuracy;
+	(*this).rate_Of_Magical_Attacks = rate_Of_Magical_Attacks;
 }
 
 const float Attributes::get_Magical_Accuracy()
@@ -468,9 +463,9 @@ const float Attributes::get_Magical_Accuracy()
 	return (*this).magical_Accuracy;
 }
 
-void Attributes::set_Movement_Speed(const float movement_Speed)
+void Attributes::set_Magical_Accuracy(const float magical_Accuracy)
 {
-	(*this).movement_Speed = movement_Speed;
+	(*this).magical_Accuracy = magical_Accuracy;
 }
 
 const float Attributes::get_Movement_Speed()
@@ -478,9 +473,9 @@ const float Attributes::get_Movement_Speed()
 	return (*this).movement_Speed;
 }
 
-void Attributes::set_Maximum_Stamina(const float maximum_Stamina)
+void Attributes::set_Movement_Speed(const float movement_Speed)
 {
-	(*this).maximum_Stamina = maximum_Stamina;
+	(*this).movement_Speed = movement_Speed;
 }
 
 const float Attributes::get_Maximum_Stamina()
@@ -488,9 +483,9 @@ const float Attributes::get_Maximum_Stamina()
 	return (*this).maximum_Stamina;
 }
 
-void Attributes::set_Stamina(const float stamina)
+void Attributes::set_Maximum_Stamina(const float maximum_Stamina)
 {
-	(*this).stamina = stamina;
+	(*this).maximum_Stamina = maximum_Stamina;
 }
 
 const float Attributes::get_Stamina()
@@ -498,9 +493,9 @@ const float Attributes::get_Stamina()
 	return (*this).stamina;
 }
 
-void Attributes::set_Rate_Of_Stamina_Regeneration(const float rate_Of_Stamina_Regeneration)
+void Attributes::set_Stamina(const float stamina)
 {
-	(*this).rate_Of_Stamina_Regeneration = rate_Of_Stamina_Regeneration;
+	(*this).stamina = stamina;
 }
 
 const float Attributes::get_Rate_Of_Stamina_Regeneration()
@@ -508,9 +503,9 @@ const float Attributes::get_Rate_Of_Stamina_Regeneration()
 	return (*this).rate_Of_Stamina_Regeneration;
 }
 
-void Attributes::set_Maximum_Mana(const float maximum_Mana)
+void Attributes::set_Rate_Of_Stamina_Regeneration(const float rate_Of_Stamina_Regeneration)
 {
-	(*this).maximum_Mana = maximum_Mana;
+	(*this).rate_Of_Stamina_Regeneration = rate_Of_Stamina_Regeneration;
 }
 
 const float Attributes::get_Maximum_Mana()
@@ -518,9 +513,9 @@ const float Attributes::get_Maximum_Mana()
 	return (*this).maximum_Mana;
 }
 
-void Attributes::set_Mana(const float mana)
+void Attributes::set_Maximum_Mana(const float maximum_Mana)
 {
-	(*this).mana = mana;
+	(*this).maximum_Mana = maximum_Mana;
 }
 
 const float Attributes::get_Mana()
@@ -528,9 +523,9 @@ const float Attributes::get_Mana()
 	return (*this).mana;
 }
 
-void Attributes::set_Rate_Of_Mana_Regeneration(const float rate_Of_Mana_Regeneration)
+void Attributes::set_Mana(const float mana)
 {
-	(*this).rate_Of_Mana_Regeneration = rate_Of_Mana_Regeneration;
+	(*this).mana = mana;
 }
 
 const float Attributes::get_Rate_Of_Mana_Regeneration()
@@ -538,9 +533,9 @@ const float Attributes::get_Rate_Of_Mana_Regeneration()
 	return (*this).rate_Of_Mana_Regeneration;
 }
 
-void Attributes::set_Maximum_Health(const float maximum_Health)
+void Attributes::set_Rate_Of_Mana_Regeneration(const float rate_Of_Mana_Regeneration)
 {
-	(*this).maximum_Health = maximum_Health;
+	(*this).rate_Of_Mana_Regeneration = rate_Of_Mana_Regeneration;
 }
 
 const float Attributes::get_Maximum_Health()
@@ -548,9 +543,9 @@ const float Attributes::get_Maximum_Health()
 	return (*this).maximum_Health;
 }
 
-void Attributes::set_Health(const float health)
+void Attributes::set_Maximum_Health(const float maximum_Health)
 {
-	(*this).health = health;
+	(*this).maximum_Health = maximum_Health;
 }
 
 const float Attributes::get_Health()
@@ -558,9 +553,9 @@ const float Attributes::get_Health()
 	return (*this).health;
 }
 
-void Attributes::set_Rate_Of_Health_Regeneration(const float rate_Of_Health_Regeneration)
+void Attributes::set_Health(const float health)
 {
-	(*this).rate_Of_Health_Regeneration = rate_Of_Health_Regeneration;
+	(*this).health = health;
 }
 
 const float Attributes::get_Rate_Of_Health_Regeneration()
@@ -568,9 +563,9 @@ const float Attributes::get_Rate_Of_Health_Regeneration()
 	return (*this).rate_Of_Health_Regeneration;
 }
 
-void Attributes::set_Physical_Defense(const float physical_Defense)
+void Attributes::set_Rate_Of_Health_Regeneration(const float rate_Of_Health_Regeneration)
 {
-	(*this).physical_Defense = physical_Defense;
+	(*this).rate_Of_Health_Regeneration = rate_Of_Health_Regeneration;
 }
 
 const float Attributes::get_Physical_Defense()
@@ -578,9 +573,9 @@ const float Attributes::get_Physical_Defense()
 	return (*this).physical_Defense;
 }
 
-void Attributes::set_Magical_Defense(const float magical_Defense)
+void Attributes::set_Physical_Defense(const float physical_Defense)
 {
-	(*this).magical_Defense = magical_Defense;
+	(*this).physical_Defense = physical_Defense;
 }
 
 const float Attributes::get_Magical_Defense()
@@ -588,9 +583,9 @@ const float Attributes::get_Magical_Defense()
 	return (*this).magical_Defense;
 }
 
-void Attributes::set_Block_Chance(const float block_Chance)
+void Attributes::set_Magical_Defense(const float magical_Defense)
 {
-	(*this).block_Chance = block_Chance;
+	(*this).magical_Defense = magical_Defense;
 }
 
 const float Attributes::get_Block_Chance()
@@ -598,12 +593,17 @@ const float Attributes::get_Block_Chance()
 	return (*this).block_Chance;
 }
 
-void Attributes::set_Evasion(const float evasion)
+void Attributes::set_Block_Chance(const float block_Chance)
 {
-	(*this).evasion = evasion;
+	(*this).block_Chance = block_Chance;
 }
 
 const float Attributes::get_Evasion()
 {
 	return (*this).evasion;
+}
+
+void Attributes::set_Evasion(const float evasion)
+{
+	(*this).evasion = evasion;
 }

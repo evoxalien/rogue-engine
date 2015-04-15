@@ -48,8 +48,8 @@ class Equipment
 		float get_Total_Evasion_Modifier();
 
 		//'Getters' and 'Setters' for private member variables
-		void set_Containing_Object_Pointer_Vector_Index(const std::uint16_t);
 		const std::uint16_t get_Containing_Object_Pointer_Vector_Index();
+		void set_Containing_Object_Pointer_Vector_Index(const std::uint16_t);
 };
 
 #endif

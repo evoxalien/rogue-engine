@@ -163,13 +163,12 @@ float Equipment::get_Total_Evasion_Modifier()
 }
 
 //'Getters' and 'Setters' for private member variables
+const std::uint16_t Equipment::get_Containing_Object_Pointer_Vector_Index()
+{
+	return (*this).containing_Object_Pointer_Vector_Index;
+}
 
 void Equipment::set_Containing_Object_Pointer_Vector_Index(const std::uint16_t containing_Object_Pointer_Vector_Index)
 {
 	(*this).containing_Object_Pointer_Vector_Index = containing_Object_Pointer_Vector_Index;
-}
-
-const std::uint16_t Equipment::get_Containing_Object_Pointer_Vector_Index()
-{
-	return (*this).containing_Object_Pointer_Vector_Index;
 }

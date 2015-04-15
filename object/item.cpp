@@ -17,13 +17,12 @@ void Item::display_Information()
 }
 
 //'Getters' and 'Setters' for private member variables
+const std::uint16_t Item::get_Containing_Object_Pointer_Vector_Index()
+{
+	return (*this).containing_Object_Pointer_Vector_Index;
+}
 
 void Item::set_Containing_Object_Pointer_Vector_Index(const std::uint16_t containing_Object_Pointer_Vector_Index)
 {
 	(*this).containing_Object_Pointer_Vector_Index = containing_Object_Pointer_Vector_Index;
-}
-
-const std::uint16_t Item::get_Containing_Object_Pointer_Vector_Index()
-{
-	return (*this).containing_Object_Pointer_Vector_Index;
 }
