@@ -58,7 +58,7 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 		platSelected[x] = false;
 		platforms[x].setRenderer(render);
 		inputFile >> shape;
-		if(shape == "quad")
+		if(shape == "platform")
 		{
 			inputFile >> platCoords[x*2];
 			inputFile >> platCoords[x*2+1];
@@ -341,7 +341,7 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 				//remove platform with r key, mouse must be over platform
 			if(input.getKeyDown() == SDLK_r)
 			{
-				for(int x = numPlatforms - 1; x > 0; x--)
+				for(int x = numPlatforms - 1; x >= 0; x--)
 				{
 					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 					{
@@ -517,7 +517,7 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 	{
 		if(cState == Testing)
 		{
-			for(int x = numPlatforms - 1; x > 0; x--)
+			for(int x = numPlatforms - 1; x >= 0; x--)
 			{
 				if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 				{
@@ -532,7 +532,7 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 		{
 			if(input.getMouseButton(3))
 			{
-				for(int x = numPlatforms - 1; x > 0; x--)
+				for(int x = numPlatforms - 1; x >= 0; x--)
 				{
 					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 					{
@@ -549,7 +549,7 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 		{
 			if(!rightClickMenuShown)
 			{
-				for(int x = numPlatforms - 1; x > 0; x--)
+				for(int x = numPlatforms - 1; x >= 0; x--)
 				{
 					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 					{
@@ -582,7 +582,7 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 		if(cState == Testing)
 		{
 			//select platforms with left mouse button
-			for(int x = numPlatforms - 1; x > 0; x--)
+			for(int x = numPlatforms - 1; x >= 0; x--)
 			{
 				if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 				{
