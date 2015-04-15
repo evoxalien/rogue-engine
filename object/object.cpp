@@ -69,6 +69,8 @@ Object::Object(const float x_Position, const float y_Position, const float angle
 		std::cerr << "Error: Object does not contain a pointer to the Box2D World, ensure one is created and set as the active World." << std::endl;
 	}
 
+	(*this).temporary_State_Holder = 1;
+
 	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
 	Object::object_Pointer_Vector.push_back(this);
 }
@@ -135,8 +137,13 @@ Object::~Object()
 	{
 		if((*this).physics != nullptr)
 		{
-			(*Object::active_World_Pointer).DestroyBody(physics);
-			(*this).physics = nullptr;
+			if((*this).temporary_State_Holder == 0)
+			{
+				std::cerr << "About to destroy body" << std::endl;
+				(*Object::active_World_Pointer).DestroyBody(physics);
+				std::cerr << "Body destroyed" << std::endl;
+				(*this).physics = nullptr;
+			}
 		}
 	}
 	Object::object_Pointer_Vector[(*this).get_Object_Pointer_Vector_Index()] = Object::object_Pointer_Vector[Object::object_Pointer_Vector.size() - 1];		//Changes pointer stored in the deconstructing Object's index to be a pointer to the last Object in the vector
@@ -147,12 +154,22 @@ Object::~Object()
 //Used for testing; displays useful information in the console log related to the Object class
 const void Object::display_Information()
 {
-	std::cout << "size of vector = " << Object::object_Pointer_Vector.size() << std::endl;
-	std::cout << "capacity of vector = " << Object::object_Pointer_Vector.capacity() << std::endl;
-	std::cout << "max capacity of vector = " << Object::object_Pointer_Vector.max_size() << std::endl << std::endl;
+	//std::cout << "size of vector = " << Object::object_Pointer_Vector.size() << std::endl;
+	//std::cout << "capacity of vector = " << Object::object_Pointer_Vector.capacity() << std::endl;
+	//std::cout << "max capacity of vector = " << Object::object_Pointer_Vector.max_size() << std::endl << std::endl;
+	std::cout << "Displaying information for Objects which have Physics:" << std::endl << std::endl;
 	for(int i = 0; i < Object::object_Pointer_Vector.size(); i++)
 	{
-		std::cout << std::endl << "Object index = " << (*Object::object_Pointer_Vector[i]).get_Object_Pointer_Vector_Index() << std::endl;
+		if((*Object::object_Pointer_Vector[i]).physics != nullptr)
+		{
+			std::cout << std::endl << "Object index = " << (*Object::object_Pointer_Vector[i]).get_Object_Pointer_Vector_Index() << std::endl;
+			b2Vec2 position = (*(*Object::object_Pointer_Vector[i]).physics).GetPosition();
+			std::cout << "Physics- x_Position: " << position.x << " y_Position: " << position.y << std::endl;
+		}
+		else
+		{
+			i = Object::object_Pointer_Vector.size();
+		}
 	}
 	std::cout << std::endl;
 }
@@ -170,9 +187,13 @@ void Object::set_Active_World_Pointer(b2World* active_World_Pointer)
 //Overloads the copy assignment operator, '=' with a normal Object as the target, to avoid changing the index contained in the appropriate members which reference the pointer to the containing Object in the Object pointer vector
 Object& Object::operator=(const Object& object)
 {
+	std::cout << "Copy assignment operator called" << std::endl;
+	(*this).temporary_State_Holder = 0;
 	uint16_t temporary_Index = (*this).get_Object_Pointer_Vector_Index();
+	(*this).physics = object.physics;
 	(*this).behavior = object.behavior;
-//	(*this).attributes = object.attributes;
+	(*this).attributes = object.attributes;
+	(*this).equipment = object.equipment;
 	(*this).set_Object_Pointer_Vector_Index(temporary_Index);
 }
 

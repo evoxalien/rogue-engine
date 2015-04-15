@@ -15,11 +15,11 @@ class Object
 //	friend class Equipment;			//Allows Equipment access to Object's private and protected member variables and functions; communicates to ...
 //	friend class Inventory;			//Allows Inventory access to Object's private and protected member variables and functions; communicates to ...
 //	friend class Status_Effects;	//Allows Status_Effects access to Object's private and protected member variables and functions; communicates to ...
+	friend class Level;
 
 	private:
 		//Private static class variables
 		static std::vector<Object*> object_Pointer_Vector;	//A vector with pointers to all Objects currently in memory; the size should never exceed a length of 65,535 or pointers may be unintentionally overwritten and cause errors
-		static b2World* active_World_Pointer;				//A pointer to the Box2D World in which active Objects are located
 		static b2BodyDef box2D_Body_Definition;				//A static Box2D Physics body definition member which is used in Object creation; holds a large number of values used for position, angle, type, and Physics optimization- constructor paramaters are used to define member values that are sent to the active Box2D World to generate a body
 		static b2FixtureDef box2D_Fixture_Definition;		//A static Box2D Physics fixture definition, which holds shape, restitution, density, and collision layer details; a body may contain multiple fixtures
 		static b2PolygonShape box2D_Polygon_Shape;			//A static Box2D Physics shape, which is used by the fixture definition to define the area which the fixture will occupy
@@ -33,6 +33,8 @@ class Object
 		//Status_Effects status_Effects;			//A member which holds information related to special effects that may be active on the Object, such as if a spell is increasing movement speed or regenerating health
 
 	public:
+		static b2World* active_World_Pointer;				//A pointer to the Box2D World in which active Objects are located
+		int temporary_State_Holder;
 		//Constructors and Destructors
 		Object();									//Default constructor
 		Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float);	//Constructor for Physics, may need to be updated to handle multiple fixtures
