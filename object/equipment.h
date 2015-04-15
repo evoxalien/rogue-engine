@@ -7,7 +7,8 @@
 class Equipment
 {
 	private:
-		const static std::uint8_t total_Number_Of_Equipment_Slots = 18;
+		const static std::uint8_t total_Number_Of_Equipment_Slots = 6;
+		std::uint8_t number_Of_Items_Equipped;
 		Item* equipped_Item_Pointer_Array[Equipment::total_Number_Of_Equipment_Slots];
 
 		std::uint16_t containing_Object_Pointer_Vector_Index;
@@ -15,9 +16,12 @@ class Equipment
 	public:
 		//Constructors and Destructors
 		Equipment();									//Default constructor
+	//	Equipment(Item&);
 
 		//Member functions
 		void display_Information();
+
+		bool equip_Item(Item&, std::uint8_t);
 
 		float get_Total_Strength_Modifier();
 		float get_Total_Dexterity_Modifier();

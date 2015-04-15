@@ -1,6 +1,7 @@
 //Attributes header file; friend of Object class
 #ifndef ATTRIBUTES_H
 #define ATTRIBUTES_H
+#include <algorithm>
 
 class Attributes
 {
@@ -164,6 +165,7 @@ class Attributes
 
 		//Public member functions
 		void display_Information();						//For testing
+		void update();
 
 		//The 'get_Effective_Attribute()' functions return the corresponding attribute plus or minus all modifications from equipment and special effects the Object is affected by; experience, level, amoutn_Carried, health, stamina, and mana already have their effective values stored, so do not have functions here and should use the regular 'get_Attribute()' functions 
 		const float get_Effective_Strength();

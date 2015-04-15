@@ -3,7 +3,7 @@
 #define OBJECT_H
 #include "Box2D/Box2D.h"	//Includes all main Box2D headers
 #include "behavior.h"
-#include "attributes.h"
+#include "attributes.h"		//Includes <algorithm>
 #include "equipment.h"		//Includes <vector> and "item.h", which includes <iostream> and <cstdint>
 //#include "inventory.h"
 //#include "status_effects.h"
@@ -25,6 +25,7 @@ class Object
 		static b2PolygonShape box2D_Polygon_Shape;			//A static Box2D Physics shape, which is used by the fixture definition to define the area which the fixture will occupy
 
 		//Private member variables; some members may be moving to derived classes or may become protected instead of private
+		b2Body* physics;							//A pointer to the Box2D body which holds information related to Physics
 		Behavior behavior;							//A member which holds information regarding the state of an Object and what it should be doing, if anything
 		Attributes attributes; 						//A member which holds information related to game attributes such as hit points, defense, damage, etc.
 		Equipment equipment;						//A member which holds information on Items which are contributing to a variety of the Object's game attributes
@@ -32,7 +33,6 @@ class Object
 		//Status_Effects status_Effects;			//A member which holds information related to special effects that may be active on the Object, such as if a spell is increasing movement speed or regenerating health
 
 	public:
-		b2Body* physics;							//A pointer to the Box2D body which holds information related to Physics
 		//Constructors and Destructors
 		Object();									//Default constructor
 		Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float);	//Constructor for Physics, may need to be updated to handle multiple fixtures

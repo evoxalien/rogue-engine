@@ -80,55 +80,350 @@ Attributes::Attributes()
 	(*this).evasion = 0;
 }
 
+const float Attributes::get_Carrying_Capacity_Per_Strength()
+{
+	return Attributes::carrying_Capacity_Per_Strength;
+}
+
+float Attributes::set_Carrying_Capacity_Per_Strength(const float carrying_Capacity_Per_Strength)
+{
+	Attributes::carrying_Capacity_Per_Strength = carrying_Capacity_Per_Strength;
+}
+
+const float Attributes::get_Carrying_Capacity_Per_Endurance()
+{
+	return Attributes::carrying_Capacity_Per_Endurance;
+}
+
+float Attributes::set_Carrying_Capacity_Per_Endurance(const float carrying_Capacity_Per_Endurance)
+{
+	Attributes::carrying_Capacity_Per_Endurance = carrying_Capacity_Per_Endurance;
+}
+
+const float Attributes::get_Vision_Range_Per_Perception()
+{
+	return Attributes::vision_Range_Per_Perception;
+}
+
+float Attributes::set_Vision_Range_Per_Perception(const float vision_Range_Per_Perception)
+{
+	Attributes::vision_Range_Per_Perception = vision_Range_Per_Perception;
+}
+
+const float Attributes::get_Hearing_Range_Per_Perception()
+{
+	return Attributes::hearing_Range_Per_Perception;
+}
+
+float Attributes::set_Hearing_Range_Per_Perception(const float hearing_Range_Per_Perception)
+{
+	Attributes::hearing_Range_Per_Perception = hearing_Range_Per_Perception;
+}
+
+const float Attributes::get_Physical_Damage_Per_Strength()
+{
+	return Attributes::physical_Damage_Per_Strength;
+}
+
+float Attributes::set_Physical_Damage_Per_Strength(const float physical_Damage_Per_Strength)
+{
+	Attributes::physical_Damage_Per_Strength = physical_Damage_Per_Strength;
+}
+
+const float Attributes::get_Rate_Of_Physical_Attacks_Per_Dexterity()
+{
+	return Attributes::rate_Of_Physical_Attacks_Per_Dexterity;
+}
+
+float Attributes::set_Rate_Of_Physical_Attacks_Per_Dexterity(const float rate_Of_Physical_Attacks_Per_Dexterity)
+{
+	Attributes::rate_Of_Physical_Attacks_Per_Dexterity = rate_Of_Physical_Attacks_Per_Dexterity;
+}
+
+const float Attributes::get_Physical_Accuracy_Per_Dexterity()
+{
+	return Attributes::physical_Accuracy_Per_Dexterity;
+}
+float Attributes::set_Physical_Accuracy_Per_Dexterity(const float physical_Accuracy_Per_Dexterity)
+{
+	Attributes::physical_Accuracy_Per_Dexterity = physical_Accuracy_Per_Dexterity;
+}
+
+const float Attributes::get_Physical_Accuracy_Per_Perception()
+{
+	return Attributes::physical_Accuracy_Per_Perception;
+}
+
+float Attributes::set_Physical_Accuracy_Per_Perception(const float physical_Accuracy_Per_Perception)
+{
+	Attributes::physical_Accuracy_Per_Perception = physical_Accuracy_Per_Perception;
+}
+
+const float Attributes::get_Magical_Damage_Per_Intelligence()
+{
+	return Attributes::magical_Damage_Per_Intelligence;
+}
+
+float Attributes::set_Magical_Damage_Per_Intelligence(const float magical_Damage_Per_Intelligence)
+{
+	Attributes::magical_Damage_Per_Intelligence = magical_Damage_Per_Intelligence;
+}
+
+const float Attributes::get_Rate_Of_Magical_Attacks_Per_Dexterity()
+{
+	return Attributes::rate_Of_Magical_Attacks_Per_Dexterity;
+}
+
+float Attributes::set_Rate_Of_Magical_Attacks_Per_Dexterity(const float rate_Of_Magical_Attacks_Per_Dexterity)
+{
+	Attributes::rate_Of_Magical_Attacks_Per_Dexterity = rate_Of_Magical_Attacks_Per_Dexterity;
+}
+
+const float Attributes::get_Magical_Accuracy_Per_Dexterity()
+{
+	return Attributes::magical_Accuracy_Per_Dexterity;
+}
+
+float Attributes::set_Magical_Accuracy_Per_Dexterity(const float magical_Accuracy_Per_Dexterity)
+{
+	Attributes::magical_Accuracy_Per_Dexterity = magical_Accuracy_Per_Dexterity;
+}
+
+const float Attributes::get_Magical_Accuracy_Per_Perception()
+{
+	return Attributes::magical_Accuracy_Per_Perception;
+}
+
+float Attributes::set_Magical_Accuracy_Per_Perception(const float magical_Accuracy_Per_Perception)
+{
+	Attributes::magical_Accuracy_Per_Perception = magical_Accuracy_Per_Perception;
+}
+
+const float Attributes::get_Movement_Speed_Per_Dexterity()
+{
+	return Attributes::movement_Speed_Per_Dexterity;
+}
+
+float Attributes::set_Movement_Speed_Per_Dexterity(const float movement_Speed_Per_Dexterity)
+{
+	Attributes::movement_Speed_Per_Dexterity = movement_Speed_Per_Dexterity;
+}
+
+const float Attributes::get_Maximum_Stamina_Per_Endurance()
+{
+	return Attributes::maximum_Stamina_Per_Endurance;
+}
+
+float Attributes::set_Maximum_Stamina_Per_Endurance(const float maximum_Stamina_Per_Endurance)
+{
+	Attributes::maximum_Stamina_Per_Endurance = maximum_Stamina_Per_Endurance;
+}
+
+const float Attributes::get_Rate_Of_Stamina_Regeneration_Per_Endurance()
+{
+	return Attributes::rate_Of_Stamina_Regeneration_Per_Endurance;
+}
+
+float Attributes::set_Rate_Of_Stamina_Regeneration_Per_Endurance(const float rate_Of_Stamina_Regeneration_Per_Endurance)
+{
+	Attributes::rate_Of_Stamina_Regeneration_Per_Endurance = rate_Of_Stamina_Regeneration_Per_Endurance;
+}
+
+const float Attributes::get_Maximum_Mana_Per_Intelligence()
+{
+	return Attributes::maximum_Mana_Per_Intelligence;
+}
+
+float Attributes::set_Maximum_Mana_Per_Intelligence(const float maximum_Mana_Per_Intelligence)
+{
+	Attributes::maximum_Mana_Per_Intelligence = maximum_Mana_Per_Intelligence;
+}
+
+const float Attributes::get_Rate_Of_Mana_Regeneration_Per_Intelligence()
+{
+	return Attributes::rate_Of_Mana_Regeneration_Per_Intelligence;
+}
+
+float Attributes::set_Rate_Of_Mana_Regeneration_Per_Intelligence(const float rate_Of_Mana_Regeneration_Per_Intelligence)
+{
+	Attributes::rate_Of_Mana_Regeneration_Per_Intelligence = rate_Of_Mana_Regeneration_Per_Intelligence;
+}
+
+const float Attributes::get_Maximum_Health_Per_Endurance()
+{
+	return Attributes::maximum_Health_Per_Endurance;
+}
+
+float Attributes::set_Maximum_Health_Per_Endurance(const float maximum_Health_Per_Endurance)
+{
+	Attributes::maximum_Health_Per_Endurance = maximum_Health_Per_Endurance;
+}
+
+const float Attributes::get_Rate_Of_Health_Regeneration_Per_Endurance()
+{
+	return Attributes::rate_Of_Health_Regeneration_Per_Endurance;
+}
+
+float Attributes::set_Rate_Of_Health_Regeneration_Per_Endurance(const float rate_Of_Health_Regeneration_Per_Endurance)
+{
+	Attributes::rate_Of_Health_Regeneration_Per_Endurance = rate_Of_Health_Regeneration_Per_Endurance;
+}
+
+const float Attributes::get_Physical_Defense_Per_Endurance()
+{
+	return Attributes::physical_Defense_Per_Endurance;
+}
+
+float Attributes::set_Physical_Defense_Per_Endurance(const float physical_Defense_Per_Endurance)
+{
+	Attributes::physical_Defense_Per_Endurance = physical_Defense_Per_Endurance;
+}
+
+const float Attributes::get_Magical_Defense_Per_Endurance()
+{
+	return Attributes::magical_Defense_Per_Endurance;
+}
+
+float Attributes::set_Magical_Defense_Per_Endurance(const float magical_Defense_Per_Endurance)
+{
+	Attributes::magical_Defense_Per_Endurance = magical_Defense_Per_Endurance;
+}
+
+const float Attributes::get_Block_Chance_Per_Dexterity()
+{
+	return Attributes::block_Chance_Per_Dexterity;
+}
+
+float Attributes::set_Block_Chance_Per_Dexterity(const float block_Chance_Per_Dexterity)
+{
+	Attributes::block_Chance_Per_Dexterity = block_Chance_Per_Dexterity;
+}
+
+const float Attributes::get_Block_Chance_Per_Perception()
+{
+	return Attributes::block_Chance_Per_Perception;
+}
+
+float Attributes::set_Block_Chance_Per_Perception(const float block_Chance_Per_Perception)
+{
+	Attributes::block_Chance_Per_Perception = block_Chance_Per_Perception;
+}
+
+const float Attributes::get_Evasion_Per_Dexterity()
+{
+	return Attributes::evasion_Per_Dexterity;
+}
+
+float Attributes::set_Evasion_Per_Dexterity(const float evasion_Per_Dexterity)
+{
+	Attributes::evasion_Per_Dexterity = evasion_Per_Dexterity;
+}
+
+const float Attributes::get_Evasion_Per_Perception()
+{
+	return Attributes::evasion_Per_Perception;
+}
+
+float Attributes::set_Evasion_Per_Perception(const float evasion_Per_Perception)
+{
+	Attributes::evasion_Per_Perception = evasion_Per_Perception;
+}
+
+//Displays the values held inside of the individual members along with the 'get_Effective_Attribute()' values; used for debugging
 void Attributes::display_Information()
 {
 	std::cout << "Vector Index: " << (*this).containing_Object_Pointer_Vector_Index << std::endl;
 
 	std::cout << "strength: " << (*this).strength << std::endl;
+	std::cout << "effective strength: " << (*this).get_Effective_Strength() << std::endl;
 	std::cout << "dexterity: " << (*this).dexterity << std::endl;
+	std::cout << "effective dexterity: " << (*this).get_Effective_Dexterity() << std::endl;
 	std::cout << "endurance: " << (*this).endurance << std::endl;
+	std::cout << "effective endurance: " << (*this).get_Effective_Endurance() << std::endl;
 	std::cout << "intelligence: " << (*this).intelligence << std::endl;
+	std::cout << "effective intelligence: " << (*this).get_Effective_Intelligence() << std::endl;
 	std::cout << "perception: " << (*this).perception << std::endl;
+	std::cout << "effective perception: " << (*this).get_Effective_Perception() << std::endl;
+	std::cout << std::endl;
 
 	std::cout << "experience: " << (*this).experience << std::endl;
 	std::cout << "level: " << (*this).level << std::endl;
+	std::cout << std::endl;
 
 	std::cout << "carrying_Capacity: " << (*this).carrying_Capacity << std::endl;
+	std::cout << "effective carrying_Capacity: " << (*this).get_Effective_Carrying_Capacity() << std::endl;
 	std::cout << "amount_Carried: " << (*this).amount_Carried << std::endl;
+	std::cout << std::endl;
 
 	std::cout << "vision_Range: " << (*this).vision_Range << std::endl;
+	std::cout << "effective vision_Range: " << (*this).get_Effective_Vision_Range() << std::endl;
 	std::cout << "hearing_Range: " << (*this).hearing_Range << std::endl;
+	std::cout << "effective hearing_Range: " << (*this).get_Effective_Hearing_Range() << std::endl;
+	std::cout << std::endl;
 
 	std::cout << "physical_Attack_Range: " << (*this).physical_Attack_Range << std::endl;
+	std::cout << "effective physical_Attack_Range: " << (*this).get_Effective_Physical_Attack_Range() << std::endl;
 	std::cout << "physical_Damage: " << (*this).physical_Damage << std::endl;
+	std::cout << "effective physical_Damage: " << (*this).get_Effective_Physical_Damage() << std::endl;
 	std::cout << "rate_Of_Physical_Attacks: " << (*this).rate_Of_Physical_Attacks << std::endl;
+	std::cout << "effective rate_Of_Physical_Attacks: " << (*this).get_Effective_Rate_Of_Physical_Attacks() << std::endl;
 	std::cout << "physical_Accuracy: " << (*this).physical_Accuracy << std::endl;
+	std::cout << "effective physical_Accuracy: " << (*this).get_Effective_Physical_Accuracy() << std::endl;
+	std::cout << std::endl;
 
 	std::cout << "magical_Attack_Range: " << (*this).magical_Attack_Range << std::endl;
+	std::cout << "effective magical_Attack_Range: " << (*this).get_Effective_Magical_Attack_Range() << std::endl;
 	std::cout << "magical_Damage: " << (*this).magical_Damage << std::endl;
+	std::cout << "effective magical_Damage: " << (*this).get_Effective_Magical_Damage() << std::endl;
 	std::cout << "rate_Of_Magical_Attacks: " << (*this).rate_Of_Magical_Attacks << std::endl;
+	std::cout << "effective rate_Of_Magical_Attacks: " << (*this).get_Effective_Rate_Of_Magical_Attacks() << std::endl;
 	std::cout << "magical_Accuracy: " << (*this).magical_Accuracy << std::endl;
+	std::cout << "effective magical_Accuracy: " << (*this).get_Effective_Magical_Accuracy() << std::endl;
+	std::cout << std::endl;
 
 	std::cout << "movement_Speed: " << (*this).movement_Speed << std::endl;
+	std::cout << "effective movement_Speed: " << (*this).get_Effective_Movement_Speed() << std::endl;
+	std::cout << std::endl;
 
 	std::cout << "maximum_Stamina: " << (*this).maximum_Stamina << std::endl;
+	std::cout << "effective maximum_Stamina: " << (*this).get_Effective_Maximum_Stamina() << std::endl;
 	std::cout << "stamina: " << (*this).stamina << std::endl;
 	std::cout << "rate_Of_Stamina_Regeneration: " << (*this).rate_Of_Stamina_Regeneration << std::endl;
+	std::cout << "effective rate_Of_Stamina_Regeneration: " << (*this).get_Effective_Rate_Of_Stamina_Regeneration() << std::endl;
+	std::cout << std::endl;
 
 	std::cout << "maximum_Mana: " << (*this).maximum_Mana << std::endl;
+	std::cout << "effective maximum_Mana: " << (*this).get_Effective_Maximum_Mana() << std::endl;
 	std::cout << "mana: " << (*this).mana << std::endl;
 	std::cout << "rate_Of_Mana_Regeneration: " << (*this).rate_Of_Mana_Regeneration << std::endl;
+	std::cout << "effective rate_Of_Mana_Regeneration: " << (*this).get_Effective_Rate_Of_Mana_Regeneration() << std::endl;
+	std::cout << std::endl;
 
 	std::cout << "maximum_Health: " << (*this).maximum_Health << std::endl;
+	std::cout << "effective maximum_Health: " << (*this).get_Effective_Maximum_Health() << std::endl;
 	std::cout << "health: " << (*this).health << std::endl;
 	std::cout << "rate_Of_Health_Regeneration: " << (*this).rate_Of_Health_Regeneration << std::endl;
+	std::cout << "effective rate_Of_Health_Regeneration: " << (*this).get_Effective_Rate_Of_Health_Regeneration() << std::endl;
+	std::cout << std::endl;
 
 	std::cout << "physical_Defense: " << (*this).physical_Defense << std::endl;
+	std::cout << "effective physical_Defense: " << (*this).get_Effective_Physical_Defense() << std::endl;
 	std::cout << "magical_Defense: " << (*this).magical_Defense << std::endl;
+	std::cout << "effective magical_Defense: " << (*this).get_Effective_Magical_Defense() << std::endl;
 	std::cout << "block_Chance: " << (*this).block_Chance << std::endl;
+	std::cout << "effective block_Chance: " << (*this).get_Effective_Block_Chance() << std::endl;
 	std::cout << "evasion: " << (*this).evasion << std::endl;
+	std::cout << "effective evasion: " << (*this).get_Effective_Evasion() << std::endl;
 
 	std::cout << std::endl;
+}
+
+//Updates stats according to regeneration rates and events such as the Object being damaged, having a spell cast on the Object, or the Object killing a monster; needs to have access to time_Step
+void Attributes::update()
+{
+	(*this).stamina = std::min((((*this).get_Effective_Rate_Of_Stamina_Regeneration() * static_cast<float>(1.0 / 60)) + (*this).stamina), (*this).get_Effective_Maximum_Stamina());
+	(*this).health =  std::min((((*this).get_Effective_Rate_Of_Health_Regeneration() * static_cast<float>(1.0 / 60)) + (*this).health), (*this).get_Effective_Maximum_Health());
+	(*this).mana =  std::min((((*this).get_Effective_Rate_Of_Mana_Regeneration() * static_cast<float>(1.0 / 60)) + (*this).mana), (*this).get_Effective_Maximum_Mana()); 
 }
 
 const float Attributes::get_Effective_Strength()
