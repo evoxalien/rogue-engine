@@ -17,6 +17,9 @@ class Map
 private:
 	bool rightClickMenuShown;
 	Texture rightClickMenuText[10];
+	bool anchorPointsShown;
+	bool movePlatform;
+	Texture anchorPoints[4];
 	Texture backgroundTexture;
 	int bgX;
 	int bgY;
@@ -56,6 +59,9 @@ public:
 	bool parseMapFile(std::string filePath,SDL_Renderer* render);
 	void renderMap();
 	void updateMap();
+	void createAnchorPoints();
+	void destroyAnchorPoints();
+	void displayAnchorPoints();
 	void createPlatMenu(int plat, int x, int y);
 	void destroyPlatMenu();
 	void displayPlatMenu();

@@ -13,6 +13,8 @@ Map::Map()
 	camera.setBoundRect(0,0,5000,5000);
 	render = NULL;
 	drawText = false;
+	movePlatform = false;
+	anchorPointsShown = false;
 	moveStep = 1;
 	cState = Testing;
 }
@@ -92,6 +94,11 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 	cursorTextTexture.setFont("calibri", 12);
 	cursorTextTexture.loadTextRender("  Testing", textColor);
 
+	for(int x = 0; x < 4; x++)
+	{
+		anchorPoints[x].setRenderer(render);
+	}
+
 	inputFile.close();
 
 	return true;
@@ -105,11 +112,15 @@ void Map::exportMapFile(Uint32 timeStamp)
 	ofstream outFile;
 	outFile.open("maps/Map_" + stringStream.str() + ".txt");
 
-	outFile << numPlatforms << "\n";
+	outFile << "background " << bgX << " " << bgY << " ";
+	outFile << backgroundTexture.getWidth() << " ";
+	outFile << backgroundTexture.getHeight() << "\n";
+	outFile << backgroundTexture.getFilePath() << "\n";
+
+	outFile << "platforms " << numPlatforms << "\n";
 
 	for(int x = 0; x < numPlatforms; x++)
 	{
-		outFile << "quad ";
 		outFile << platCoords[x*2] << " ";
 		outFile << platCoords[x*2+1] << " ";
 		outFile << platforms[x].getWidth() << " ";
@@ -127,6 +138,18 @@ void Map::unfocus()
 	{
 		platSelected[x] = false;
 		platforms[x].setColor(0xFF,0xFF,0xFF);
+	}
+
+	movePlatform = false;
+
+	anchorPointsShown = false;
+	destroyAnchorPoints();
+
+	destroyPlatMenu();
+
+	if(SDL_IsTextInputActive())
+	{
+		SDL_StopTextInput();
 	}
 }
 
@@ -157,6 +180,9 @@ void Map::updateMap()
 
 void Map::createPlatMenu(int plat, int x, int y)
 {
+	x += camera.getCamX();
+	y += camera.getCamY();
+	
 	int index = 0;
 	std::stringstream ss;
 	rightClickMenuText[index].setRenderer(render);
@@ -250,6 +276,21 @@ void Map::displayPlatMenu()
 	{
 		rightClickMenuText[x].render(menuChoiceRects[x].x - camera.getCamX(), menuChoiceRects[x].y - camera.getCamY());
 	}
+}
+
+void Map::createAnchorPoints()
+{
+
+}
+
+void Map::destroyAnchorPoints()
+{
+
+}
+
+void Map::displayAnchorPoints()
+{
+
 }
 
 /**************************************
@@ -385,37 +426,7 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 		break;
 		//Cursor State is Select
 		case Select :
-			if(SDL_IsTextInputActive())
-			{
-				if(input.getKeyDown() == SDLK_BACKSPACE)
-				{
-					if(keyboardInput.length() > 0)
-					{
-						keyboardInput.pop_back();
-					}
-				}
-
-				if(input.getKeyDown() == SDLK_RETURN)
-				{
-					if(atoi(keyboardInput.c_str()) != 0)
-					{
-						for(int x = 0; x < numPlatforms; x++)
-						{
-							if(platSelected[x])
-							{
-								platSelected[x] = false;
-								platforms[x].setWidth(atoi(keyboardInput.c_str()));
-								SDL_StopTextInput();
-							}
-						}
-					}
-				}
-			}
-
-			if(input.getEvent().type == SDL_TEXTINPUT)
-			{
-				keyboardInput += input.getEvent().text.text;
-			}
+			
 		break;
 		//Cursor state is Info
 		case Info :
@@ -554,16 +565,16 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 		else
 		if(cState == Select)
 		{
-			if(input.getMouseButton(3))
+			for(int x = numPlatforms - 1; x >= 0; x--)
 			{
-				for(int x = numPlatforms - 1; x >= 0; x--)
+				if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 				{
-					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+					if(!platSelected[x])
 					{
+						unfocus();
 						platSelected[x] = true;
-						keyboardInput = "";
-						SDL_StartTextInput();
-						break;
+						anchorPointsShown = true;
+						createAnchorPoints();
 					}
 				}
 			}
@@ -619,7 +630,26 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 		else
 		if(cState == Select)
 		{
-			
+			for(int x = numPlatforms - 1; x >= 0; x--)
+			{
+				if(movePlatform)
+				{
+					if(platSelected[x])
+					{
+						platCoords[x*2] = input.getMouseX() - platforms[x].getWidth()/2 + camera.getCamX();
+						platCoords[x*2+1] = input.getMouseY() - platforms[x].getHeight()/2 + camera.getCamY();
+					}
+				}
+				else
+				{
+					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+					{
+						platSelected[x] = true;
+						movePlatform = true;
+						break;
+					}
+				}
+			}
 		}
 		else
 		if(cState == Info)
@@ -655,6 +685,14 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 			}
 		}
 	}
+	if(!input.getMouseButton(1))
+	{
+		if(cState == Select)
+		{
+			if(!anchorPointsShown)
+				unfocus();
+		}
+	}
 }
 
 void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
@@ -664,18 +702,29 @@ void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 		case SDLK_0 : 
 			unfocus();
 			cState = Testing;
-			cursorTextTexture.loadTextRender("  Testing", textColor);
+			cursorTextTexture.loadTextRender("   Testing", textColor);
 			break;
 		case SDLK_1 :
 			unfocus();
 			cState = Select;
-			cursorTextTexture.loadTextRender("  Select", textColor);
+			cursorTextTexture.loadTextRender("   Select", textColor);
 			break;
 		case SDLK_2 :
 			unfocus();
 			cState = Info;
-			cursorTextTexture.loadTextRender("  Info", textColor);
+			cursorTextTexture.loadTextRender("   Info", textColor);
 			break;
+	}
+
+	if(input.getMouseWheel() > 0)
+	{
+		textColor = {0xFF,0xFF,0xFF,0xFF};
+		cursorTextTexture.setColor(0xFF, 0xFF, 0xFF);
+	}
+	if(input.getMouseWheel() < 0)
+	{
+		textColor = {0,0,0,0xFF};
+		cursorTextTexture.setColor(0, 0, 0);
 	}
 
 	cursorX = input.getMouseX();
