@@ -128,6 +128,7 @@ int playerClass::playerInitalize(int playerIndexPassed)
 
 	string CurrentData;
 	inputFile >> playerInputMode;//"Keyboard" or "Gamepad"
+
 	if(playerInputMode=="Keyboard") // loads SDLK data type
 	{
 		inputFile >> CurrentData;	
@@ -180,7 +181,7 @@ int playerClass::playerInitalize(int playerIndexPassed)
 
 void playerClass::InitSprite(SDL_Renderer* gRenderer)
 {
-	playerAnimation.Initialize(playerX, playerY, 8, 8);
+	playerAnimation.Initialize(playerX, playerY, 10, 8);
 	playerAnimation.Image.setRenderer(gRenderer);
 }
 
@@ -389,7 +390,7 @@ void playerClass::playerUpdate(int gameTime)
 	{
 		playerX -= playerMovementSpeed;// * ((float)gameTime%6000);
 		playerDirection=true;
-		currentFrameY = 1;
+		currentFrameY = 3;
 	}
 	else
 	{

@@ -175,6 +175,8 @@ bool gameroot::initialize()
       return false;
    }
 
+   GameMap.parseMapFile("maps/mapTree.txt", renderer);
+
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
   
@@ -247,19 +249,17 @@ void gameroot::update()
 	  
 	  //Checking if X has been clicked
       OnEvent(&Event);
+
+      if(engineState == Loading)
+      {
+         Hero.playerKeyPress(input.getKeyDown());
+         Hero.playerKeyRelease(input.getKeyUp());
+         Hero.playerUpdate(fpsTimer.getTicks());
+      }
 	  
    }  
       
-      if(engineState == MapEditor)
-      {
-         
-      }
-      if(engineState == Loading)
-      {
-         Hero.playerUpdate(fpsTimer.getTicks());
-         Hero.playerKeyPress(input.getKeyDown());
-         Hero.playerKeyRelease(input.getKeyUp());
-      }
+      
 
 }
    
@@ -274,7 +274,7 @@ void gameroot::draw()
 
    if(engineState == Loading)
    {
-      
+      GameMap.renderMap();
       // texture.render(0,0);
       // Hero.playerTexture.render(0,0);
       Hero.playerDraw();
