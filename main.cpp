@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
    aMap.execute();
    
    //Runs actual game loop
-   theGame.execute();
+   //theGame.execute();
    
    return 0;
 }

@@ -17,6 +17,9 @@ class Map
 private:
 	bool rightClickMenuShown;
 	Texture rightClickMenuText[10];
+	Texture backgroundTexture;
+	int bgX;
+	int bgY;
 	bool drawText;
 	SDL_Color textColor;
 	Texture cursorTextTexture;

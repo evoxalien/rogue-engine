@@ -48,26 +48,43 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 	if(!inputFile)
 		return false;
 
-	inputFile >> numPlatforms;
-
-	string shape = "";
+	string inputStr = "";
 	string texturePath = "";
 	int w = 0, h = 0;
-	for(int x = 0; x < numPlatforms;x++)
+
+	while(inputFile >> inputStr)
 	{
-		platSelected[x] = false;
-		platforms[x].setRenderer(render);
-		inputFile >> shape;
-		if(shape == "platform")
+		if(inputStr == "background")
 		{
-			inputFile >> platCoords[x*2];
-			inputFile >> platCoords[x*2+1];
+			backgroundTexture.setRenderer(render);
+
+			inputFile >> bgX;
+			inputFile >> bgY;
 			inputFile >> w;
 			inputFile >> h;
 			inputFile >> texturePath;
-			platforms[x].loadTexture(texturePath);
-			platforms[x].setWidth(w);
-			platforms[x].setHeight(h);
+
+			backgroundTexture.loadTexture(texturePath);
+			backgroundTexture.setWidth(w);
+			backgroundTexture.setHeight(h);
+		}
+		if(inputStr == "platforms")
+		{
+			inputFile >> numPlatforms;
+			for(int x = 0; x < numPlatforms;x++)
+			{
+				platSelected[x] = false;
+				platforms[x].setRenderer(render);
+
+				inputFile >> platCoords[x*2];
+				inputFile >> platCoords[x*2+1];
+				inputFile >> w;
+				inputFile >> h;
+				inputFile >> texturePath;
+				platforms[x].loadTexture(texturePath);
+				platforms[x].setWidth(w);
+				platforms[x].setHeight(h);
+			}
 		}
 	}
 
@@ -115,13 +132,20 @@ void Map::unfocus()
 
 void Map::renderMap()
 {
+	if(backgroundTexture.getFilePath() != "")
+	{
+		backgroundTexture.render(bgX - camera.getCamX(), bgY - camera.getCamY());
+	}
+
 	for(int x = 0; x < numPlatforms; x++)
 	{
 		platforms[x].render(platCoords[x*2] - camera.getCamX(), platCoords[x*2+1] - camera.getCamY());
 	}
 		
 	if(rightClickMenuShown)
+	{
 		displayPlatMenu();
+	}
 
 	cursorTextTexture.render(cursorX, cursorY);
 }
@@ -637,13 +661,19 @@ void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 {
 	switch(input.getKeyDown())
 	{
-		case SDLK_0 : cState = Testing;
+		case SDLK_0 : 
+			unfocus();
+			cState = Testing;
 			cursorTextTexture.loadTextRender("  Testing", textColor);
 			break;
-		case SDLK_1 : cState = Select;
+		case SDLK_1 :
+			unfocus();
+			cState = Select;
 			cursorTextTexture.loadTextRender("  Select", textColor);
 			break;
-		case SDLK_2 : cState = Info;
+		case SDLK_2 :
+			unfocus();
+			cState = Info;
 			cursorTextTexture.loadTextRender("  Info", textColor);
 			break;
 	}
