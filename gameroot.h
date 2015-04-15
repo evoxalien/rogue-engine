@@ -11,9 +11,9 @@
 #include "input.h"
 #include "ltimer.h"
 #include "Texture.h"
-#include "Map.cpp"
 #include "startMenu.h"
 #include "playerClass.h"
+#include "gameMap.cpp"
 //#include <thread>
 
 #define FPS_INTERVAL 1.0 //Seconds
@@ -90,7 +90,8 @@ private:
    playerClass Hero;
    bool initialize();
    InputClass input;
-  
+   
+   gameMap GameMap;
  
 public:
    gameroot(); 
@@ -188,7 +189,6 @@ bool gameroot::initialize()
    Hero.playerInitalize(1);
 
    Hero.InitSprite(renderer);
-   Hero.LoadSpriteContent();
 
    return true;
 }
@@ -204,6 +204,7 @@ bool gameroot::loadContent()
    }
    texture.setWidth(SCREEN_WIDTH);
    texture.setHeight(SCREEN_HEIGHT);
+   Hero.LoadSpriteContent();
    
    // if(!Hero.playerTexture.loadTexture("img/shapes/OrangeSquare.png"))
    // {
