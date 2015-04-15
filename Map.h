@@ -18,6 +18,7 @@ private:
 	bool rightClickMenuShown;
 	Texture rightClickMenuText[10];
 	bool anchorPointsShown;
+	bool anchorPointSelected[4];
 	bool movePlatform;
 	Texture anchorPoints[4];
 	Texture backgroundTexture;
@@ -59,7 +60,6 @@ public:
 	bool parseMapFile(std::string filePath,SDL_Renderer* render);
 	void renderMap();
 	void updateMap();
-	void createAnchorPoints();
 	void destroyAnchorPoints();
 	void displayAnchorPoints();
 	void createPlatMenu(int plat, int x, int y);

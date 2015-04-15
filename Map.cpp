@@ -17,6 +17,10 @@ Map::Map()
 	anchorPointsShown = false;
 	moveStep = 1;
 	cState = Testing;
+	for(int x = 0; x < 4; x++)
+	{
+		anchorPointSelected[x] = false;
+	}
 }
 
 Map::~Map()
@@ -97,6 +101,8 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 	for(int x = 0; x < 4; x++)
 	{
 		anchorPoints[x].setRenderer(render);
+		anchorPoints[x].loadTexture("img/shapes/WhiteSquare.png");
+		anchorPoints[x].setColor(0x77, 0x77, 0x77);
 	}
 
 	inputFile.close();
@@ -140,10 +146,15 @@ void Map::unfocus()
 		platforms[x].setColor(0xFF,0xFF,0xFF);
 	}
 
+	rightClickMenuShown = false;
+
 	movePlatform = false;
 
 	anchorPointsShown = false;
-	destroyAnchorPoints();
+	for(int x = 0; x < 4; x++)
+	{
+		anchorPointSelected[x] = false;
+	}
 
 	destroyPlatMenu();
 
@@ -168,6 +179,11 @@ void Map::renderMap()
 	if(rightClickMenuShown)
 	{
 		displayPlatMenu();
+	}
+
+	if(anchorPointsShown)
+	{
+		displayAnchorPoints();
 	}
 
 	cursorTextTexture.render(cursorX, cursorY);
@@ -278,19 +294,26 @@ void Map::displayPlatMenu()
 	}
 }
 
-void Map::createAnchorPoints()
-{
-
-}
-
 void Map::destroyAnchorPoints()
 {
-
+	for(int x = 0; x < 4; x++)
+	{
+		anchorPoints[x].free();
+	}
 }
 
 void Map::displayAnchorPoints()
 {
-
+	for(int x = 0; x < numPlatforms; x++)
+	{
+		if(platSelected[x])
+		{
+			anchorPoints[0].render(platCoords[x*2] - anchorPoints[0].getWidth() - camera.getCamX(), platCoords[x*2+1] - anchorPoints[0].getHeight() - camera.getCamY());
+			anchorPoints[1].render(platCoords[x*2] + platforms[x].getWidth() - camera.getCamX(), platCoords[x*2+1] - anchorPoints[1].getHeight() - camera.getCamY());
+			anchorPoints[2].render(platCoords[x*2] - anchorPoints[2].getWidth() - camera.getCamX(), platCoords[x*2+1] + platforms[x].getHeight() - camera.getCamY());
+			anchorPoints[3].render(platCoords[x*2] + platforms[x].getWidth() - camera.getCamX(), platCoords[x*2+1] + platforms[x].getHeight() - camera.getCamY());
+		}
+	}
 }
 
 /**************************************
@@ -574,7 +597,7 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 						unfocus();
 						platSelected[x] = true;
 						anchorPointsShown = true;
-						createAnchorPoints();
+						break;
 					}
 				}
 			}
@@ -588,13 +611,7 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 				{
 					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 					{
-						for(int y = 0; y < numPlatforms; y++)
-						{
-							if(platSelected[y])
-							{
-								platSelected[y] = false;
-							}
-						}
+						unfocus();
 						platSelected[x] = true;
 						menuX = input.getMouseX();
 						menuY = input.getMouseY();
@@ -630,23 +647,115 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 		else
 		if(cState == Select)
 		{
-			for(int x = numPlatforms - 1; x >= 0; x--)
+			if(anchorPointsShown)
 			{
-				if(movePlatform)
+				bool runLoop = true;
+
+				for(int x = 0; x < 4; x++)
 				{
-					if(platSelected[x])
+					if(anchorPointSelected[x])
 					{
-						platCoords[x*2] = input.getMouseX() - platforms[x].getWidth()/2 + camera.getCamX();
-						platCoords[x*2+1] = input.getMouseY() - platforms[x].getHeight()/2 + camera.getCamY();
+						for(int y = 0; y < numPlatforms; y++)
+						{
+							if(platSelected[y])
+							{
+								runLoop = false;
+								switch(x)
+								{
+									case 0 :
+										platforms[y].setWidth(platforms[y].getWidth() + ((platCoords[y*2] - camera.getCamX()) - input.getMouseX() - anchorPoints[0].getWidth()/2));
+										platforms[y].setHeight(platforms[y].getHeight() + ((platCoords[y*2+1] - camera.getCamY()) - input.getMouseY() - anchorPoints[0].getWidth()/2));
+										platCoords[y*2] = input.getMouseX() + anchorPoints[0].getWidth()/2 + camera.getCamX();
+										platCoords[y*2+1] = input.getMouseY() + anchorPoints[0].getHeight()/2 + camera.getCamY();
+										break;
+									case 1 :
+										platforms[y].setWidth(platforms[y].getWidth() + (input.getMouseX() - anchorPoints[3].getWidth()/2) - (platCoords[y*2] + platforms[y].getWidth() - camera.getCamX()));
+										platforms[y].setHeight(platforms[y].getHeight() + ((platCoords[y*2+1] - camera.getCamY()) - input.getMouseY() - anchorPoints[0].getWidth()/2));
+										platCoords[y*2+1] = input.getMouseY() + anchorPoints[0].getHeight()/2 + camera.getCamY();
+										break;
+									case 2 :
+										platforms[y].setHeight(platforms[y].getHeight() + (input.getMouseY() - anchorPoints[3].getWidth()/2) - (platCoords[y*2+1] + platforms[y].getHeight() - camera.getCamY()));
+										platforms[y].setWidth(platforms[y].getWidth() + ((platCoords[y*2] - camera.getCamX()) - input.getMouseX() - anchorPoints[0].getWidth()/2));
+										platCoords[y*2] = input.getMouseX() + anchorPoints[0].getWidth()/2 + camera.getCamX();
+										break;
+									case 3 :
+										platforms[y].setWidth(platforms[y].getWidth() + (input.getMouseX() - anchorPoints[3].getWidth()/2) - (platCoords[y*2] + platforms[y].getWidth() - camera.getCamX()));
+										platforms[y].setHeight(platforms[y].getHeight() + (input.getMouseY() - anchorPoints[3].getWidth()/2) - (platCoords[y*2+1] + platforms[y].getHeight() - camera.getCamY()));
+										break;
+								}
+								break;
+								x = 4;
+							}
+						}
 					}
 				}
-				else
+
+				if(runLoop)
 				{
-					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+					for(int x = numPlatforms - 1; x >= 0; x--)
 					{
-						platSelected[x] = true;
-						movePlatform = true;
-						break;
+						if(platSelected[x])
+						{
+							if(mouseOverRect(input,
+								{platCoords[x*2] - anchorPoints[0].getWidth(),
+								platCoords[x*2+1] - anchorPoints[0].getHeight(),
+								anchorPoints[0].getWidth(),
+								anchorPoints[0].getHeight()}))
+							{
+								anchorPointSelected[0] = true;
+								break;
+							}
+							if(mouseOverRect(input,
+								{platCoords[x*2] + platforms[x].getWidth(),
+								platCoords[x*2+1] - anchorPoints[1].getHeight(),
+								anchorPoints[1].getWidth(),
+								anchorPoints[1].getHeight()}))
+							{
+								anchorPointSelected[1] = true;
+								break;
+							}
+							if(mouseOverRect(input,
+								{platCoords[x*2] - anchorPoints[2].getWidth(),
+								platCoords[x*2+1] + platforms[x].getHeight(),
+								anchorPoints[2].getWidth(),
+								anchorPoints[2].getHeight()}))
+							{
+								anchorPointSelected[2] = true;
+								break;
+							}
+							if(mouseOverRect(input,
+								{platCoords[x*2] + platforms[x].getWidth(),
+								platCoords[x*2+1] + platforms[x].getHeight(),
+								anchorPoints[3].getWidth(),
+								anchorPoints[3].getHeight()}))
+							{
+								anchorPointSelected[3] = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				for(int x = numPlatforms - 1; x >= 0; x--)
+				{
+					if(movePlatform)
+					{
+						if(platSelected[x])
+						{
+							platCoords[x*2] = input.getMouseX() - platforms[x].getWidth()/2 + camera.getCamX();
+							platCoords[x*2+1] = input.getMouseY() - platforms[x].getHeight()/2 + camera.getCamY();
+						}
+					}
+					else
+					{
+						if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+						{
+							platSelected[x] = true;
+							movePlatform = true;
+							break;
+						}
 					}
 				}
 			}
@@ -690,7 +799,16 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 		if(cState == Select)
 		{
 			if(!anchorPointsShown)
+			{
 				unfocus();
+			}
+			else
+			{
+				for(int x = 0; x < 4; x++)
+				{
+					anchorPointSelected[x] = false;
+				}
+			}
 		}
 	}
 }
@@ -713,6 +831,9 @@ void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 			unfocus();
 			cState = Info;
 			cursorTextTexture.loadTextRender("   Info", textColor);
+			break;
+		case SDLK_ESCAPE :
+			unfocus();
 			break;
 	}
 

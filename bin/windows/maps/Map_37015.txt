@@ -1,0 +1,9 @@
+background 0 0 1280 720
+img/backgrounds/NightSky.png
+platforms 3
+131 422 245 141
+img/shapes/OrangeSquare.png
+493 316 322 106
+img/shapes/OrangeSquare.png
+291 109 100 100
+img/shapes/WhiteSquare.png
