@@ -174,7 +174,7 @@ int playerClass::playerInitalize(int playerIndexPassed)
 	inputFile >> playerName;
 	inputFile >> CurrentData;
 	inputFile >> playerHealth;
-	LoadSpriteContent();
+	// LoadSpriteContent();
 }
 
 
@@ -186,7 +186,8 @@ void playerClass::InitSprite(SDL_Renderer* gRenderer)
 
 void playerClass::LoadSpriteContent()
 {
-	playerAnimation.LoadImage("playerConfig/PLayerScript.txt");
+	playerAnimation.LoadImage("TestCharacter.png");
+	// playerAnimation.LoadImage("playerConfig/TestCharacter.png");
 }
 
 void playerClass::playerButtonPress(SDL_Keycode e)
@@ -357,7 +358,7 @@ void playerClass::playerUpdate(int gameTime)
 	playerAnimation.setActive(true);
     
     currentFrameX = playerAnimation.getFrameX();
-	
+    
 	if(Actions.Down==true)
 	{
 		playerY += playerMovementSpeed;// * ((float)gameTime%6000);

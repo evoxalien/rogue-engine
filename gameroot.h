@@ -164,7 +164,7 @@ bool gameroot::initialize()
    //tell texture the renderer to use
    texture.setRenderer(renderer);
    
-   Hero.playerTexture.setRenderer(renderer);
+   // Hero.playerTexture.setRenderer(renderer);
 
    //initialize image subsystem to load png files
    int imgFlags = IMG_INIT_PNG;
@@ -185,11 +185,11 @@ bool gameroot::initialize()
    fps_current = 0; //the current FPS.
    fps_frames = 0; //frames passed since the last recorded fps.
    */
-
    Hero.playerInitalize(1);
+
    Hero.InitSprite(renderer);
-   // Hero.LoadSpriteContent();
-   
+   Hero.LoadSpriteContent();
+
    return true;
 }
 
@@ -205,13 +205,13 @@ bool gameroot::loadContent()
    texture.setWidth(SCREEN_WIDTH);
    texture.setHeight(SCREEN_HEIGHT);
    
-   if(!Hero.playerTexture.loadTexture("img/shapes/OrangeSquare.png"))
-   {
-      error_log << "PLayerTexture Texture failed to load.\n";
-      return false;
-   }
-   Hero.playerTexture.setWidth(30);
-   Hero.playerTexture.setHeight(30);
+   // if(!Hero.playerTexture.loadTexture("img/shapes/OrangeSquare.png"))
+   // {
+   //    error_log << "PLayerTexture Texture failed to load.\n";
+   //    return false;
+   // }
+   // Hero.playerTexture.setWidth(30);
+   // Hero.playerTexture.setHeight(30);
    
    
    return true;
@@ -253,11 +253,11 @@ void gameroot::update()
       {
          
       }
-      if(engineState == GamePlaying1)
+      if(engineState == Loading)
       {
+         Hero.playerUpdate(fpsTimer.getTicks());
          Hero.playerKeyPress(input.getKeyDown());
          Hero.playerKeyRelease(input.getKeyUp());
-         Hero.playerUpdate(fpsTimer.getTicks());
       }
 
 }
@@ -274,9 +274,9 @@ void gameroot::draw()
    if(engineState == Loading)
    {
       
-      texture.render(0,0);
-      Hero.playerTexture.render(0,0);
-      
+      // texture.render(0,0);
+      // Hero.playerTexture.render(0,0);
+      Hero.playerDraw();
    }
    else if(engineState == GameRootMenu)
    {
@@ -284,7 +284,7 @@ void gameroot::draw()
    }
    else if(engineState == GamePlaying1)
    {
-      Hero.playerDraw();   
+         
    }
    
    //update screen
@@ -340,7 +340,7 @@ int gameroot::execute()
 void gameroot::close()
 {
    texture.free();
-   Hero.playerTexture.free();
+   // Hero.playerTexture.free();
 
    SDL_DestroyRenderer(renderer);
    SDL_DestroyWindow(window);
