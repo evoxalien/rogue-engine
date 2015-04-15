@@ -416,7 +416,7 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 			if(input.getKeyDown() == SDLK_p && numPlatforms < PLATMAX)
 			{
 				platforms[numPlatforms].setRenderer(render);
-				platforms[numPlatforms].loadTexture("img/shapes/WhiteSquare.png");
+				platforms[numPlatforms].loadTexture("img/shapes/OrangeSquare.png");
 				platforms[numPlatforms].setWidth(100);
 				platforms[numPlatforms].setHeight(100);
 				platSelected[numPlatforms] = false;
