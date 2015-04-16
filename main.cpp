@@ -8,24 +8,30 @@ using namespace std;
 int main(int argc, char *argv[])
 {
    int menuChoice;
-   maproot aMap;
-   gameroot theGame;  
-   menu mainMenu;   
+   maproot *aMap = NULL;
+   gameroot *theGame = NULL;  
+   menu *mainMenu = NULL;   
    
-   //do
-   //{
-      menuChoice = mainMenu.execute();
+   do
+   {
+      mainMenu = new menu();
+	  menuChoice = mainMenu->execute();
+	  delete mainMenu;
    
       switch(menuChoice)
       {
          //Runs actual game loop
-         case 1: theGame.execute();
+         case 1: theGame = new gameroot();
+		         theGame->execute();
+				 delete theGame;
 	             break;
          //Runs the map editor's functions
-         case 2: aMap.execute();
+         case 2: aMap = new maproot();
+		         aMap->execute();
+				 delete aMap;
 	             break;
       }
-   //}while(menuChoice != 3);
+   }while(menuChoice != 3);
    
    return 0;
 }
