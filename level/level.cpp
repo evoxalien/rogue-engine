@@ -3,18 +3,18 @@
 
 Level::Level(std::string level_Path)
 {
-	(*this).level_File;
 	(*this).level_File.open(level_Path);
-	std::cout << level_Path << std::endl;
 	if((*this).level_File)
 	{
 		int number_Of_Objects = 0;
 		(*this).level_File >> number_Of_Objects;
-		std::cout << number_Of_Objects << std::endl;
+
 		if(number_Of_Objects > Level::maximum_Number_Of_Objects)
 		{
+			std::cerr << "The number of Objects requested to generate (" << number_Of_Objects << ") exceeds the maximum number of Objects available for a level (" << Level::maximum_Number_Of_Objects << "); " << Level::maximum_Number_Of_Objects << " Objects will be created." << std::endl;
 			number_Of_Objects = Level::maximum_Number_Of_Objects;
 		}
+
 		float temporary_X_Position = 0;
 		float temporary_Y_Position = 0;
 		float temporary_Angle_In_Radians = 0;
@@ -38,7 +38,6 @@ Level::Level(std::string level_Path)
 		for(int i = 0; i < number_Of_Objects; i++)
 		{
 			(*this).level_File >> temporary_X_Position;
-			std::cout << temporary_X_Position << std::endl;
 			(*this).level_File >> temporary_Y_Position;
 			(*this).level_File >> temporary_Angle_In_Radians;
 			(*this).level_File >> temporary_Body_Type;
@@ -58,8 +57,8 @@ Level::Level(std::string level_Path)
 			(*this).level_File >> temporary_Group_Index;
 			(*this).level_File >> temporary_X_Half_Length;
 			(*this).level_File >> temporary_Y_Half_Length;
-			Object temporary_Object(temporary_X_Position, temporary_Y_Position, temporary_Angle_In_Radians, temporary_Body_Type, temporary_Check_For_Dynamic_Tunneling, temporary_Use_Fixed_Rotation, temporary_Linear_Damping, temporary_Angular_Damping, temporary_Gravity_Scale, temporary_Allow_Physics_Sleep, temporary_Initialize_Awake, temporary_Initialize_Active, temporary_Density, temporary_Friction, temporary_Restitution, temporary_Exists_In_Layers, temporary_Collides_With_Layers, temporary_Group_Index, temporary_X_Half_Length, temporary_Y_Half_Length);
-			(*this).level_Objects_Array[i] = temporary_Object;
+			(*this).level_Objects_Array[i] = Object(temporary_X_Position, temporary_Y_Position, temporary_Angle_In_Radians, temporary_Body_Type, temporary_Check_For_Dynamic_Tunneling, temporary_Use_Fixed_Rotation, temporary_Linear_Damping, temporary_Angular_Damping, temporary_Gravity_Scale, temporary_Allow_Physics_Sleep, temporary_Initialize_Awake, temporary_Initialize_Active, temporary_Density, temporary_Friction, temporary_Restitution, temporary_Exists_In_Layers, temporary_Collides_With_Layers, temporary_Group_Index, temporary_X_Half_Length, temporary_Y_Half_Length);
+			//(*this).level_Objects_Array[i] = temporary_Object;
 		}
 		(*this).level_File.close();
 	}

@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string>
 #include <chrono>
-#include "object/player.h"			//Includes Object header files and all Object component header files, including Box2D's, along with <iostream>, <vector>, and <cstdint>
+#include "level/level.h"			//Includes level and all Object header files and all Object component header files, including Box2D's, along with <iostream>, <vector>, and <cstdint> but excluding inherited classes (Player, NonPlayerCharacter)
 #include "log.h"
 #include "input.h"
 #include "ltimer.h"
@@ -20,19 +20,6 @@
 
 using namespace std;
 
-//This is the code to declare a "world" in Box2D that creates all 
-//objects/bodies as well as applies gravity and other properties.
-//Have fun Andrew
-/*
-b2Vec2 gravity(0.0f, -10.0f);
-b2World world(gravity);
-b2BodyDef groundBodyDef;
-groundBodyDef.position.Set(0.0f, -10.0f);
-b2Body* groundBody = world.CreateBody(&groundBodyDef);
-b2PolygonShape groundBox;
-groundBox.SetAsBox(50.0f, 10.0f);
-groundBody->CreateFixture(&groundBox, 0.0f);
-*/
 
 class gameroot
 {

@@ -4,6 +4,7 @@
 //Default Behavior constructor
 Behavior::Behavior()
 {
+	std::cout << "Behavior()" << std::endl;
 	(*this).behavior_State = Behavior_States::Unaware;
 	(*this).behavior_Pattern = Behavior_Patterns::Neutral;
 
@@ -13,6 +14,7 @@ Behavior::Behavior()
 //Constructor for when the Behavior pattern is known, behavior_State will initialize to Unaware
 Behavior::Behavior(Behavior_Patterns behavior_Pattern)
 {
+	std::cout << "Behavior(Behavior_Patterns)" << std::endl;
 	(*this).behavior_State = Behavior_States::Unaware;
 	(*this).behavior_Pattern = behavior_Pattern;
 
@@ -22,6 +24,7 @@ Behavior::Behavior(Behavior_Patterns behavior_Pattern)
 //Constructor for when both the behavior state and pattern are known
 Behavior::Behavior(Behavior_States behavior_State, Behavior_Patterns behavior_Pattern)
 {
+	std::cout << "Behavior(Behavior_States,Behavior_Patterns)" << std::endl;
 	(*this).behavior_State = behavior_State;
 	(*this).behavior_Pattern = behavior_Pattern;
 
@@ -229,6 +232,10 @@ void Behavior::display_Information()
 //	std::cout << "Size of this = " << sizeof(this) << std::endl;
 //	std::cout << "Size of (*this) = " << sizeof((*this)) << std::endl;
 	std::cout << std::endl;
+}
+
+void Behavior::update()
+{
 }
 
 //'Getters' and 'Setters' for private member variables

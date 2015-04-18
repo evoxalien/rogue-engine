@@ -34,6 +34,10 @@ void Equipment::display_Information()
 	}
 }
 
+void Equipment::update()
+{
+}
+
 //Returns true if the item was successfully equipped or false if the item couldn't be equipped for whatever reason
 bool Equipment::equip_Item(Item& item, std::uint8_t index_To_Equip_Item)
 {

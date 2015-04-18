@@ -46,6 +46,7 @@ class Behavior
 		void surrender();	//The Object is cornered and cannot flee or win, so will attempt to gain the mercy of the Player
 
 		void display_Information();						//For testing
+		void update();
 
 		//'Getters' and 'Setters' for private member variables
 		const Behavior_States get_Behavior_State();

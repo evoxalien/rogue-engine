@@ -20,6 +20,7 @@ class Equipment
 
 		//Member functions
 		void display_Information();
+		void update();
 
 		bool equip_Item(Item&, std::uint8_t);
 
