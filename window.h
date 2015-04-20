@@ -4,7 +4,6 @@
 
 #include <stdio.h>
 #include "SDLincludes.h"
-#include <string>
 
 
 class Window
@@ -17,14 +16,14 @@ class Window
    
    public:
    Window();
-   //Window(string windowText);
+   Window(const char* title);
    Window(int staticWindow);
    Window(int x, int y);
    Window(int x, int y,int w, int h);
    ~Window();
    
    SDL_Renderer* getRenderer();
-   //void setTitle(string titleIn)
+   void setTitle(const char* titleIn);
    void update(SDL_Event& windowEvent);
    int getWidth();
    int getHeight();
@@ -51,7 +50,40 @@ Window::Window()
    
    width = 1024;
    height = 720;
+   //Calls and tests function to create SDL Window (documentation in link)
+   //https://wiki.libsdl.org/SDL_CreateWindow
    windowPointer = SDL_CreateWindow("Rogue Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+   if(windowPointer == NULL)
+   {
+      printf("Window failed to be created! SDL Error: %s\n", SDL_GetError());
+   }
+   
+   ID = SDL_GetWindowID(windowPointer);
+   //Creates SDL Renderer. Renderer renders assets to SDL windows
+   //Can be used to draw .bmp images to window (example in link)
+   //https://wiki.libsdl.org/SDL_CreateRenderer
+   windowRenderer = SDL_CreateRenderer(windowPointer, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+   if(windowRenderer == NULL)
+   {
+      printf("renderer for window failed to be created! SDL Error: %s\n", SDL_GetError());
+   }
+   
+   SDL_SetRenderDrawColor(windowRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+}
+
+Window::Window(const char* title)
+{
+   if(!SDL_WasInit(SDL_INIT_EVERYTHING))
+   {
+      if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
+      {
+         printf("SDL Component failed to initialize Error: %s", SDL_GetError());
+      }
+   }
+   
+   width = 1024;
+   height = 720;
+   windowPointer = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
    if(windowPointer == NULL)
    {
       printf("Window failed to be created! SDL Error: %s\n", SDL_GetError());
@@ -66,34 +98,6 @@ Window::Window()
    
    SDL_SetRenderDrawColor(windowRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 }
-
-/*Window::Window(string windowText)
-{
-   if(!SDL_WasInit(SDL_INIT_EVERYTHING))
-   {
-      if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
-      {
-         printf("SDL Component failed to initialize Error: %s", SDL_GetError());
-      }
-   }
-   
-   width = 1024;
-   height = 720;
-   windowPointer = SDL_CreateWindow(windowText.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-   if(windowPointer == NULL)
-   {
-      printf("Window failed to be created! SDL Error: %s\n", SDL_GetError());
-   }
-   
-   ID = SDL_GetWindowID(windowPointer);
-   windowRenderer = SDL_CreateRenderer(windowPointer, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-   if(windowRenderer == NULL)
-   {
-      printf("renderer for window failed to be created! SDL Error: %s\n", SDL_GetError());
-   }
-   
-   SDL_SetRenderDrawColor(windowRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-}*/
 
 Window::Window(int staticWindow)
 {
@@ -140,7 +144,7 @@ Window::Window(int x, int y)
    
    width = 1024;
    height = 720;
-   if(x > 0 && y > 0)
+   if(x >= 0 && y >= 0)
       windowPointer = SDL_CreateWindow("Rogue Engine", x, y, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
    else
    {
@@ -172,7 +176,8 @@ Window::Window(int x, int y,int w, int h)
          printf ("SDL Component failed to initialize Error: %s", SDL_GetError());
       }
    }
-   if(x > 0 && y > 0 && w > 0 && h > 0)
+   
+   if(x >= 0 && y >= 0 && w > 0 && h > 0)
    {
       width = w;
       height = h;
@@ -212,10 +217,10 @@ SDL_Renderer* Window::getRenderer()
    return windowRenderer;
 }
 
-/*void Window::setTitle(string titleIn)
+void Window::setTitle(const char* titleIn)
 {
-   SDL_SetWindowTitle( windowPointer, titleIn.c_str());
-}*/
+   SDL_SetWindowTitle(windowPointer, titleIn);
+}
 
 void Window::update(SDL_Event& windowEvent)
 {

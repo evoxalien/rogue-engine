@@ -14,6 +14,7 @@
 #include "startMenu.h"
 #include "playerClass.h"
 #include "gameMap.cpp"
+#include "window.h"
 //#include <thread>
 
 #define FPS_INTERVAL 1.0 //Seconds
@@ -27,8 +28,6 @@ private:
    static double maximum_Frame_Rate;
    static double total_Time;
    
-   const int SCREEN_WIDTH = 1024;
-   const int SCREEN_HEIGHT = 720;
    const int SCREEN_FPS = 60;
    const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
    static std::chrono::high_resolution_clock::time_point start_Of_Previous_Frame;
@@ -36,7 +35,7 @@ private:
    static std::chrono::duration<double> time_Of_Previous_Frame;
    
    bool Running;
-   SDL_Window *window;
+   Window *window;
    SDL_Renderer *renderer;
    Texture texture;
    // Texture playerTexture;
@@ -81,7 +80,7 @@ private:
    gameMap GameMap;
  
 public:
-   gameroot(); 
+   gameroot(Window *mainWindow); 
    bool loadContent();
    int execute();
    void OnEvent(SDL_Event *Event);
@@ -105,10 +104,10 @@ std::chrono::duration<double> gameroot::time_Of_Previous_Frame = std::chrono::du
 
 
 //Simple initializes
-gameroot::gameroot()
+gameroot::gameroot(Window *mainWindow)
 {
    Running = false;
-   window = NULL;
+   window = mainWindow;
    renderer = NULL;
    engineState = Loading;
    
@@ -126,29 +125,8 @@ bool gameroot::initialize()
       return false;
    }
 
-   //Calls and tests function to create SDL Window (documentation in link)
-   //https://wiki.libsdl.org/SDL_CreateWindow
-   if((window = SDL_CreateWindow( "Rogue Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN )) == NULL)
-   {
-      printf ("Window Error: %s", SDL_GetError());
-      return false;
-   }
-
-   //Creates SDL Renderer. Renderer renders assets to SDL windows
-   //Can be used to draw .bmp images to window (example in link)
-   //https://wiki.libsdl.org/SDL_CreateRenderer
-   renderer = SDL_CreateRenderer ( window , - 1 , SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC ) ;
-
-   //Tests if renderer initialized properly
-   if (renderer == NULL)
-   {
-      printf ("Render Error: %s", SDL_GetError());
-      return false;
-   }
-
-   //set render draw color property
-   SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
+   renderer = window->getRenderer();
+   
    //tell texture the renderer to use
    texture.setRenderer(renderer);
    
@@ -191,8 +169,8 @@ bool gameroot::loadContent()
       error_log << "Texture failed to load.\n";
       return false;
    }
-   texture.setWidth(SCREEN_WIDTH);
-   texture.setHeight(SCREEN_HEIGHT);
+   texture.setWidth(window->getWidth());
+   texture.setHeight(window->getHeight());
    Hero.LoadSpriteContent();
    
    // if(!Hero.playerTexture.loadTexture("img/shapes/OrangeSquare.png"))
@@ -213,7 +191,20 @@ bool gameroot::loadContent()
 //https://wiki.libsdl.org/SDL_Event
 void gameroot::OnEvent(SDL_Event *Event)
 {
-   //Check if event is the clicking of the exit (SDL_QUIT)
+   //Check if event is the clicking of the exit (red x)
+   if(Event->type == SDL_WINDOWEVENT)
+   {
+      if(Event->window.windowID == window->ID)
+	  {
+	     if(Event->window.event == SDL_WINDOWEVENT_CLOSE)
+		 {
+		    Event->type = SDL_QUIT;
+            SDL_PushEvent(Event);
+         }
+	  }
+   }
+   
+   
    if(Event->type == SDL_QUIT)
    {
       Running = false;
@@ -329,13 +320,9 @@ void gameroot::close()
 {
    texture.free();
    // Hero.playerTexture.free();
-
-   SDL_DestroyRenderer(renderer);
-   SDL_DestroyWindow(window);
-   
+  
    IMG_Quit();
    TTF_Quit();
-   SDL_Quit();
 }
 
 #endif

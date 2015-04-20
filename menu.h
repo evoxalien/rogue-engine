@@ -8,6 +8,7 @@
 #include "input.h"
 #include "Texture.h"
 #include "button.h"
+#include "window.h"
 
 using namespace std;
 
@@ -16,9 +17,8 @@ class menu
 private:
    bool Running;
    int menuChoice;
-   SDL_Window *window;
+   Window *window;
    SDL_Renderer *renderer;
-   Texture texture;
    SDL_Event Event;
    bool initialize();
    InputClass input;
@@ -28,7 +28,7 @@ private:
   
  
 public:
-   menu(); 
+   menu(Window *mainWindow); 
    bool loadContent();
    int execute();
    void OnEvent(SDL_Event *Event);
@@ -38,10 +38,10 @@ public:
 };
 
 //Simple initializes
-menu::menu()
+menu::menu(Window *mainWindow)
 {
    Running = false;
-   window = NULL;
+   window = mainWindow;
    renderer = NULL;
 }
 
@@ -66,54 +66,30 @@ bool menu::initialize()
       }
    }
 
-   //Calls and tests function to create SDL Window (documentation in link)
-   //https://wiki.libsdl.org/SDL_CreateWindow
-   if((window = SDL_CreateWindow( "Start Menu",  SDL_WINDOWPOS_CENTERED,  SDL_WINDOWPOS_CENTERED, 720, 800, SDL_WINDOW_SHOWN )) == NULL)
-   {
-      printf ("Window Error: %s", SDL_GetError());
-      return false;
-   }
-
-   //Creates SDL Renderer. Renderer renders assets to SDL windows
-   //Can be used to draw .bmp images to window (example in link)
-   //https://wiki.libsdl.org/SDL_CreateRenderer
-   renderer = SDL_CreateRenderer (window , - 1 , SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC) ;
+   renderer = window->getRenderer();
    
    startButton.setRenderer(renderer);
    startButton.setFont("times");
-   startButton.setWidth(720);
-   startButton.setHeight(266);
+   startButton.setWidth(1024);
+   startButton.setHeight(240);
    startButton.setButtonColor(255, 255, 255);
    startButton.setText("Start Game");
    
    mapButton.setRenderer(renderer);
    mapButton.setFont("times");
-   mapButton.setWidth(720);
-   mapButton.setHeight(266);
-   mapButton.setY(266);
+   mapButton.setWidth(1024);
+   mapButton.setHeight(240);
+   mapButton.setY(240);
    mapButton.setButtonColor(255, 255, 255);
    mapButton.setText("Edit Map");
    
    exitButton.setRenderer(renderer);
    exitButton.setFont("times");
-   exitButton.setWidth(720);
-   exitButton.setHeight(266);
-   exitButton.setY(532);
+   exitButton.setWidth(1024);
+   exitButton.setHeight(240);
+   exitButton.setY(480);
    exitButton.setButtonColor(255, 255, 255);
    exitButton.setText("Exit Engine");
-   
-   //Tests if renderer initialized properly
-   if (renderer == NULL)
-   {
-      printf ("Render Error: %s", SDL_GetError());
-      return false;
-   }
-
-   //set render draw color property
-   SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-   //tell texture the renderer to use
-   texture.setRenderer(renderer);
    
    //initialize image subsystem to load png files
    int imgFlags = IMG_INIT_PNG;
@@ -135,17 +111,7 @@ bool menu::initialize()
 //Load textures and other content here
 bool menu::loadContent()
 {
-
-   if(!texture.loadTexture("../../images/dino.png"))
-   {
-      error_log << "Texture failed to load.\n";
-      return false;
-   }
-   texture.setWidth(720);
-   texture.setHeight(1024);
-   
    return true;
-
 }
 
 //Event checking for game loop 
@@ -153,10 +119,22 @@ bool menu::loadContent()
 //https://wiki.libsdl.org/SDL_Event
 void menu::OnEvent(SDL_Event *Event)
 {
-   //Check if event is the clicking of the exit (SDL_QUIT)
+   //Check if event is the clicking of the exit (red x)
+   if(Event->type == SDL_WINDOWEVENT)
+   {
+      if(Event->window.windowID == window->ID)
+	  {
+	     if(Event->window.event == SDL_WINDOWEVENT_CLOSE)
+		 {
+		    Event->type = SDL_QUIT;
+            SDL_PushEvent(Event);
+         }
+	  }
+   }
+   
+   
    if(Event->type == SDL_QUIT)
    {
-      menuChoice = 3;
       Running = false;
    }
 }
@@ -241,14 +219,8 @@ int menu::execute()
 //Free all the assets
 void menu::close()
 {
-   texture.free();
- 
-   SDL_DestroyRenderer(renderer);
-   SDL_DestroyWindow(window);
-   
    TTF_Quit();
    IMG_Quit();
-   SDL_Quit();
 }
 
 #endif
