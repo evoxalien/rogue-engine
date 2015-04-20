@@ -2,9 +2,12 @@
 #include "maproot.h"
 #include "menu.h"
 #include "window.h"
-
+#include "SDL_thread.h"
+#include "SDL_timer.h"
 
 using namespace std;
+
+static int TestThread(void *ptr);
 
 //Just the main. Very boring
 int main(int argc, char *argv[])
@@ -15,7 +18,25 @@ int main(int argc, char *argv[])
    maproot *aMap = NULL;
    gameroot *theGame = NULL;  
    menu *mainMenu = NULL;
-  
+   SDL_Thread *thread;
+   int         threadReturnValue;
+
+   printf("\nSimple SDL_CreateThread test:");
+
+   //Create a simple thread
+   thread = SDL_CreateThread(TestThread, "TestThread", (void *)NULL);
+
+   if (NULL == thread)
+   {
+      printf("\nSDL_CreateThread failed: %s\n", SDL_GetError());
+   } 
+   else 
+   {
+      SDL_WaitThread(thread, &threadReturnValue);
+      printf("\nThread returned value: %d", threadReturnValue);
+   }
+
+
    
    do
    {
@@ -44,4 +65,18 @@ int main(int argc, char *argv[])
    SDL_Quit();
    
    return 0;
+}
+
+// Very simple thread. counts 0 to 9 delaying 50ms between increments
+static int TestThread(void *ptr)
+{
+    int i;
+
+    for (i = 0; i < 10; ++i)
+	{
+        printf("\nThread counter: %d", i);
+        SDL_Delay(50);
+    }
+
+    return i;
 }
