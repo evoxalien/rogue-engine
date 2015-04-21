@@ -52,7 +52,31 @@ class ParticleManager<T>
         }
 
         //Create Particle
+        void CreateParticle(Texture texture, Vector2D pos, SDL_Color color, float duration, Vector2D scale, T state, float theta = 0)
+        {
+            Particle particle;
+            if(particleList.Count == particleList.Capacity)
+            {
+                //Over write the oldest
+                particle = particleList[0];
+                particleList.Start++;
+            }
+            else
+            {
+                particle = particleList[particleList.Count];
+                particleList.Count++;
+            }
 
+            particle.Texture = texture;
+            particle.Position = position;
+            particle.Tint = tint;
+
+            particle.Duration = duration;
+            particle.PercentLife = 1f;
+            particle.Scale = scale;
+            particle.Orientation = theta;
+            particle.State = state;
+        }
 };
 
 #endif
