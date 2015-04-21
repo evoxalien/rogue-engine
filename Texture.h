@@ -9,6 +9,9 @@ class Texture
 		//The actual hardware texture
 		SDL_Texture* texture;
 
+		//font
+		TTF_Font* font;
+
 		//Image dimensions
 		int width;
 		int height;
@@ -25,6 +28,7 @@ class Texture
 			height = 0;
 			texture = NULL;
 			renderer = NULL;
+			font = NULL;
 			filePath = "";
 		}
 
@@ -32,6 +36,7 @@ class Texture
 		~Texture()
 		{
 			free();
+			TTF_Quit();
 		}
 
 		void setRenderer(SDL_Renderer* render)
@@ -39,9 +44,23 @@ class Texture
 			renderer = render;
 		}
 
+		void setFont(std::string filePath, int fontSize)
+		{
+			if(TTF_Init() == -1)
+			{
+				printf("TTF init failed\n");
+				return;
+			}
+
+			filePath += ".ttf";
+			font = TTF_OpenFont(filePath.c_str(), fontSize);
+		}
+
 		//Loads image at specified path
 		bool loadTexture(std::string path)
 		{
+			free();
+
 		   //final surface to return
 		   SDL_Texture* newTexture = NULL;
 		   
@@ -74,15 +93,46 @@ class Texture
 		   return texture != NULL;
 		}
 		
-		/*#ifdef _SDL_TTF_H
-		//Creates image from font string
-		bool loadFromRenderedText( std::string textureText, SDL_Color textColor );
-		#endif*/
+		bool loadTextRender( std::string text, SDL_Color textColor )
+		{
+			//Get rid of preexisting texture
+			free();
+
+			//Render text surface
+			SDL_Surface* textSurface = TTF_RenderText_Solid( font, text.c_str(), textColor );
+			if( textSurface != NULL )
+			{
+				//Create texture from surface pixels
+		        texture = SDL_CreateTextureFromSurface( renderer, textSurface );
+				if( texture == NULL )
+				{
+					printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+				}
+				else
+				{
+					//Get image dimensions
+					width = textSurface->w;
+					height = textSurface->h;
+				}
+
+				//Get rid of old surface
+				SDL_FreeSurface( textSurface );
+			}
+			else
+			{
+				printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+			}
+
+			
+			//Return success
+			return texture != NULL;
+		}
 
 		//Deallocates texture
 		void free()
 		{
-			SDL_DestroyTexture(texture);
+			if(texture != NULL)
+				SDL_DestroyTexture(texture);
 			texture = NULL;
 			width = 0;
 			height = 0;

@@ -1,7 +1,7 @@
 #ifndef GAMEPAD_H
 #define GAMEPAD_H
  
-#include <SDL.h>
+#include "SDLincludes.h"
 #include <stdio.h>
 // #include <sys/mman.h>
 #include <stdint.h>
@@ -32,6 +32,7 @@ public:
   bool  YButton1;
   int StickX1;//int16
   int StickY1;
+  bool Player1Controls[12];
   bool  Up2;
   bool  Down2;
   bool  Left2;
@@ -46,7 +47,7 @@ public:
   bool  YButton2;
   int StickX2;
   int StickY2;
-  
+  bool Player2Controls[12];
 };
 
 

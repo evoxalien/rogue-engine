@@ -101,6 +101,14 @@ GameState gamestate;
 
 int playerAgency::intializePlayer(int playerIndex)
 {
+   //parse the file
+   ifstream inputFile;
+   inputFile.open("playerConfig/PLayerScript.txt");
+
+   if(!inputFile)
+      return false;
+
+   inputFile >> playerIndex;
    if(playerIndex==0)//player 1
    {
       setPlayerIndex(playerIndex);

@@ -6,7 +6,7 @@
 class InputClass
 {
 private:
-   bool mouseArray[5];
+   bool mouseArray[3];
    int x, y;
    SDL_Event event;
 
@@ -57,16 +57,31 @@ public:
       return -1;
    }
 
+   SDL_Event getEvent()
+   {
+      return event;
+   }
+
    //1 = left click
    //2 = mid click
    //3 = right click
    bool getMouseButton(int index)
    {
-      if(index >= 0 && index <= 5)
+      if(index >= 1 && index <= 3)
       {
          return mouseArray[index - 1];
       }
       return false;
+   }
+
+   int getMouseWheel()
+   {
+      if(event.type == SDL_MOUSEWHEEL)
+      {
+         return event.wheel.y;
+      }
+
+      return 0;
    }
 
    int getMouseX()

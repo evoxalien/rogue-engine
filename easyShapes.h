@@ -32,8 +32,7 @@ public:
    void clearRenderer();
    void clearRenderer(SDL_Renderer* tempRenderer);
    
-   //Two rectangles to store position of filled or empty box
-   SDL_Rect square;
+   //Rectangle to store position of filled or empty box
    SDL_Rect box;
    
    //Values for Red, Green, Blue, and Alpha level
@@ -48,7 +47,6 @@ public:
 shape::shape()
 {
    rendererCopy = NULL;
-   square = { 0, 0, 5, 5};
    box = { 0, 0, 5, 5};
    r = 0xFF;
    g = 0x00;
@@ -60,7 +58,6 @@ shape::shape()
 shape::shape(SDL_Renderer* tempRenderer)
 {
    rendererCopy = tempRenderer;
-   square = { 0, 0, 5, 5};
    box = { 0, 0, 5, 5};
    r = 0xFF;
    g = 0x00;
@@ -85,7 +82,7 @@ bool shape::drawSquare(SDL_Renderer* tempRenderer)
 	  return false;
    }
    
-   if(SDL_RenderFillRect(tempRenderer, &square ) < 0)
+   if(SDL_RenderFillRect(tempRenderer, &box ) < 0)
    {
       printf("SDL_RenderFillRect in shape object failed: %s\n", SDL_GetError());
       SDL_ClearError();
@@ -112,7 +109,7 @@ bool shape::drawSquare()
 	  return false;
    }
    
-   if(SDL_RenderFillRect(rendererCopy, &square ) < 0)
+   if(SDL_RenderFillRect(rendererCopy, &box ) < 0)
    {
       printf("SDL_RenderFillRect in shape object failed: %s\n", SDL_GetError());
       SDL_ClearError();
