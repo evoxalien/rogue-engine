@@ -10,6 +10,7 @@
 #include "level/level.h"			//Includes level and all Object header files and all Object component header files, including Box2D's, along with <iostream>, <vector>, and <cstdint> but excluding inherited classes (Player, NonPlayerCharacter)
 #include "log.h"
 #include "input.h"
+#include "SoundManager.h"
 #include "ltimer.h"
 #include "Texture.h"
 #include "mathutil.h"
@@ -81,6 +82,7 @@ private:
    InputClass input;
    
    gameMap GameMap;
+   Sound_Manager soundManager;
  
 public:
    gameroot(Window *mainWindow); 
@@ -159,6 +161,8 @@ bool gameroot::initialize()
    Hero.playerInitalize(1);
 
    Hero.InitSprite(renderer);
+   //Sound Manager Initialize
+   soundManager.Init();
 
    return true;
 }
@@ -183,7 +187,28 @@ bool gameroot::loadContent()
    // }
    // Hero.playerTexture.setWidth(30);
    // Hero.playerTexture.setHeight(30);
-   
+
+   // Test Loading of sounds
+   /*if(!soundManager.Load_Sound("Song.mp3","DarkSouls",0))
+	{
+      printf("sound failed to load 1.\n");
+      return false;
+    }
+   if(!soundManager.Load_Sound("Song2.mp3","A2",0))
+	   {
+      printf("sound failed to load 2.\n");
+      return false;
+   }
+   if(!soundManager.Load_Sound("potion.wav","SFX",1))
+	   {
+      printf("sound failed to load 3.\n");
+      return false;
+   }
+   if(!soundManager.Load_Sound("gnt.wav","gnt",1))
+	   {
+      printf("sound failed to load 3.\n");
+      return false;
+   }*/
    
    return true;
 
@@ -236,6 +261,28 @@ void gameroot::update()
          Hero.playerKeyPress(input.getKeyDown());
          Hero.playerKeyRelease(input.getKeyUp());
          Hero.playerUpdate(fpsTimer.getTicks());
+
+		/* if(input.getKeyDown() == SDLK_1)
+         {
+			 soundManager.Play_Music("DarkSouls",-1);
+         }
+		 if(input.getKeyDown() == SDLK_2)
+		 {
+			soundManager.Play_Music("A2",-1);
+		 }
+		 if(input.getKeyDown() == SDLK_3)
+		 {
+			 soundManager.Play_Sound("SFX",0);
+		 }
+		 if(input.getKeyDown() == SDLK_4)
+		 {
+			 soundManager.Play_Sound("gnt",0);
+		 }
+         if(input.getKeyDown() == SDLK_p)
+         {
+			 soundManager.Stop_Sound();
+			 soundManager.Stop();
+         }*/
       }
 	  
    }  
@@ -323,7 +370,15 @@ void gameroot::close()
 {
    texture.free();
    // Hero.playerTexture.free();
-  
+
+
+  ////unloading of sounds
+  // soundManager.Unload_Sound("DarkSouls",0);
+  // soundManager.Unload_Sound("A2",0);
+  // soundManager.Unload_Sound("SFX",1);
+  // soundManager.Unload_Sound("gnt",1);
+
+
    IMG_Quit();
    TTF_Quit();
 }
