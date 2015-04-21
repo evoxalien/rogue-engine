@@ -1,6 +1,8 @@
 #OBJS specifies which files to compile as part of the project
 
-OBJS = main.cpp log.cpp level/level.cpp level/object/objectcpps.cpp mingw_dev_lib/include/Box2D/Box2Dcpps.cpp
+
+OBJS = main.cpp log.cpp vector2d.cpp level/level.cpp level/object/objectcpps.cpp mingw_dev_lib/include/Box2D/Box2Dcpps.cpp
+
 
 #CC specifies which compiler we're using
 CC = g++

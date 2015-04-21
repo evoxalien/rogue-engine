@@ -4,6 +4,7 @@
 
 #include "SDLincludes.h"
 #include <stdio.h>
+#include <cstdlib>
 #include <string>
 #include <chrono>
 #include "level/level.h"			//Includes level and all Object header files and all Object component header files, including Box2D's, along with <iostream>, <vector>, and <cstdint> but excluding inherited classes (Player, NonPlayerCharacter)
@@ -11,11 +12,13 @@
 #include "input.h"
 #include "ltimer.h"
 #include "Texture.h"
+#include "mathutil.h"
 #include "startMenu.h"
 #include "playerClass.h"
 #include "gameMap.cpp"
 #include "window.h"
 //#include <thread>
+
 
 #define FPS_INTERVAL 1.0 //Seconds
 
