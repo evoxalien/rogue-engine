@@ -260,6 +260,7 @@ void gameroot::update()
       {
          Hero.playerKeyPress(input.getKeyDown());
          Hero.playerKeyRelease(input.getKeyUp());
+         Hero.UpdateGamePad();
          Hero.playerUpdate(fpsTimer.getTicks());
 
 		/* if(input.getKeyDown() == SDLK_1)

@@ -50,6 +50,17 @@ private:
 		SDL_GameControllerButton playerJump;
 		SDL_GameControllerButton playerExit;
 	};
+
+	// struct instances 
+	PlayerControlsKeyboard playerControlsKeyboard;
+	PlayerControlsGamePad playerControlsGamePad;
+
+	string playerName;
+	int    playerIndex;
+	int    playerHealth;
+	string playerInputMode;
+
+public:
 	struct PlayerAction //holds the flags of the buttons that are being pressed
 	{
 		bool  Up;
@@ -68,18 +79,7 @@ private:
 		int StickY;
 		bool Player1Controls[12];
 	};
-
-	// struct instances 
-	PlayerControlsKeyboard playerControlsKeyboard;
-	PlayerControlsGamePad playerControlsGamePad;
 	PlayerAction Actions;
-
-	string playerName;
-	int    playerIndex;
-	int    playerHealth;
-	string playerInputMode;
-
-public:
 	SDL_Rect whiteBoxRect;
 	int    playerX;
 	int    playerY;
@@ -150,26 +150,36 @@ int playerClass::playerInitalize(int playerIndexPassed)
 		inputFile >> CurrentData;
 		inputFile >> playerControlsKeyboard.playerExit;	
 	}
+	string GamepadMap;
 	if (playerInputMode=="Gamepad")// loads SDL_GameControllerButton type
 	{
-		// inputFile >> CurrentData;	
-		// inputFile >> playerControlsGamePad.playerActivate;
-		// inputFile >> CurrentData;  
-		// inputFile >> playerControlsGamePad.playerBack;
-		// inputFile >> CurrentData;
-		// inputFile >> playerControlsGamePad.playerUp;
-		// inputFile >> CurrentData;
-		// inputFile >> playerControlsGamePad.playerDown;
-		// inputFile >> CurrentData;
-		// inputFile >> playerControlsGamePad.playerLeft;
-		// inputFile >> CurrentData;
-		// inputFile >> playerControlsGamePad.playerRight;
-		// inputFile >> CurrentData;
-		// inputFile >> playerControlsGamePad.playerJump;
-		// inputFile >> CurrentData;
-		// inputFile >> playerControlsGamePad.playerPause;
-		// inputFile >> CurrentData;
-		// inputFile >> playerControlsGamePad.playerExit;
+		inputFile >> CurrentData;	
+		inputFile >> GamepadMap;
+		playerControlsGamePad.playerActivate=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> CurrentData;  
+		inputFile >> GamepadMap;
+		playerControlsGamePad.playerBack=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> CurrentData;
+		inputFile >> GamepadMap;
+		playerControlsGamePad.playerUp=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> CurrentData;
+		inputFile >> GamepadMap;
+		playerControlsGamePad.playerDown=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> CurrentData;
+		inputFile >> GamepadMap;
+		playerControlsGamePad.playerLeft=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> CurrentData;
+		inputFile >> GamepadMap;
+		playerControlsGamePad.playerRight=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> CurrentData;
+		inputFile >> GamepadMap;
+		playerControlsGamePad.playerJump=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> CurrentData;
+		inputFile >> GamepadMap;
+		playerControlsGamePad.playerPause=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> CurrentData;
+		inputFile >> GamepadMap;
+		playerControlsGamePad.playerExit=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
 	}
 	inputFile >> CurrentData;
 	inputFile >> playerName;
@@ -331,8 +341,6 @@ void playerClass::UpdateGamePad()
 // Poll our controllers for input.
     if(ControllerHandles[playerIndex] != 0 && SDL_GameControllerGetAttached(ControllerHandles[playerIndex-1]))
       {
-        if (playerIndex-1 == 1)
-        {
           Actions.Up = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerUp);
           Actions.Down = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerDown);
           Actions.Left = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerLeft);
@@ -347,8 +355,6 @@ void playerClass::UpdateGamePad()
           Actions.YButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_Y);
           Actions.StickX = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTX);
           Actions.StickY = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTY);
-        }
-        
       }
 
 }
