@@ -77,7 +77,67 @@ class ParticleManager<T>
             particle.Orientation = theta;
             particle.State = state;
         }
+
+        class CircularParticleArray
+        {
+            private:
+                int start;
+                Particle[] list;
+            
+            public:
+                int Start
+                {
+                    get { return start; }
+                    set { start = value % list.Length; }
+                }
+                
+                int Count { get; set; }
+                int Capacity { get { return list.Length; } }
+                
+                CircularParticleArray(int capacity)
+                {
+                    list = new Particle[capacity];
+                }
+                
+                Particle this[int i]
+                {
+                    get { return list[(start + i) % list.Length]; }
+                    set { list[(start + i) % list.Length] = value; }
+                }
+        };
+
+        public void Update()
+        {
+            int removalCount = 0;
+            for (int i = 0; i < particleList.Count; i++)
+            {
+                auto particle = particleList[i];
+                updateParticle(particle);
+                particle.PercentLife -= 1f / particle.Duration;
+
+                //Now its time to shift the deleted ones to the back of the list
+                Swap(particleList, i - removalCount, i);
+                ParticleCount = particleList.Count;
+                // if the particle has expired, delete this particle
+                if (particle.PercentLife < 0)
+                    removalCount++;
+            }
+            particleList.Count -= removalCount;
+        }
+        
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            for (int i = 0; i < particleList.Count; i++)
+            {
+                auto particle = particleList[i];
+
+                //Vector2 origin = new Vector2(particle.Texture.Width / 2, particle.Texture.Height / 2);
+                //spriteBatch.Draw(particle.Texture, particle.Position, null, particle.Tint, particle.Orientation, origin, particle.Scale, 0, 0);
+
+            }
+        }
 };
+
 
 #endif
 
