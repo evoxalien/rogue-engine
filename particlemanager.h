@@ -1,5 +1,11 @@
 #ifndef PARTICLE_MANAGER_
 #define PARTICLE_MANAGER_
+#include "SDLincludes.h"
+#include "Texture.h"
+#include "mathutil.h"
+#include <cmath>
+#include <stdlib.h>
+
 
 template<typename T>
 class ParticleManager<T> 
@@ -9,12 +15,6 @@ class ParticleManager<T>
         CircularParticleArray particleList;
         int ParticleCount;
     public:
-
-        class Color
-        {
-            public:
-                int r, g, b, a;
-        };
 
         class Particle
         {
@@ -131,7 +131,8 @@ class ParticleManager<T>
             {
                 auto particle = particleList[i];
 
-                //Vector2 origin = new Vector2(particle.Texture.Width / 2, particle.Texture.Height / 2);
+                //Vector2D origin = new Vector2D(particle.Texture.Width / 2, particle.Texture.Height / 2);
+
                 //spriteBatch.Draw(particle.Texture, particle.Position, null, particle.Tint, particle.Orientation, origin, particle.Scale, 0, 0);
 
             }

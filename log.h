@@ -53,6 +53,8 @@ public:
 	}
 };
 
+//Externs are glorified global variables, it allows external classes full access to the log files.
+
 extern OutputLog debug_log;
 extern OutputLog error_log;
 extern OutputLog warning_log;
