@@ -156,14 +156,14 @@ bool gameroot::initialize()
   
    GLOBAL_FRAME_COUNTER = 0;
    fpsTimer.start();
-   /*
+   /*3
    previousTicks = 0;
    fps_lasttime = SDL_GetTicks(); //the last recorded time.
    fps_current = 0; //the current FPS.
    fps_frames = 0; //frames passed since the last recorded fps.
    */
    Hero.playerInitalize(1);
-
+   Hero.SDLOpenGameControllers();
    Hero.InitSprite(renderer);
    //Sound Manager Initialize
    soundManager.Init();

@@ -41,14 +41,17 @@ private:
 		SDL_GameControllerButton playerDown;
 		SDL_GameControllerButton playerLeft;
 		SDL_GameControllerButton playerRight;
-		SDL_GameControllerButton playerActivate;
-		SDL_GameControllerButton playerUse;
-		SDL_GameControllerButton playerAttack;
-		SDL_GameControllerButton playerSpecial;
-		SDL_GameControllerButton playerPause;
+		SDL_GameControllerButton playerX;
+		SDL_GameControllerButton playerA;
+		SDL_GameControllerButton playerB;
+		SDL_GameControllerButton playerY;
+		SDL_GameControllerButton playerStart;
 		SDL_GameControllerButton playerBack;
-		SDL_GameControllerButton playerJump;
-		SDL_GameControllerButton playerExit;
+		SDL_GameControllerButton playerLeftShoulder;
+		SDL_GameControllerButton playerRightShoulder;
+		int StickX;//int 16
+		int StickY;
+		bool Player1Controls[12];
 	};
 
 	// struct instances 
@@ -63,21 +66,20 @@ private:
 public:
 	struct PlayerAction //holds the flags of the buttons that are being pressed
 	{
-		bool  Up;
-		bool  Down;
-		bool  Left;
-		bool  Right;
-		bool  Start;
-		bool  Back;
-		bool  LeftShoulder;
-		bool  RightShoulder;
-		bool  AButton;
-		bool  BButton;
-		bool  XButton;
-		bool  YButton;
-		int StickX;//int 16
-		int StickY;
-		bool Player1Controls[12];
+		bool  playerUp;
+		bool  playerDown;
+		bool  playerLeft;
+		bool  playerRight;
+		bool  playerActivate;
+		bool  playerUse;
+		bool  playerAttack;
+		bool  playerSpecial;
+		bool  playerStart;
+		bool  playerBack;
+		bool  playerJump;
+		bool  playerExit;
+		bool  playerLeftShoulder;
+		bool playerRightShoulder;
 	};
 	PlayerAction Actions;
 	SDL_Rect whiteBoxRect;
@@ -95,7 +97,6 @@ public:
 	void SDLOpenGameControllers();
 	void SDLCloseGameControllers();
 	void UpdateGamePad();
-	void playerInitalizeControls(int playerIndexPassed);
 	void playerUpdate(int gameTime);
 	void playerDraw();
 	void playerButtonPress(SDL_Keycode e);
@@ -155,10 +156,10 @@ int playerClass::playerInitalize(int playerIndexPassed)
 	{
 		inputFile >> CurrentData;	
 		inputFile >> GamepadMap;
-		playerControlsGamePad.playerActivate=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		playerControlsGamePad.playerA=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
 		inputFile >> CurrentData;  
 		inputFile >> GamepadMap;
-		playerControlsGamePad.playerBack=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		playerControlsGamePad.playerB=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
 		inputFile >> CurrentData;
 		inputFile >> GamepadMap;
 		playerControlsGamePad.playerUp=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
@@ -173,13 +174,13 @@ int playerClass::playerInitalize(int playerIndexPassed)
 		playerControlsGamePad.playerRight=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
 		inputFile >> CurrentData;
 		inputFile >> GamepadMap;
-		playerControlsGamePad.playerJump=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		playerControlsGamePad.playerX=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
 		inputFile >> CurrentData;
 		inputFile >> GamepadMap;
-		playerControlsGamePad.playerPause=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		playerControlsGamePad.playerStart=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
 		inputFile >> CurrentData;
 		inputFile >> GamepadMap;
-		playerControlsGamePad.playerExit=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		playerControlsGamePad.playerBack=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
 	}
 	inputFile >> CurrentData;
 	inputFile >> playerName;
@@ -207,47 +208,53 @@ void playerClass::playerButtonPress(SDL_Keycode e)
 
             if(e== SDLK_DOWN)
             {
-                Actions.Up=true;       
+                Actions.playerUp=true;       
             }
             else if ( e== SDLK_UP)
             {
-                Actions.Down=true;            
+                Actions.playerDown=true;            
             }
             else if (e== SDLK_RIGHT)
             {
-                Actions.Right=true; 
+                Actions.playerRight=true; 
             }
             else if (e== SDLK_LEFT)
             {
-                Actions.Left=true; 
+                Actions.playerLeft=true; 
             }
 	// whiteBoxRect.x = playerX;
 	// whiteBoxRect.y = playerY;
 }
+
+
 void playerClass::playerKeyPress(SDL_Keycode e)
 { 
 	if (playerInputMode=="Keyboard")
 	{
 		if (e==playerControlsKeyboard.playerUp)
-		{
-		    Actions.Up=true;
-		}
+		    Actions.playerUp=true;
 		if (e==playerControlsKeyboard.playerDown)
-		{
-		    Actions.Down=true;
-		}
+		    Actions.playerDown=true;
 		if (e==playerControlsKeyboard.playerRight)
-		{
-		    Actions.Right=true; 
-		}
+		    Actions.playerRight=true; 
 		if (e==playerControlsKeyboard.playerLeft)
-		{
-		    Actions.Left=true; 
-		}
+		    Actions.playerLeft=true; 
+		if (e==playerControlsKeyboard.playerActivate)
+			Actions.playerActivate=true;
+		if (e==playerControlsKeyboard.playerUse)
+			Actions.playerUse=true;
+		if (e==playerControlsKeyboard.playerAttack)
+			Actions.playerAttack=true;
+		if (e==playerControlsKeyboard.playerSpecial)
+			Actions.playerSpecial=true;
 		if (e==playerControlsKeyboard.playerStart)
-		{
-		    Actions.Start=true; 
-		}
+			Actions.playerStart=true;
+		if (e==playerControlsKeyboard.playerBack)
+			Actions.playerBack=true;
+		if (e==playerControlsKeyboard.playerJump)
+			Actions.playerJump=true;
+		if (e==playerControlsKeyboard.playerExit)
+			Actions.playerExit=true;
 	}
 }
 void playerClass::playerKeyRelease(SDL_Keycode e)
@@ -255,41 +262,37 @@ void playerClass::playerKeyRelease(SDL_Keycode e)
 	if (playerInputMode=="Keyboard")
 	{
 		if (e==playerControlsKeyboard.playerUp)
-		{
-		    Actions.Up=false;
-		}
+		    Actions.playerUp=false;
 		if (e==playerControlsKeyboard.playerDown)
-		{
-		    Actions.Down=false;
-		}
+		    Actions.playerDown=false;
 		if (e==playerControlsKeyboard.playerRight)
-		{
-		    Actions.Right=false; 
-		}
+		    Actions.playerRight=false; 
 		if (e==playerControlsKeyboard.playerLeft)
-		{
-		    Actions.Left=false; 
-		}
-        if (e==playerControlsKeyboard.playerStart)
-		{
-		    Actions.Start=false; 
-		}
+		    Actions.playerLeft=false; 
+		if (e==playerControlsKeyboard.playerActivate)
+			Actions.playerActivate=true;
+		if (e==playerControlsKeyboard.playerUse)
+			Actions.playerUse=true;
+		if (e==playerControlsKeyboard.playerAttack)
+			Actions.playerAttack=true;
+		if (e==playerControlsKeyboard.playerSpecial)
+			Actions.playerSpecial=true;
+		if (e==playerControlsKeyboard.playerStart)
+			Actions.playerStart=true;
+		if (e==playerControlsKeyboard.playerBack)
+			Actions.playerBack=true;
+		if (e==playerControlsKeyboard.playerJump)
+			Actions.playerJump=true;
+		if (e==playerControlsKeyboard.playerExit)
+			Actions.playerExit=true;
 		if(e== SDLK_DOWN)
-        {
-            Actions.Up=false;       
-        }
+            Actions.playerUp=false;       
         else if ( e== SDLK_UP)
-        {
-            Actions.Down=false;            
-        }
+            Actions.playerDown=false;            
         else if (e== SDLK_RIGHT)
-        {
-            Actions.Right=false; 
-        }
+            Actions.playerRight=false; 
         else if (e== SDLK_LEFT)
-        {
-            Actions.Left=false; 
-        }
+            Actions.playerLeft=false; 
 	}
 }
 
@@ -349,20 +352,20 @@ void playerClass::UpdateGamePad()
 // Poll our controllers for input.
     if(ControllerHandles[playerIndex] != 0 && SDL_GameControllerGetAttached(ControllerHandles[playerIndex-1]))
       {
-          Actions.Up = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerUp);
-          Actions.Down = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerDown);
-          Actions.Left = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerLeft);
-          Actions.Right = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerRight);
-          Actions.Start = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerPause);
-          Actions.Back = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerExit);
-          Actions.LeftShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
-          Actions.RightShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
-          Actions.AButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerActivate);
-          Actions.BButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerBack);
-          Actions.XButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerJump);
-          Actions.YButton = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_Y);
-          Actions.StickX = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTX);
-          Actions.StickY = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTY);
+          Actions.playerUp = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerUp);
+          Actions.playerDown = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerDown);
+          Actions.playerLeft = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerLeft);
+          Actions.playerRight = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerRight);
+          Actions.playerStart = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerStart);
+          Actions.playerBack = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerBack);
+          Actions.playerLeftShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+          Actions.playerRightShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+          Actions.playerActivate = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerA);
+          Actions.playerBack = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerB);
+          Actions.playerJump = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerX);
+          Actions.playerSpecial = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerX);
+          // Actions.StickX = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTX);
+          // Actions.StickY = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTY);
       }
 
 }
@@ -374,7 +377,7 @@ void playerClass::playerUpdate(int gameTime)
     
     currentFrameX = playerAnimation.getFrameX();
     
-	if(Actions.Down==true)
+	if(Actions.playerDown==true)
 	{
 		playerY += playerMovementSpeed;// * ((float)gameTime%6000);
 		if (playerDirection) //true facing left false facing right
@@ -384,7 +387,7 @@ void playerClass::playerUpdate(int gameTime)
 			currentFrameY = 0;
 		}
 	}
-	else if (Actions.Up==true)
+	else if (Actions.playerUp==true)
 	{
 		playerY -= playerMovementSpeed; //* ((float)gameTime%6000);
 		if (playerDirection) //true facing left false facing right
@@ -394,13 +397,13 @@ void playerClass::playerUpdate(int gameTime)
 			currentFrameY = 4;
 		}              
 	}
-	else if (Actions.Right==true)
+	else if (Actions.playerRight==true)
 	{
 		playerX += playerMovementSpeed;// * ((float)gameTime%6000);
 		playerDirection=false;
 		currentFrameY = 2;
 	}
-	else if (Actions.Left==true)
+	else if (Actions.playerLeft==true)
 	{
 		playerX -= playerMovementSpeed;// * ((float)gameTime%6000);
 		playerDirection=true;
