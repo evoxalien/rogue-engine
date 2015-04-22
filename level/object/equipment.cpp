@@ -26,7 +26,7 @@ Equipment::Equipment()
 //	(*this).equipped_Item_Pointer_Array[0] = &item;
 //}
 
-void Equipment::display_Information()
+void Equipment::display_Information() const
 {
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
 	{
@@ -67,7 +67,7 @@ bool Equipment::equip_Item(Item& item, std::uint8_t index_To_Equip_Item)
 	}
 }
 
-float Equipment::get_Total_Strength_Modifier()
+float Equipment::get_Total_Strength_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -80,7 +80,7 @@ float Equipment::get_Total_Strength_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Dexterity_Modifier()
+float Equipment::get_Total_Dexterity_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -93,7 +93,7 @@ float Equipment::get_Total_Dexterity_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Endurance_Modifier()
+float Equipment::get_Total_Endurance_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -106,7 +106,7 @@ float Equipment::get_Total_Endurance_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Intelligence_Modifier()
+float Equipment::get_Total_Intelligence_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -119,7 +119,7 @@ float Equipment::get_Total_Intelligence_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Perception_Modifier()
+float Equipment::get_Total_Perception_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -132,7 +132,7 @@ float Equipment::get_Total_Perception_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Carrying_Capacity_Modifier()
+float Equipment::get_Total_Carrying_Capacity_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -145,7 +145,7 @@ float Equipment::get_Total_Carrying_Capacity_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Vision_Range_Modifier()
+float Equipment::get_Total_Vision_Range_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -158,7 +158,7 @@ float Equipment::get_Total_Vision_Range_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Hearing_Range_Modifier()
+float Equipment::get_Total_Hearing_Range_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -171,7 +171,7 @@ float Equipment::get_Total_Hearing_Range_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Physical_Attack_Range_Modifier()
+float Equipment::get_Total_Physical_Attack_Range_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -184,7 +184,7 @@ float Equipment::get_Total_Physical_Attack_Range_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Physical_Damage_Modifier()
+float Equipment::get_Total_Physical_Damage_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -197,7 +197,7 @@ float Equipment::get_Total_Physical_Damage_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Rate_Of_Physical_Attacks_Modifier()
+float Equipment::get_Total_Rate_Of_Physical_Attacks_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -210,7 +210,7 @@ float Equipment::get_Total_Rate_Of_Physical_Attacks_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Physical_Accuracy_Modifier()
+float Equipment::get_Total_Physical_Accuracy_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -223,7 +223,7 @@ float Equipment::get_Total_Physical_Accuracy_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Magical_Attack_Range_Modifier()
+float Equipment::get_Total_Magical_Attack_Range_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -236,7 +236,7 @@ float Equipment::get_Total_Magical_Attack_Range_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Magical_Damage_Modifier()
+float Equipment::get_Total_Magical_Damage_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -249,7 +249,7 @@ float Equipment::get_Total_Magical_Damage_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Rate_Of_Magical_Attacks_Modifier()
+float Equipment::get_Total_Rate_Of_Magical_Attacks_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -262,7 +262,7 @@ float Equipment::get_Total_Rate_Of_Magical_Attacks_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Magical_Accuracy_Modifier()
+float Equipment::get_Total_Magical_Accuracy_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -275,7 +275,7 @@ float Equipment::get_Total_Magical_Accuracy_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Movement_Speed_Modifier()
+float Equipment::get_Total_Movement_Speed_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -288,7 +288,7 @@ float Equipment::get_Total_Movement_Speed_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Maximum_Stamina_Modifier()
+float Equipment::get_Total_Maximum_Stamina_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -301,7 +301,7 @@ float Equipment::get_Total_Maximum_Stamina_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Rate_Of_Stamina_Regeneration_Modifier()
+float Equipment::get_Total_Rate_Of_Stamina_Regeneration_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -314,7 +314,7 @@ float Equipment::get_Total_Rate_Of_Stamina_Regeneration_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Maximum_Mana_Modifier()
+float Equipment::get_Total_Maximum_Mana_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -327,7 +327,7 @@ float Equipment::get_Total_Maximum_Mana_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Rate_Of_Mana_Regeneration_Modifier()
+float Equipment::get_Total_Rate_Of_Mana_Regeneration_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -340,7 +340,7 @@ float Equipment::get_Total_Rate_Of_Mana_Regeneration_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Maximum_Health_Modifier()
+float Equipment::get_Total_Maximum_Health_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -353,7 +353,7 @@ float Equipment::get_Total_Maximum_Health_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Rate_Of_Health_Regeneration_Modifier()
+float Equipment::get_Total_Rate_Of_Health_Regeneration_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -366,7 +366,7 @@ float Equipment::get_Total_Rate_Of_Health_Regeneration_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Physical_Defense_Modifier()
+float Equipment::get_Total_Physical_Defense_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -379,7 +379,7 @@ float Equipment::get_Total_Physical_Defense_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Magical_Defense_Modifier()
+float Equipment::get_Total_Magical_Defense_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -392,7 +392,7 @@ float Equipment::get_Total_Magical_Defense_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Block_Chance_Modifier()
+float Equipment::get_Total_Block_Chance_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -405,7 +405,7 @@ float Equipment::get_Total_Block_Chance_Modifier()
 	return total_Attribute_Modifier;
 }
 
-float Equipment::get_Total_Evasion_Modifier()
+float Equipment::get_Total_Evasion_Modifier() const
 {
 	float total_Attribute_Modifier = 0;
 	for(std::uint8_t i = 0; i < Equipment::total_Number_Of_Equipment_Slots; i++)
@@ -419,7 +419,7 @@ float Equipment::get_Total_Evasion_Modifier()
 }
 
 //'Getters' and 'Setters' for private member variables
-const std::uint16_t Equipment::get_Containing_Object_Pointer_Vector_Index()
+std::uint16_t Equipment::get_Containing_Object_Pointer_Vector_Index() const
 {
 	return (*this).containing_Object_Pointer_Vector_Index;
 }

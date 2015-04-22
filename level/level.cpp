@@ -64,7 +64,7 @@ Level::Level(std::string level_Path)
 	}
 }
 
-void Level::display_Information()
+void Level::display_Information() const
 {
 //	float time_Step = (1.0 / 60);
 //	(*Object::active_World_Pointer).Step(time_Step,6,2);

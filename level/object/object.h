@@ -6,15 +6,15 @@
 #include "attributes.h"		//Includes <algorithm>
 #include "equipment.h"		//Includes <vector> and "item.h", which includes <iostream> and <cstdint>
 //#include "inventory.h"
-//#include "status_effects.h"
+#include "status_effects.h"	//Includes "status_effect.h"
 
 class Object
 {
 	friend class Behavior;			//Allows Behavior access to Object's private and protected member variables and functions; communicates to physics, attributes, and status_Effects members
 	friend class Attributes;		//Allows Attributes access to Object's private and protected member variables and functions; communicates to equipment, inventory, and status_Effects members
-	friend class Equipment;			//Allows Equipment access to Object's private and protected member variables and functions; communicates to attributes and inventory
+//	friend class Equipment;			//Allows Equipment access to Object's private and protected member variables and functions; communicates to attributes and inventory
 //	friend class Inventory;			//Allows Inventory access to Object's private and protected member variables and functions; communicates to equipment
-	friend class Status_Effects;	//Allows Status_Effects access to Object's private and protected member variables and functions; communicates to attributes
+//	friend class Status_Effects;	//Allows Status_Effects access to Object's private and protected member variables and functions; communicates to attributes
 	friend class Animation;			//Allows Animation access to Object's private and protected member variables and functions; communicates to physics
 //	friend class Sound;				//Shouldn't need access unless we implement directional sounds
 //	friend class Level;				//Shouldn't need access, just creates and stores Objects
@@ -34,7 +34,7 @@ class Object
 		Attributes attributes; 						//A member which holds information related to game attributes such as hit points, defense, damage, etc.
 		Equipment equipment;						//A member which holds information on Items which are contributing to a variety of the Object's game attributes
 		//Inventory inventory;						//A member which holds information on what Items are available to the Object to use or equip; Items here contribute to the attribute 'amount_Carried'
-		//Status_Effects status_Effects;			//A member which holds information related to special effects that may be active on the Object, such as if a spell is increasing movement speed or regenerating health
+		Status_Effects status_Effects;				//A member which holds information related to special effects that may be active on the Object, such as if a spell is increasing movement speed or regenerating health
 		//Animation animation;
 		//Sound sound;
 
@@ -45,13 +45,14 @@ class Object
 		Object(const Behavior);						//Constructor for when there is an already existing Behavior the Object should follow
 		Object(const Attributes);					//Constructor for when the Attributes of an Object is known
 		Object(const Behavior, const Attributes);	//Constructor for when both the Behavior and Attributes of the Object are known
+		Object(const Behavior, const Attributes, const Equipment, const Status_Effects);
 		Object(const Object&);						//Copy constructor; copies the data in the existing Object's members to that of the new Object, places a pointer at the end of the Object pointer vector, and updates members to have the proper index of the pointer to their containing Object within the Object pointer vector
 		Object(Object&&);							//Move constructor; moves the data detailed in the constructor into the location allocted in a right-side value already in use, rather than allocating additional space and deleting the old space
 		~Object();									//Destructor
 
 		//Public static functions
-		const static void display_Information();	//For testing
-		const static void update();
+		static void display_Information();	//For testing
+		static void update();
 
 		//'Getters' and 'Setters' for private static variables
 
@@ -60,7 +61,7 @@ class Object
 		Object& operator=(Object&&);				//Overloads the assignment operator, '=', for right hand values of Object type
 
 		//Public member functions
-		const std::uint16_t get_Object_Pointer_Vector_Index();		//Rather than storing an additional index within Object itself, a member which already requires the index (behavior) is accessed for the necessary index of the Object within the static Object pointer vector
+		std::uint16_t get_Object_Pointer_Vector_Index() const;		//Rather than storing an additional index within Object itself, a member which already requires the index (behavior) is accessed for the necessary index of the Object within the static Object pointer vector
 		void set_Object_Pointer_Vector_Index(const std::uint16_t);	//Updates necessary Object members to store the index within the static Object pointer vector of the Object that they are contained within
 
 		//'Getters' and 'Setters' for private member variables

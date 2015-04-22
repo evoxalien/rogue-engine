@@ -5,9 +5,8 @@
 #include "SDLincludes.h"
 #include <stdio.h>
 #include <cstdlib>
-#include <string>
 #include <chrono>
-#include "level/level.h"			//Includes level and all Object header files and all Object component header files, including Box2D's, along with <iostream>, <vector>, and <cstdint> but excluding inherited classes (Player, NonPlayerCharacter)
+#include "level/level.h"	//Includes level and all Object header files and all Object component header files, including Box2D's, along with <fstream>, <string>, <algorithm>, <iostream>, <vector>, <cstdint> but excluding inherited classes (Player, NonPlayerCharacter)
 #include "log.h"
 #include "input.h"
 #include "SoundManager.h"

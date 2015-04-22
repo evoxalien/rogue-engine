@@ -88,215 +88,215 @@ class Attributes
 
 		//Public static functions
 		//'Getters' and 'Setters' for private static variables
-		const static float get_Carrying_Capacity_Per_Strength();
-		static float set_Carrying_Capacity_Per_Strength(const float);
+		static float get_Carrying_Capacity_Per_Strength();
+		void set_Carrying_Capacity_Per_Strength(const float);
 
-		const static float get_Carrying_Capacity_Per_Endurance();
-		static float set_Carrying_Capacity_Per_Endurance(const float);
+		static float get_Carrying_Capacity_Per_Endurance();
+		void set_Carrying_Capacity_Per_Endurance(const float);
 
-		const static float get_Vision_Range_Per_Perception();
-		static float set_Vision_Range_Per_Perception(const float);
+		static float get_Vision_Range_Per_Perception();
+		void set_Vision_Range_Per_Perception(const float);
 
-		const static float get_Hearing_Range_Per_Perception();
-		static float set_Hearing_Range_Per_Perception(const float);
+		static float get_Hearing_Range_Per_Perception();
+		void set_Hearing_Range_Per_Perception(const float);
 
-		const static float get_Physical_Damage_Per_Strength();
-		static float set_Physical_Damage_Per_Strength(const float);
+		static float get_Physical_Damage_Per_Strength();
+		void set_Physical_Damage_Per_Strength(const float);
 
-		const static float get_Rate_Of_Physical_Attacks_Per_Dexterity();
-		static float set_Rate_Of_Physical_Attacks_Per_Dexterity(const float);
+		static float get_Rate_Of_Physical_Attacks_Per_Dexterity();
+		void set_Rate_Of_Physical_Attacks_Per_Dexterity(const float);
 
-		const static float get_Physical_Accuracy_Per_Dexterity();
-		static float set_Physical_Accuracy_Per_Dexterity(const float);
+		static float get_Physical_Accuracy_Per_Dexterity();
+		void set_Physical_Accuracy_Per_Dexterity(const float);
 
-		const static float get_Physical_Accuracy_Per_Perception();
-		static float set_Physical_Accuracy_Per_Perception(const float);
+		static float get_Physical_Accuracy_Per_Perception();
+		void set_Physical_Accuracy_Per_Perception(const float);
 
-		const static float get_Magical_Damage_Per_Intelligence();
-		static float set_Magical_Damage_Per_Intelligence(const float);
+		static float get_Magical_Damage_Per_Intelligence();
+		void set_Magical_Damage_Per_Intelligence(const float);
 
-		const static float get_Rate_Of_Magical_Attacks_Per_Dexterity();
-		static float set_Rate_Of_Magical_Attacks_Per_Dexterity(const float);
+		static float get_Rate_Of_Magical_Attacks_Per_Dexterity();
+		void set_Rate_Of_Magical_Attacks_Per_Dexterity(const float);
 
-		const static float get_Magical_Accuracy_Per_Dexterity();
-		static float set_Magical_Accuracy_Per_Dexterity(const float);
+		static float get_Magical_Accuracy_Per_Dexterity();
+		void set_Magical_Accuracy_Per_Dexterity(const float);
 
-		const static float get_Magical_Accuracy_Per_Perception();
-		static float set_Magical_Accuracy_Per_Perception(const float);
+		static float get_Magical_Accuracy_Per_Perception();
+		void set_Magical_Accuracy_Per_Perception(const float);
 
-		const static float get_Movement_Speed_Per_Dexterity();
-		static float set_Movement_Speed_Per_Dexterity(const float);
+		static float get_Movement_Speed_Per_Dexterity();
+		void set_Movement_Speed_Per_Dexterity(const float);
 
-		const static float get_Maximum_Stamina_Per_Endurance();
-		static float set_Maximum_Stamina_Per_Endurance(const float);
+		static float get_Maximum_Stamina_Per_Endurance();
+		void set_Maximum_Stamina_Per_Endurance(const float);
 
-		const static float get_Rate_Of_Stamina_Regeneration_Per_Endurance();
-		static float set_Rate_Of_Stamina_Regeneration_Per_Endurance(const float);
+		static float get_Rate_Of_Stamina_Regeneration_Per_Endurance();
+		void set_Rate_Of_Stamina_Regeneration_Per_Endurance(const float);
 
-		const static float get_Maximum_Mana_Per_Intelligence();
-		static float set_Maximum_Mana_Per_Intelligence(const float);
+		static float get_Maximum_Mana_Per_Intelligence();
+		void set_Maximum_Mana_Per_Intelligence(const float);
 
-		const static float get_Rate_Of_Mana_Regeneration_Per_Intelligence();
-		static float set_Rate_Of_Mana_Regeneration_Per_Intelligence(const float);
+		static float get_Rate_Of_Mana_Regeneration_Per_Intelligence();
+		void set_Rate_Of_Mana_Regeneration_Per_Intelligence(const float);
 
-		const static float get_Maximum_Health_Per_Endurance();
-		static float set_Maximum_Health_Per_Endurance(const float);
+		static float get_Maximum_Health_Per_Endurance();
+		void set_Maximum_Health_Per_Endurance(const float);
 
-		const static float get_Rate_Of_Health_Regeneration_Per_Endurance();
-		static float set_Rate_Of_Health_Regeneration_Per_Endurance(const float);
+		static float get_Rate_Of_Health_Regeneration_Per_Endurance();
+		void set_Rate_Of_Health_Regeneration_Per_Endurance(const float);
 
-		const static float get_Physical_Defense_Per_Endurance();
-		static float set_Physical_Defense_Per_Endurance(const float);
+		static float get_Physical_Defense_Per_Endurance();
+		void set_Physical_Defense_Per_Endurance(const float);
 
-		const static float get_Magical_Defense_Per_Endurance();
-		static float set_Magical_Defense_Per_Endurance(const float);
+		static float get_Magical_Defense_Per_Endurance();
+		void set_Magical_Defense_Per_Endurance(const float);
 
-		const static float get_Block_Chance_Per_Dexterity();
-		static float set_Block_Chance_Per_Dexterity(const float);
+		static float get_Block_Chance_Per_Dexterity();
+		void set_Block_Chance_Per_Dexterity(const float);
 
-		const static float get_Block_Chance_Per_Perception();
-		static float set_Block_Chance_Per_Perception(const float);
+		static float get_Block_Chance_Per_Perception();
+		void set_Block_Chance_Per_Perception(const float);
 
-		const static float get_Evasion_Per_Dexterity();
-		static float set_Evasion_Per_Dexterity(const float);
+		static float get_Evasion_Per_Dexterity();
+		void set_Evasion_Per_Dexterity(const float);
 
-		const static float get_Evasion_Per_Perception();
-		static float set_Evasion_Per_Perception(const float);
+		static float get_Evasion_Per_Perception();
+		void set_Evasion_Per_Perception(const float);
 
 		//Public member functions
-		void display_Information();						//For testing
+		void display_Information() const;						//For testing
 		void update();
 
 		//The 'get_Effective_Attribute()' functions return the corresponding attribute plus or minus all modifications from equipment and special effects the Object is affected by; experience, level, amoutn_Carried, health, stamina, and mana already have their effective values stored, so do not have functions here and should use the regular 'get_Attribute()' functions 
-		const float get_Effective_Strength();
-		const float get_Effective_Dexterity();
-		const float get_Effective_Endurance();
-		const float get_Effective_Intelligence();
-		const float get_Effective_Perception();
-		const float get_Effective_Carrying_Capacity();
-		const float get_Effective_Vision_Range();
-		const float get_Effective_Hearing_Range();
-		const float get_Effective_Physical_Attack_Range();
-		const float get_Effective_Physical_Damage();
-		const float get_Effective_Rate_Of_Physical_Attacks();
-		const float get_Effective_Physical_Accuracy();
-		const float get_Effective_Magical_Attack_Range();
-		const float get_Effective_Magical_Damage();
-		const float get_Effective_Rate_Of_Magical_Attacks();
-		const float get_Effective_Magical_Accuracy();
-		const float get_Effective_Movement_Speed();
-		const float get_Effective_Maximum_Stamina();
-		const float get_Effective_Rate_Of_Stamina_Regeneration();
-		const float get_Effective_Maximum_Mana();
-		const float get_Effective_Rate_Of_Mana_Regeneration();
-		const float get_Effective_Maximum_Health();
-		const float get_Effective_Rate_Of_Health_Regeneration();
-		const float get_Effective_Physical_Defense();
-		const float get_Effective_Magical_Defense();
-		const float get_Effective_Block_Chance();
-		const float get_Effective_Evasion();
+		float get_Effective_Strength() const;
+		float get_Effective_Dexterity() const;
+		float get_Effective_Endurance() const;
+		float get_Effective_Intelligence() const;
+		float get_Effective_Perception() const;
+		float get_Effective_Carrying_Capacity() const;
+		float get_Effective_Vision_Range() const;
+		float get_Effective_Hearing_Range() const;
+		float get_Effective_Physical_Attack_Range() const;
+		float get_Effective_Physical_Damage() const;
+		float get_Effective_Rate_Of_Physical_Attacks() const;
+		float get_Effective_Physical_Accuracy() const;
+		float get_Effective_Magical_Attack_Range() const;
+		float get_Effective_Magical_Damage() const;
+		float get_Effective_Rate_Of_Magical_Attacks() const;
+		float get_Effective_Magical_Accuracy() const;
+		float get_Effective_Movement_Speed() const;
+		float get_Effective_Maximum_Stamina() const;
+		float get_Effective_Rate_Of_Stamina_Regeneration() const;
+		float get_Effective_Maximum_Mana() const;
+		float get_Effective_Rate_Of_Mana_Regeneration() const;
+		float get_Effective_Maximum_Health() const;
+		float get_Effective_Rate_Of_Health_Regeneration() const;
+		float get_Effective_Physical_Defense() const;
+		float get_Effective_Magical_Defense() const;
+		float get_Effective_Block_Chance() const;
+		float get_Effective_Evasion() const;
 
 		//'Getters' and 'Setters' for private member variables
-		const std::uint16_t get_Containing_Object_Pointer_Vector_Index();
+		std::uint16_t get_Containing_Object_Pointer_Vector_Index() const;
 		void set_Containing_Object_Pointer_Vector_Index(const std::uint16_t);
 
-		const float get_Strength();
+		float get_Strength() const;
 		void set_Strength(const float);
 
-		const float get_Dexterity();
+		float get_Dexterity() const;
 		void set_Dexterity(const float);
 
-		const float get_Endurance();
+		float get_Endurance() const;
 		void set_Endurance(const float);
 
-		const float get_Intelligence();
+		float get_Intelligence() const;
 		void set_Intelligence(const float);
 
-		const float get_Perception();
+		float get_Perception() const;
 		void set_Perception(const float);
 
-		const float get_Experience();
+		float get_Experience() const;
 		void set_Experience(const float);
 
-		const float get_Level();
+		float get_Level() const;
 		void set_Level(const float);
 
-		const float get_Carrying_Capacity();
+		float get_Carrying_Capacity() const;
 		void set_Carrying_Capacity(const float);
 
-		const float get_Amount_Carried();
+		float get_Amount_Carried() const;
 		void set_Amount_Carried(const float);
 
-		const float get_Vision_Range();
+		float get_Vision_Range() const;
 		void set_Vision_Range(const float);
 
-		const float get_Hearing_Range();
+		float get_Hearing_Range() const;
 		void set_Hearing_Range(const float);
 
-		const float get_Physical_Attack_Range();
+		float get_Physical_Attack_Range() const;
 		void set_Physical_Attack_Range(const float);
 
-		const float get_Physical_Damage();
+		float get_Physical_Damage() const;
 		void set_Physical_Damage(const float);
 
-		const float get_Rate_Of_Physical_Attacks();
+		float get_Rate_Of_Physical_Attacks() const;
 		void set_Rate_Of_Physical_Attacks(const float);
 
-		const float get_Physical_Accuracy();
+		float get_Physical_Accuracy() const;
 		void set_Physical_Accuracy(const float);
 
-		const float get_Magical_Attack_Range();
+		float get_Magical_Attack_Range() const;
 		void set_Magical_Attack_Range(const float);
 
-		const float get_Magical_Damage();
+		float get_Magical_Damage() const;
 		void set_Magical_Damage(const float);
 
-		const float get_Rate_Of_Magical_Attacks();
+		float get_Rate_Of_Magical_Attacks() const;
 		void set_Rate_Of_Magical_Attacks(const float);
 
-		const float get_Magical_Accuracy();
+		float get_Magical_Accuracy() const;
 		void set_Magical_Accuracy(const float);
 
-		const float get_Movement_Speed();
+		float get_Movement_Speed() const;
 		void set_Movement_Speed(const float);
 
-		const float get_Maximum_Stamina();
+		float get_Maximum_Stamina() const;
 		void set_Maximum_Stamina(const float);
 
-		const float get_Stamina();
+		float get_Stamina() const;
 		void set_Stamina(const float);
 
-		const float get_Rate_Of_Stamina_Regeneration();
+		float get_Rate_Of_Stamina_Regeneration() const;
 		void set_Rate_Of_Stamina_Regeneration(const float);
 
-		const float get_Maximum_Mana();
+		float get_Maximum_Mana() const;
 		void set_Maximum_Mana(const float);
 
-		const float get_Mana();
+		float get_Mana() const;
 		void set_Mana(const float);
 
-		const float get_Rate_Of_Mana_Regeneration();
+		float get_Rate_Of_Mana_Regeneration() const;
 		void set_Rate_Of_Mana_Regeneration(const float);
 
-		const float get_Maximum_Health();
+		float get_Maximum_Health() const;
 		void set_Maximum_Health(const float);
 
-		const float get_Health();
+		float get_Health() const;
 		void set_Health(const float);
 
-		const float get_Rate_Of_Health_Regeneration();
+		float get_Rate_Of_Health_Regeneration() const;
 		void set_Rate_Of_Health_Regeneration(const float);
 
-		const float get_Physical_Defense();
+		float get_Physical_Defense() const;
 		void set_Physical_Defense(const float);
 
-		const float get_Magical_Defense();
+		float get_Magical_Defense() const;
 		void set_Magical_Defense(const float);
 
-		const float get_Block_Chance();
+		float get_Block_Chance() const;
 		void set_Block_Chance(const float);
 
-		const float get_Evasion();
+		float get_Evasion() const;
 		void set_Evasion(const float);
 };
 

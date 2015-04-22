@@ -216,7 +216,7 @@ void Behavior::surrender()
 }
 
 //Used for testing
-void Behavior::display_Information()
+void Behavior::display_Information() const
 {
 	std::cout << "behavior_State = " << static_cast<int>((*this).behavior_State) << std::endl;
 	std::cout << "behavior_Pattern = " << static_cast<int>((*this).behavior_Pattern) << std::endl;
@@ -239,7 +239,7 @@ void Behavior::update()
 }
 
 //'Getters' and 'Setters' for private member variables
-const Behavior_States Behavior::get_Behavior_State()
+Behavior_States Behavior::get_Behavior_State() const
 {
 	return (*this).behavior_State;
 }
@@ -249,7 +249,7 @@ void Behavior::set_Behavior_State(const Behavior_States behavior_State)
 	(*this).behavior_State = behavior_State;
 }
 
-const Behavior_Patterns Behavior::get_Behavior_Pattern()
+Behavior_Patterns Behavior::get_Behavior_Pattern() const
 {
 	return (*this).behavior_Pattern;
 }
@@ -259,7 +259,7 @@ void Behavior::set_Behavior_Pattern(const Behavior_Patterns behavior_Pattern)
 	(*this).behavior_Pattern = behavior_Pattern;
 }
 
-const std::uint16_t Behavior::get_Containing_Object_Pointer_Vector_Index()
+std::uint16_t Behavior::get_Containing_Object_Pointer_Vector_Index() const
 {
 	return (*this).containing_Object_Pointer_Vector_Index;
 }

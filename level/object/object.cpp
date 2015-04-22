@@ -108,6 +108,19 @@ Object::Object(const Behavior behavior, const Attributes attributes)
 	Object::object_Pointer_Vector.push_back(this);
 }
 
+Object::Object(const Behavior behavior, const Attributes attributes, const Equipment equipment, const Status_Effects status_Effects)
+{
+	std::cout << "Object(Behavior, Attributes)" << std::endl;
+	(*this).physics = nullptr;
+	(*this).behavior = behavior;
+	(*this).attributes = attributes;			//Requires testing
+	(*this).equipment = equipment;				//Requires testing
+	(*this).status_Effects = status_Effects;	//Requires testing
+
+	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
+	Object::object_Pointer_Vector.push_back(this);
+}
+
 //Copy constructor; calls the Object constructor with the members of the Object being copied from passed as arguments, which ensures the newly generated Object has its own index with the rest of the data equivalent to the Object being copied from
 Object::Object(const Object &object) : Object(object.behavior, object.attributes)
 {
@@ -154,7 +167,7 @@ Object::~Object()
 }
 
 //Used for testing; displays useful information in the console log related to the Object class
-const void Object::display_Information()
+void Object::display_Information()
 {
 	//std::cout << "size of vector = " << Object::object_Pointer_Vector.size() << std::endl;
 	//std::cout << "capacity of vector = " << Object::object_Pointer_Vector.capacity() << std::endl;
@@ -178,7 +191,7 @@ const void Object::display_Information()
 }
 
 //Currently will update all Objects' physics, behavior, and attributes appropriately, even in inactive levels, which may prove problematic
-const void Object::update()
+void Object::update()
 {
 	Object::box2D_World.Step(Object::physics_Time_Step, 6, 3);		//Moves and appropriately checks for collisions for all active Box2D Bodies in the Box2D World
 	for(int i = 0; i < Object::object_Pointer_Vector.size(); i++)	//Iterates through all Object pointers in the Object pointer vector
@@ -222,7 +235,7 @@ Object& Object::operator=(Object&& object)
 }
 
 //Rather than storing an additional index within Object itself, a member which already requires the index is accessed for the necessary index of the Object within the static Object pointer vector
-const std::uint16_t Object::get_Object_Pointer_Vector_Index()
+std::uint16_t Object::get_Object_Pointer_Vector_Index() const
 {
 	return (*this).behavior.get_Containing_Object_Pointer_Vector_Index();
 }

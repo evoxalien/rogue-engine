@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdint>
 
-enum class Item_States : std::uint8_t		//An enumeration representing where the Object is within the game-world which affects 
+enum class Item_States : std::uint8_t		//An enumeration representing where the Object is within the game-world which affects whether it should be drawn, is able to be picked up, equipped, or removed
 {
 	On_Ground,
 	In_Inventory,
@@ -67,112 +67,112 @@ class Item
 		//Constructors and Destructors
 		Item();									//Default constructor
 
-		void display_Information();
+		void display_Information() const;
 
 		//'Getters' and 'Setters' for private member variables
-		const Item_States get_Item_State();
+		Item_States get_Item_State() const;
 		void set_Item_State(const Item_States);
 
-		const float get_Strength_Modifier();
+		float get_Strength_Modifier() const;
 		void set_Strength_Modifier(const float);
 
-		const float get_Dexterity_Modifier();
+		float get_Dexterity_Modifier() const;
 		void set_Dexterity_Modifier(const float);
 
-		const float get_Endurance_Modifier();
+		float get_Endurance_Modifier() const;
 		void set_Endurance_Modifier(const float);
 
-		const float get_Intelligence_Modifier();
+		float get_Intelligence_Modifier() const;
 		void set_Intelligence_Modifier(const float);
 
-		const float get_Perception_Modifier();
+		float get_Perception_Modifier() const;
 		void set_Perception_Modifier(const float);
 
-		const float get_Level();
+		float get_Level() const;
 		void set_Level(const float);
 
-		const float get_Durability();
+		float get_Durability() const;
 		void set_Durability(const float);
 
-		const float get_Carrying_Capacity_Modifier();
+		float get_Carrying_Capacity_Modifier() const;
 		void set_Carrying_Capacity_Modifier(const float);
 
-		const float get_Weight();
+		float get_Weight() const;
 		void set_Weight(const float);
 
-		const float get_Vision_Range_Modifier();
+		float get_Vision_Range_Modifier() const;
 		void set_Vision_Range_Modifier(const float);
 
-		const float get_Hearing_Range_Modifier();
+		float get_Hearing_Range_Modifier() const;
 		void set_Hearing_Range_Modifier(const float);
 
-		const float get_Physical_Attack_Range_Modifier();
+		float get_Physical_Attack_Range_Modifier() const;
 		void set_Physical_Attack_Range_Modifier(const float);
 
-		const float get_Physical_Damage_Modifier();
+		float get_Physical_Damage_Modifier() const;
 		void set_Physical_Damage_Modifier(const float);
 
-		const float get_Rate_Of_Physical_Attacks_Modifier();
+		float get_Rate_Of_Physical_Attacks_Modifier() const;
 		void set_Rate_Of_Physical_Attacks_Modifier(const float);
 
-		const float get_Physical_Accuracy_Modifier();
+		float get_Physical_Accuracy_Modifier() const;
 		void set_Physical_Accuracy_Modifier(const float);
 
-		const float get_Magical_Attack_Range_Modifier();
+		float get_Magical_Attack_Range_Modifier() const;
 		void set_Magical_Attack_Range_Modifier(const float);
 
-		const float get_Magical_Damage_Modifier();
+		float get_Magical_Damage_Modifier() const;
 		void set_Magical_Damage_Modifier(const float);
 
-		const float get_Rate_Of_Magical_Attacks_Modifier();
+		float get_Rate_Of_Magical_Attacks_Modifier() const;
 		void set_Rate_Of_Magical_Attacks_Modifier(const float);
 
-		const float get_Magical_Accuracy_Modifier();
+		float get_Magical_Accuracy_Modifier() const;
 		void set_Magical_Accuracy_Modifier(const float);
 
-		const float get_Movement_Speed_Modifier();
+		float get_Movement_Speed_Modifier() const;
 		void set_Movement_Speed_Modifier(const float);
 
-		const float get_Maximum_Stamina_Modifier();
+		float get_Maximum_Stamina_Modifier() const;
 		void set_Maximum_Stamina_Modifier(const float);
 
-		const float get_Rate_Of_Stamina_Regeneration_Modifier();
+		float get_Rate_Of_Stamina_Regeneration_Modifier() const;
 		void set_Rate_Of_Stamina_Regeneration_Modifier(const float);
 
-		const float get_Stamina_Consumed_On_Use();
+		float get_Stamina_Consumed_On_Use() const;
 		void set_Stamina_Consumed_On_Use(const float);
 
-		const float get_Maximum_Mana_Modifier();
+		float get_Maximum_Mana_Modifier() const;
 		void set_Maximum_Mana_Modifier(const float);
 
-		const float get_Rate_Of_Mana_Regeneration_Modifier();
+		float get_Rate_Of_Mana_Regeneration_Modifier() const;
 		void set_Rate_Of_Mana_Regeneration_Modifier(const float);
 
-		const float get_Mana_Consumed_On_Use();
+		float get_Mana_Consumed_On_Use() const;
 		void set_Mana_Consumed_On_Use(const float);
 
-		const float get_Maximum_Health_Modifier();
+		float get_Maximum_Health_Modifier() const;
 		void set_Maximum_Health_Modifier(const float);
 
-		const float get_Rate_Of_Health_Regeneration_Modifier();
+		float get_Rate_Of_Health_Regeneration_Modifier() const;
 		void set_Rate_Of_Health_Regeneration_Modifier(const float);
 
-		const float get_Health_Consumed_On_Use();
+		float get_Health_Consumed_On_Use() const;
 		void set_Health_Consumed_On_Use(const float);
 
-		const float get_Physical_Defense_Modifier();
+		float get_Physical_Defense_Modifier() const;
 		void set_Physical_Defense_Modifier(const float);
 
-		const float get_Magical_Defense_Modifier();
+		float get_Magical_Defense_Modifier() const;
 		void set_Magical_Defense_Modifier(const float);
 
-		const float get_Block_Chance_Modifier();
+		float get_Block_Chance_Modifier() const;
 		void set_Block_Chance_Modifier(const float);
 
-		const float get_Evasion_Modifier();
+		float get_Evasion_Modifier() const;
 		void set_Evasion_Modifier(const float);
 
-		const std::uint16_t get_Containing_Object_Pointer_Vector_Index();
+		std::uint16_t get_Containing_Object_Pointer_Vector_Index() const;
 		void set_Containing_Object_Pointer_Vector_Index(const std::uint16_t);
 };
 #endif

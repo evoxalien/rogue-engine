@@ -45,17 +45,17 @@ class Behavior
 		void flee();		//The Object will attempt to ensure its own survival by escaping from the Player's vicinity
 		void surrender();	//The Object is cornered and cannot flee or win, so will attempt to gain the mercy of the Player
 
-		void display_Information();						//For testing
+		void display_Information() const;						//For testing
 		void update();
 
 		//'Getters' and 'Setters' for private member variables
-		const Behavior_States get_Behavior_State();
+		Behavior_States get_Behavior_State() const;
 		void set_Behavior_State(const Behavior_States);
 
-		const Behavior_Patterns get_Behavior_Pattern();
+		Behavior_Patterns get_Behavior_Pattern() const;
 		void set_Behavior_Pattern(const Behavior_Patterns);
 
-		const std::uint16_t get_Containing_Object_Pointer_Vector_Index();
+		std::uint16_t get_Containing_Object_Pointer_Vector_Index() const;
 		void set_Containing_Object_Pointer_Vector_Index(const std::uint16_t);
 };
 

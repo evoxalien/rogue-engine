@@ -3,7 +3,7 @@
 #define LEVEL_H
 #include <fstream>
 #include <string>
-#include "object/object.h"
+#include "object/object.h" //Includes all main Box2D headers, "behavior.h", "attributes.h" which includes <algorithm>, "equipment.h" which includes <vector> and "item.h" which includes <iostream> and <cstdint>, and "status_effects.h" which includes "status_effect"
 
 class Level
 {
@@ -27,7 +27,7 @@ class Level
 		//Static functions
 
 		//Member functions
-		void display_Information();
+		void display_Information() const;
 
 		//'Getters' and 'Setters' for private member variables
 };
