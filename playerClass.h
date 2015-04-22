@@ -30,7 +30,7 @@ private:
 		SDL_Keycode playerUse;
 		SDL_Keycode playerAttack;
 		SDL_Keycode playerSpecial;
-		SDL_Keycode playerPause;
+		SDL_Keycode playerStart;
 		SDL_Keycode playerBack;
 		SDL_Keycode playerJump;
 		SDL_Keycode playerExit;
@@ -146,7 +146,7 @@ int playerClass::playerInitalize(int playerIndexPassed)
 		inputFile >> CurrentData;
 		inputFile >> playerControlsKeyboard.playerJump;
 		inputFile >> CurrentData;	
-		inputFile >> playerControlsKeyboard.playerPause;
+		inputFile >> playerControlsKeyboard.playerStart;
 		inputFile >> CurrentData;
 		inputFile >> playerControlsKeyboard.playerExit;	
 	}
@@ -244,6 +244,10 @@ void playerClass::playerKeyPress(SDL_Keycode e)
 		{
 		    Actions.Left=true; 
 		}
+		if (e==playerControlsKeyboard.playerStart)
+		{
+		    Actions.Start=true; 
+		}
 	}
 }
 void playerClass::playerKeyRelease(SDL_Keycode e)
@@ -265,6 +269,10 @@ void playerClass::playerKeyRelease(SDL_Keycode e)
 		if (e==playerControlsKeyboard.playerLeft)
 		{
 		    Actions.Left=false; 
+		}
+        if (e==playerControlsKeyboard.playerStart)
+		{
+		    Actions.Start=false; 
 		}
 		if(e== SDLK_DOWN)
         {
