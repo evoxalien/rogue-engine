@@ -17,6 +17,9 @@
 #include "playerClass.h"
 #include "gameMap.cpp"
 #include "window.h"
+/*
+#include "particlemanager.h"
+#include "particle.h"*/
 //#include <thread>
 
 
@@ -30,6 +33,8 @@ class gameroot
 private:
    static double maximum_Frame_Rate;
    static double total_Time;
+
+
    
    const int SCREEN_FPS = 60;
    const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;

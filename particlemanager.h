@@ -1,6 +1,8 @@
 #ifndef PARTICLE_MANAGER_
 #define PARTICLE_MANAGER_
 #include "SDLincludes.h"
+#include "particle.h"
+#include "particlestate.h"
 #include "Texture.h"
 #include "mathutil.h"
 #include <cmath>
@@ -8,29 +10,53 @@
 
 
 template<typename T>
-class ParticleManager<T> 
+class ParticleManager 
 {
-    private:
-        Action<Particle> updateParticle;
-        CircularParticleArray particleList;
-        int ParticleCount;
     public:
-
         class Particle
         {
             public:
                 //Texture
-                Vector2D Position;
+                int posX, posY;
                 float Orientation;
 
                 Vector2D Scale = new Vector2D(1,1);
 
                 Color Tint;
                 float Duration;
-                float PercentLife = 1f;
-                T State;
+                float PercentLife = (float)1.0;
+                ParticleState State;
 
         };
+
+        class CircularParticleArray
+        {
+            private:
+                int start;
+                Particle[] list;
+
+            public:
+               int getStart() { return start; }
+               void setStart(int value) { start = value % list.Length; }
+
+                int Count { get; set; }
+                int Capacity { get { return list.Length; } }
+
+                CircularParticleArray(int capacity)
+                {
+                    list = new Particle[capacity];
+                }
+
+
+                Particle getParticle(int i) { return list[(start + i) % list.Length]; }
+                void setParticle(int i, Particle value) { list[(start + i) % list.Length] = value; }
+
+        };
+    private:
+        function<Particle> updateParticle;
+        CircularParticleArray particleList;
+        int ParticleCount;
+    public:
 
         ParticleManager(int capacity, Action<Particle> updateParticle)
         {
@@ -52,7 +78,7 @@ class ParticleManager<T>
         }
 
         //Create Particle
-        void CreateParticle(Texture texture, Vector2D pos, SDL_Color color, float duration, Vector2D scale, T state, float theta = 0)
+        void CreateParticle(Texture texture, x, y, SDL_Color color, float duration, Vector2D scale, T state, float theta = 0)
         {
             Particle particle;
             if(particleList.Count == particleList.Capacity)
@@ -68,7 +94,8 @@ class ParticleManager<T>
             }
 
             particle.Texture = texture;
-            particle.Position = position;
+            particle.posX = x;
+            particle.posY = y;
             particle.Tint = tint;
 
             particle.Duration = duration;
@@ -78,33 +105,6 @@ class ParticleManager<T>
             particle.State = state;
         }
 
-        class CircularParticleArray
-        {
-            private:
-                int start;
-                Particle[] list;
-            
-            public:
-                int Start
-                {
-                    get { return start; }
-                    set { start = value % list.Length; }
-                }
-                
-                int Count { get; set; }
-                int Capacity { get { return list.Length; } }
-                
-                CircularParticleArray(int capacity)
-                {
-                    list = new Particle[capacity];
-                }
-                
-                Particle this[int i]
-                {
-                    get { return list[(start + i) % list.Length]; }
-                    set { list[(start + i) % list.Length] = value; }
-                }
-        };
 
         public void Update()
         {
