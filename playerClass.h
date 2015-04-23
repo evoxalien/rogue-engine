@@ -37,18 +37,18 @@ private:
 	};
 	struct PlayerControlsGamePad // holds what buttons activate flags
 	{
-		SDL_GameControllerButton playerUp;
-		SDL_GameControllerButton playerDown;
-		SDL_GameControllerButton playerLeft;
-		SDL_GameControllerButton playerRight;
-		SDL_GameControllerButton playerX;
-		SDL_GameControllerButton playerA;
-		SDL_GameControllerButton playerB;
-		SDL_GameControllerButton playerY;
-		SDL_GameControllerButton playerStart;
-		SDL_GameControllerButton playerBack;
-		SDL_GameControllerButton playerLeftShoulder;
-		SDL_GameControllerButton playerRightShoulder;
+		int playerUp;
+		int playerDown;
+		int playerLeft;
+		int playerRight;
+		int playerX;
+		int playerA;
+		int playerB;
+		int playerY;
+		int playerStart;
+		int playerBack;
+		int playerLeftShoulder;
+		int playerRightShoulder;
 		int StickX;//int 16
 		int StickY;
 		bool Player1Controls[12];
@@ -61,7 +61,6 @@ private:
 	string playerName;
 	int    playerIndex;
 	int    playerHealth;
-	string playerInputMode;
 
 public:
 	struct PlayerAction //holds the flags of the buttons that are being pressed
@@ -91,7 +90,9 @@ public:
 	int    currentFrameY;
 	float  playerMovementSpeed;
 	bool   playerDirection; // true = facing left false facing Right
+	string playerInputMode;
 	Animation playerAnimation;
+	SDL_Joystick* gGameController = NULL;
 	void InitSprite(SDL_Renderer* gRenderer);
 	void loadSpriteContent();
 	void SDLOpenGameControllers();
@@ -105,6 +106,9 @@ public:
 	void UpdateControls();
 	void LoadSpriteContent();
 	void playerKeyRelease(SDL_Keycode e);
+	bool init();
+	void close();
+	void UpdateSDLJoy(SDL_Event *Event);
 	Texture playerTexture;
 };
 
@@ -116,12 +120,12 @@ int playerClass::playerInitalize(int playerIndexPassed)
 	if (playerIndex==1)//player 1 file
 	{
 	   //parse the file
-	   inputFile.open("playerConfig/Player1Script.txt");
+	   inputFile.open("playerConfig/Player2Script.txt");
 	}
 	if (playerIndex==2)//player 2 file
 	{
+	   inputFile.open("playerConfig/Player1Script.txt");
 		//parse the file
-	   inputFile.open("playerConfig/Player2Script.txt");
 	}
 
 	if(!inputFile)//file failed
@@ -155,32 +159,23 @@ int playerClass::playerInitalize(int playerIndexPassed)
 	if (playerInputMode=="Gamepad")// loads SDL_GameControllerButton type
 	{
 		inputFile >> CurrentData;	
-		inputFile >> GamepadMap;
-		playerControlsGamePad.playerA=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> playerControlsGamePad.playerA;
 		inputFile >> CurrentData;  
-		inputFile >> GamepadMap;
-		playerControlsGamePad.playerB=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> playerControlsGamePad.playerB;
 		inputFile >> CurrentData;
-		inputFile >> GamepadMap;
-		playerControlsGamePad.playerUp=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> playerControlsGamePad.playerUp;
 		inputFile >> CurrentData;
-		inputFile >> GamepadMap;
-		playerControlsGamePad.playerDown=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> playerControlsGamePad.playerDown;
 		inputFile >> CurrentData;
-		inputFile >> GamepadMap;
-		playerControlsGamePad.playerLeft=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> playerControlsGamePad.playerLeft;
 		inputFile >> CurrentData;
-		inputFile >> GamepadMap;
-		playerControlsGamePad.playerRight=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> playerControlsGamePad.playerRight;
 		inputFile >> CurrentData;
-		inputFile >> GamepadMap;
-		playerControlsGamePad.playerX=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> playerControlsGamePad.playerX;
 		inputFile >> CurrentData;
-		inputFile >> GamepadMap;
-		playerControlsGamePad.playerStart=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> playerControlsGamePad.playerStart;
 		inputFile >> CurrentData;
-		inputFile >> GamepadMap;
-		playerControlsGamePad.playerBack=SDL_GameControllerGetButtonFromString(GamepadMap.c_str());
+		inputFile >> playerControlsGamePad.playerBack;
 	}
 	inputFile >> CurrentData;
 	inputFile >> playerName;
@@ -301,6 +296,176 @@ void playerClass::UpdateControls()
 //update the controls //change them in menu
 
 }
+
+bool playerClass::init()
+{
+	//Initialization flag
+	bool success = true;
+
+	//Initialize SDL
+	if( SDL_Init( SDL_INIT_JOYSTICK ) < 0 )
+	{
+		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
+		success = false;
+	}
+	else
+	{
+		//Check for joysticks
+		if( SDL_NumJoysticks() < 1 )
+		{
+			printf( "Warning: No joysticks connected!\n" );
+		}
+		else
+		{
+			//Load joystick
+			gGameController = SDL_JoystickOpen( 0 );
+			if( gGameController == NULL )
+			{
+				printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
+			}
+		}
+
+	}
+
+	return success;
+}
+void playerClass::close()
+{
+	//Close game controller
+	SDL_JoystickClose( gGameController );
+	gGameController = NULL;
+}
+/*
+0 up
+1 down
+2 left
+3 right
+4 start
+5 back
+6 Left thumbstick L3
+7 Right thumbstick R3
+8 Left Bumper
+9 Right Bumper
+10 A
+11 B
+12 X
+13 Y
+14 Xbox Button
+*/
+void playerClass::UpdateSDLJoy(SDL_Event *Event)
+{
+	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerUp)==1)
+	{
+		Actions.playerUp=true;
+	}
+	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerDown)==1)
+	{
+		Actions.playerDown=true;
+	}
+	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerLeft)==1)
+	{
+		Actions.playerLeft=true;
+	}
+	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerRight)==1)
+	{
+		Actions.playerRight=true;
+	}
+	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerUp)==0)
+	{
+		Actions.playerUp=false;
+	}
+	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerDown)==0)
+	{
+		Actions.playerDown=false;
+	}
+	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerLeft)==0)
+	{
+		Actions.playerLeft=false;
+	}
+	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerRight)==0)
+	{
+		Actions.playerRight=false;
+	}
+	// if (SDL_JoystickGetButton(gGameController, 1)==1)
+	// {
+	// 	/* code */
+	// 	printf("down\n");
+	// }
+	// if (SDL_JoystickGetButton(gGameController, 2)==1)
+	// {
+	// 	/* code */
+	// 	printf("howdy2\n");
+	// }
+	// if (SDL_JoystickGetButton(gGameController, 3)==1)
+	// {
+	// 	/* code */
+	// 	printf("howdy3\n");
+	// }
+	if (SDL_JoystickGetButton(gGameController, 5)==1)
+	{
+		/* code */
+		printf("howdy5\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 4)==1)
+	{
+		/* code */
+		printf("howdy4\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 6)==1)
+	{
+		/* code */
+		printf("howdy6\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 7)==1)
+	{
+		/* code */
+		printf("howdy7\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 8)==1)
+	{
+		/* code */
+		printf("howdy8\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 9)==1)
+	{
+		/* code */
+		printf("howdy9\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerA)==1)
+	{
+		Actions.playerJump=true;
+	}
+	if (SDL_JoystickGetButton(gGameController, 11)==1)
+	{
+		/* code */
+		printf("howdy11\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 12)==1)
+	{
+		/* code */
+		printf("howdy12\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 13)==1)
+	{
+		/* code */
+		printf("howdy13\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 14)==1)
+	{
+		/* code */
+		printf("howdy14\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 15)==1)
+	{
+		/* code */
+		printf("howdy15\n");
+	}
+	// if (Event->type == SDL_JOYBUTTONDOWN)
+	// {
+	// 		printf("%i\n", SDL_JoystickNumButtons(gGameController));
+	// }
+
+}
 //gamepad open //should be called once by player 1 never by player 2
 void playerClass::SDLOpenGameControllers()
 {
@@ -349,24 +514,24 @@ void playerClass::SDLCloseGameControllers()
 
 void playerClass::UpdateGamePad()
 {
-// Poll our controllers for input.
-    if(ControllerHandles[playerIndex] != 0 && SDL_GameControllerGetAttached(ControllerHandles[playerIndex-1]))
-      {
-          Actions.playerUp = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerUp);
-          Actions.playerDown = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerDown);
-          Actions.playerLeft = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerLeft);
-          Actions.playerRight = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerRight);
-          Actions.playerStart = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerStart);
-          Actions.playerBack = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerBack);
-          Actions.playerLeftShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
-          Actions.playerRightShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
-          Actions.playerActivate = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerA);
-          Actions.playerBack = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerB);
-          Actions.playerJump = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerX);
-          Actions.playerSpecial = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerX);
-          // Actions.StickX = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTX);
-          // Actions.StickY = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTY);
-      }
+// // Poll our controllers for input.
+//     if(ControllerHandles[playerIndex] != 0 && SDL_GameControllerGetAttached(ControllerHandles[playerIndex-1]))
+//       {
+//           Actions.playerUp = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerUp);
+//           Actions.playerDown = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerDown);
+//           Actions.playerLeft = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerLeft);
+//           Actions.playerRight = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerRight);
+//           Actions.playerStart = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerStart);
+//           Actions.playerBack = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerBack);
+//           Actions.playerLeftShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+//           Actions.playerRightShoulder = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+//           Actions.playerActivate = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerA);
+//           Actions.playerBack = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerB);
+//           Actions.playerJump = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerX);
+//           Actions.playerSpecial = SDL_GameControllerGetButton(ControllerHandles[playerIndex-1], playerControlsGamePad.playerX);
+//           // Actions.StickX = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTX);
+//           // Actions.StickY = SDL_GameControllerGetAxis(ControllerHandles[playerIndex-1], SDL_CONTROLLER_AXIS_LEFTY);
+//       }
 
 }
 

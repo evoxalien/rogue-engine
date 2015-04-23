@@ -163,8 +163,8 @@ bool gameroot::initialize()
    fps_frames = 0; //frames passed since the last recorded fps.
    */
    Hero.playerInitalize(1);
-   Hero.SDLOpenGameControllers();
    Hero.InitSprite(renderer);
+   Hero.init();
    //Sound Manager Initialize
    soundManager.Init();
 
@@ -235,7 +235,10 @@ void gameroot::OnEvent(SDL_Event *Event)
          }
 	  }
    }
-   
+   if (Hero.playerInputMode=="Gamepad")
+   {
+      Hero.UpdateSDLJoy(Event);
+   }
    
    if(Event->type == SDL_QUIT)
    {
@@ -264,7 +267,6 @@ void gameroot::update()
       {
          Hero.playerKeyPress(input.getKeyDown());
          Hero.playerKeyRelease(input.getKeyUp());
-         Hero.UpdateGamePad();
          Hero.playerUpdate(fpsTimer.getTicks());
 
 		/* if(input.getKeyDown() == SDLK_1)
@@ -375,7 +377,7 @@ void gameroot::close()
 {
    texture.free();
    // Hero.playerTexture.free();
-
+   Hero.close();
 
   ////unloading of sounds
   // soundManager.Unload_Sound("DarkSouls",0);
