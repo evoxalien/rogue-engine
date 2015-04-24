@@ -25,7 +25,7 @@ Map::Map()
 
 Map::~Map()
 {
-	if(platforms != NULL)
+	if(platforms != NULL) //This should be always true, It also throws a warning. - John V.
 	{
 		for(int x = 0; x < numPlatforms; x++)
 		{
@@ -33,7 +33,7 @@ Map::~Map()
 		}
 	}
 
-	if(rightClickMenuText != NULL)
+	if(rightClickMenuText != NULL) //This should be always true, It also throws a warning. - John V.
 	{
 		for(int x = 0; x < 10; x++)
 		{

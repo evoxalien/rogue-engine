@@ -16,7 +16,7 @@ class startMenu
 {
 	InputClass input;
 public:
-	int MenuChoices(SDL_Keycode e, int EngineActiveState);
+   void MenuChoices(SDL_Keycode e, int EngineActiveState);
    void Update();
    void Draw();
 
@@ -59,8 +59,8 @@ M takes you to the map editor
       Test3 //21
    };
 */
-
-int startMenu::MenuChoices(SDL_Keycode e, int EngineActiveState)
+//Had no return type so I turned it to void. - John V.
+void startMenu::MenuChoices(SDL_Keycode e, int EngineActiveState)
 {
    if (e==SDLK_p)
    {

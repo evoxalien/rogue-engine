@@ -288,7 +288,7 @@ bool Window::thisWindowEvent(SDL_Event& windowEvent)
 {
    if(windowEvent.type == SDL_WINDOWEVENT && windowEvent.window.windowID == ID)
       return true;
-   else
+   //else is unnecessary - John V. - Throws Warning.
       return false;
 }
 

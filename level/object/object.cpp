@@ -211,6 +211,8 @@ Object& Object::operator=(const Object& object)
 	(*this).attributes = object.attributes;
 	(*this).equipment = object.equipment;
 	(*this).set_Object_Pointer_Vector_Index(temporary_Index);
+    
+    //This function doesn't have a return value, and throws a warning - John V.
 }
 
 //Overloads the move assignment operator, '=' with a 'temporary' right-side Object as the target, to move the data into the space already allocated by the temporary value, rather than copying and deleting memory; still in testing
@@ -232,6 +234,8 @@ Object& Object::operator=(Object&& object)
 //	Object::object_Pointer_Vector.push_back(&object);
 //	std::cerr << "4" << std::endl;
 //	object.
+    
+    //This function doesn't have a return value, and throws a warning - John V.
 }
 
 //Rather than storing an additional index within Object itself, a member which already requires the index is accessed for the necessary index of the Object within the static Object pointer vector

@@ -102,7 +102,7 @@ public:
 	void playerDraw();
 	void playerButtonPress(SDL_Keycode e);
 	void playerKeyPress(SDL_Keycode e);
-	int  playerInitalize(int playerIndexPassed);
+	bool playerInitalize(int playerIndexPassed);
 	void UpdateControls();
 	void LoadSpriteContent();
 	void playerKeyRelease(SDL_Keycode e);
@@ -113,7 +113,8 @@ public:
 };
 
 
-int playerClass::playerInitalize(int playerIndexPassed)
+//Was int changed to bool to match true/false returns
+bool playerClass::playerInitalize(int playerIndexPassed)
 {
 	ifstream inputFile;
 	playerIndex=playerIndexPassed;
@@ -182,6 +183,9 @@ int playerClass::playerInitalize(int playerIndexPassed)
 	inputFile >> CurrentData;
 	inputFile >> playerHealth;
 	// LoadSpriteContent();
+    
+    //Needed a return type for success was throwing a warning John V.
+    return true;
 }
 
 
