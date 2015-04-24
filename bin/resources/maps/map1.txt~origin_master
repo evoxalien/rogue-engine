@@ -1,0 +1,7 @@
+background 0 0 1280 720
+img/backgrounds/NightSky.png
+platforms 2
+0 500 200 30
+img/shapes/OrangeSquare.png
+300 400 200 30
+img/shapes/OrangeSquare.png
