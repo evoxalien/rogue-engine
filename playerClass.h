@@ -121,11 +121,11 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 	if (playerIndex==1)//player 1 file
 	{
 	   //parse the file
-	   inputFile.open("playerConfig/Player2Script.txt");
+	   inputFile.open("../resources/playerConfig/Player2Script.txt");
 	}
 	if (playerIndex==2)//player 2 file
 	{
-	   inputFile.open("playerConfig/Player1Script.txt");
+	   inputFile.open("./resources/playerConfig/Player1Script.txt");
 		//parse the file
 	}
 
@@ -197,7 +197,7 @@ void playerClass::InitSprite(SDL_Renderer* gRenderer)
 
 void playerClass::LoadSpriteContent()
 {
-	playerAnimation.LoadImage("TestCharacter.png");
+	playerAnimation.LoadImage("../resources/TestCharacter.png");
 	// playerAnimation.LoadImage("playerConfig/TestCharacter.png");
 }
 

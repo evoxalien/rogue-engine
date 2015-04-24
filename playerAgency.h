@@ -103,7 +103,7 @@ int playerAgency::intializePlayer(int playerIndex)
 {
    //parse the file
    ifstream inputFile;
-   inputFile.open("playerConfig/PLayerScript.txt");
+   inputFile.open("../resources/playerConfig/PLayerScript.txt");
 
    if(!inputFile)
       return false;
