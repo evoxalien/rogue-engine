@@ -21,24 +21,19 @@ Map::Map()
 	{
 		anchorPointSelected[x] = false;
 	}
+	SDL_StopTextInput();
 }
 
 Map::~Map()
 {
-	if(platforms != NULL) //This should be always true, It also throws a warning. - John V.
+	for(int x = 0; x < numPlatforms; x++)
 	{
-		for(int x = 0; x < numPlatforms; x++)
-		{
-			platforms[x].free();
-		}
+		platforms[x].free();
 	}
 
-	if(rightClickMenuText != NULL) //This should be always true, It also throws a warning. - John V.
+	for(int x = 0; x < 10; x++)
 	{
-		for(int x = 0; x < 10; x++)
-		{
-			rightClickMenuText[x].free();
-		}
+		rightClickMenuText[x].free();
 	}
 
 	cursorTextTexture.free();
@@ -815,34 +810,39 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 
 void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 {
-	switch(input.getKeyDown())
+	if(input.getKeyDown() == SDLK_ESCAPE)
 	{
-		case SDLK_0 : 
-			unfocus();
-			cState = Testing;
-			cursorTextTexture.loadTextRender("   Testing", textColor);
-			break;
-		case SDLK_1 :
-			unfocus();
-			cState = Select;
-			cursorTextTexture.loadTextRender("   Select", textColor);
-			break;
-		case SDLK_2 :
-			unfocus();
-			cState = Info;
-			cursorTextTexture.loadTextRender("   Info", textColor);
-			break;
-		case SDLK_ESCAPE :
-			unfocus();
-			break;
+		unfocus();
 	}
 
-	if(input.getMouseWheel() > 0)
+	if(!SDL_IsTextInputActive())
+	{
+		switch(input.getKeyDown())
+		{
+			case SDLK_0 : 
+				unfocus();
+				cState = Testing;
+				cursorTextTexture.loadTextRender("   Testing", textColor);
+				break;
+			case SDLK_1 :
+				unfocus();
+				cState = Select;
+				cursorTextTexture.loadTextRender("   Select", textColor);
+				break;
+			case SDLK_2 :
+				unfocus();
+				cState = Info;
+				cursorTextTexture.loadTextRender("   Info", textColor);
+				break;
+		}
+	}
+
+	if(input.getMouseWheel() > 0  || input.getKeyDown() == SDLK_LEFTBRACKET)
 	{
 		textColor = {0xFF,0xFF,0xFF,0xFF};
 		cursorTextTexture.setColor(0xFF, 0xFF, 0xFF);
 	}
-	if(input.getMouseWheel() < 0)
+	if(input.getMouseWheel() < 0 || input.getKeyDown() == SDLK_RIGHTBRACKET)
 	{
 		textColor = {0,0,0,0xFF};
 		cursorTextTexture.setColor(0, 0, 0);
