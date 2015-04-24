@@ -3,6 +3,6 @@
 //Declaring the three logs here pervents multiple instances of each from being created. 
 //Because This file runs one time and then exits.
 
-OutputLog debug_log("debug.txt", false);
-OutputLog warning_log("warning.txt", false);
-OutputLog error_log("error.txt", false);
+OutputLog debug_log("./debug.txt", false);
+OutputLog warning_log("./warning.txt", false);
+OutputLog error_log("./error.txt", false);

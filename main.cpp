@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
    else 
    {
       SDL_WaitThread(thread, &threadReturnValue);
-      printf("\nThread returned value: %d", threadReturnValue);
+      printf("\nThread returned value: %d\n", threadReturnValue);
    }
 
 

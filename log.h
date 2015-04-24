@@ -24,7 +24,7 @@ public:
 	OutputLog(string filename)
 	{
 		print = false; //Defaults to false so no output will show up in console.
-		directory = "../../log/"; //Defaults to the log dirrectory and will not write if it doesn't exist
+		directory = "./"; //Defaults to the log dirrectory and will not write if it doesn't exist
 		string stemp = directory + filename; //Adds the file name to the directory
 		log_file.open( stemp.data()); //Opens our new file for output
 	}
@@ -32,7 +32,7 @@ public:
 	OutputLog(string filename, bool initPrint)
 	{
 		print = initPrint; //Takes user's pref.
-		directory = "";
+		directory = "./";
 		string stemp = directory + filename;
 		log_file.open( stemp.data());
 
