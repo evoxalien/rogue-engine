@@ -59,7 +59,7 @@ button::button()
    }
    
    buttonTexture = NULL;
-   font = TTF_OpenFont( "calibri.ttf", 500);
+   font = TTF_OpenFont( "../resources/fonts/calibri.ttf", 500);
    if(font == NULL)
       printf("font not found!!\n");
    
@@ -83,7 +83,7 @@ button::button(SDL_Texture *buttonTextureIn)
    }
    
    buttonTexture = buttonTextureIn;
-   font = TTF_OpenFont( "calibri.ttf", 500);
+   font = TTF_OpenFont( "../resources/fonts/calibri.ttf", 500);
    if(font == NULL)
       printf("font not found!!\n");
    
@@ -106,7 +106,7 @@ button::button(SDL_Renderer *rendererIn)
    }
    
    buttonTexture = NULL;
-   font = TTF_OpenFont( "calibri.ttf", 500);
+   font = TTF_OpenFont( "../resources/fonts/calibri.ttf", 500);
    if(font == NULL)
       printf("font not found!!\n");
 
@@ -145,7 +145,7 @@ button::button(SDL_Renderer *rendererIn, string tempText)
    }
    
    buttonTexture = NULL;
-   font = TTF_OpenFont( "calibri.ttf", 500);
+   font = TTF_OpenFont( "../resources/fonts/calibri.ttf", 500);
    if(font == NULL)
       printf("font not found!!\n");
    
@@ -183,7 +183,7 @@ button::button(SDL_Renderer *rendererIn, string tempText,int xIn, int yIn,int wI
    }
    
    buttonTexture = NULL;
-   font = TTF_OpenFont( "calibri.ttf", 500);
+   font = TTF_OpenFont( "../resources/fonts/calibri.ttf", 500);
    if(font == NULL)
       printf("font not found!!\n");
    
@@ -305,12 +305,12 @@ void button::setText(string textIn)
 //if it fails and returns false
 bool button::setFont(string fontChoice)
 {
-   fontChoice = fontChoice + ".ttf";
+   fontChoice = "../resources/fonts/" + fontChoice + ".ttf";
    font = TTF_OpenFont(fontChoice.c_str() , 500);
    if(font == NULL)
    {
       printf("font not found, using default font!!\n");
-	  font = TTF_OpenFont( "calibri.ttf", 500);
+	  font = TTF_OpenFont( "../resources/fonts/calibri.ttf", 500);
       if(font == NULL)
          printf("default font not found!!\n");
 		 
@@ -374,7 +374,7 @@ void button::setButtonColor(Uint8 rIn, Uint8 gIn, Uint8 bIn)
 //Sets the size of the font used. large numbers suggested
 void button::setFontSize(int size)
 {
-   font = TTF_OpenFont( "calibri.ttf", size);
+   font = TTF_OpenFont( "../resources/fonts/calibri.ttf", size);
    
     if(rendererCopy == NULL)
       return;

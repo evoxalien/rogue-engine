@@ -149,7 +149,7 @@ bool gameroot::initialize()
       return false;
    }
 
-   GameMap.parseMapFile("maps/mapTree.txt", renderer);
+   GameMap.parseMapFile("mapTree", renderer);
 
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;

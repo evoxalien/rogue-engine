@@ -123,7 +123,7 @@ bool maproot::loadContent()
 {
 
    //initialize map from file
-   if(!map.parseMapFile("maps/map1.txt", renderer))
+   if(!map.parseMapFile("map1", renderer))
    {
       printf("Map file failed to load!!\n");
    }

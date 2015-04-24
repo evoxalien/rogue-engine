@@ -46,13 +46,14 @@ class Texture
 
 		void setFont(std::string filePath, int fontSize)
 		{
+			filePath = "../resources/fonts/" + filePath + ".ttf";
+
 			if(TTF_Init() == -1)
 			{
 				printf("TTF init failed\n");
 				return;
 			}
 
-			filePath += ".ttf";
 			font = TTF_OpenFont(filePath.c_str(), fontSize);
 		}
 
@@ -64,6 +65,8 @@ class Texture
 		   //final surface to return
 		   SDL_Texture* newTexture = NULL;
 		   
+		   path = "../resources/" + path;
+
 		   //load surface at path
 		   SDL_Surface* loadSurface = IMG_Load(path.c_str());
 		   if( loadSurface == NULL )

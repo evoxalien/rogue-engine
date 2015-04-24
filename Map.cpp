@@ -44,6 +44,9 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 	render = r;
 
 	ifstream inputFile;
+
+	filePath = "../resources/maps/" + filePath + ".txt";
+
 	inputFile.open(filePath);
 
 	if(!inputFile)
@@ -91,7 +94,7 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 
 	cursorTextTexture.setRenderer(render);
 	cursorTextTexture.setFont("calibri", 12);
-	cursorTextTexture.loadTextRender("  Testing", textColor);
+	cursorTextTexture.loadTextRender("   Testing", textColor);
 
 	for(int x = 0; x < 4; x++)
 	{
@@ -182,11 +185,6 @@ void Map::renderMap()
 	}
 
 	cursorTextTexture.render(cursorX, cursorY);
-}
-
-void Map::updateMap()
-{
-	
 }
 
 void Map::createPlatMenu(int plat, int x, int y)

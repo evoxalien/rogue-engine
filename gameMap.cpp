@@ -25,6 +25,8 @@ bool gameMap::parseMapFile(std::string filepath, SDL_Renderer* r)
 {
 	render = r;
 
+	filepath = "../resources/maps/" + filepath + ".txt";
+
 	ifstream inputFile;
 	inputFile.open(filepath);
 

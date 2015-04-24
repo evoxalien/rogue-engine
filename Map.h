@@ -59,7 +59,6 @@ public:
 	~Map();
 	bool parseMapFile(std::string filePath,SDL_Renderer* render);
 	void renderMap();
-	void updateMap();
 	void destroyAnchorPoints();
 	void displayAnchorPoints();
 	void createPlatMenu(int plat, int x, int y);
