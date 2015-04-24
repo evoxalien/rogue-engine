@@ -1,9 +1,11 @@
 #ifndef Sound_Manager_H
 #define Sound_Manager_H
-#include <SDL.h>
-#include <SDL_mixer.h>
+//#include <SDL.h>
+//#include <SDL_mixer.h>
+#include "SDLincludes.h"
 #include <stdio.h>
 #include <map>
+#include <string>
 
 using namespace std;
 
@@ -26,19 +28,19 @@ public:
 
 	void Init();
 
-	bool Load_Sound(std::string fileName, std::string id, int i);
+	bool Load_Sound(string fileName, string id, int i);
 
-	void Play_Sound(std::string id, int looping);
+	void Play_Sound(string id, int looping);
 
-	void Play_Music(std::string id, int looping);
+	void Play_Music(string id, int looping);
 
 	void Stop_Sound();
 	void Stop();
 	
-	void Unload_Sound(std::string id, int i);
+	void Unload_Sound(string id, int i);
 
-	std::map<std::string, Mix_Chunk*>m_SFX;
-	std::map<std::string, Mix_Music*>m_MUSIC;
+	map<string, Mix_Chunk*>m_SFX;
+	map<string, Mix_Music*>m_MUSIC;
 
 	Sound_Manager();
 	~Sound_Manager();

@@ -1,7 +1,8 @@
 #OBJS specifies which files to compile as part of the project
 
 
-OBJS = main.cpp SoundManager.cpp log.cpp vector2d.cpp level/level.cpp level/object/objectcpps.cpp mingw_dev_lib/include/Box2D/Box2Dcpps.cpp
+OBJSW = main.cpp SoundManager.cpp log.cpp vector2d.cpp level/level.cpp level/object/objectcpps.cpp mingw_dev_lib/include/Box2D/Box2Dcpps.cpp
+OBJSM = main.cpp SoundManager.cpp log.cpp vector2d.cpp level/level.cpp level/object/objectcpps.cpp
 
 
 #CC specifies which compiler we're using
@@ -27,7 +28,7 @@ MACSTUFF =  -I/usr/local/include/ -L/usr/local/lib
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS_W = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -D WINDOWS
 LINKER_FLAGS_L = -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -D LINUX
-LINKER_FLAGS_M = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -D LINUX
+LINKER_FLAGS_M = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lBox2D -D MAC
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME_W = bin/windows/Rogue_Engine
@@ -36,10 +37,10 @@ OBJ_NAME_M = bin/mac/Rogue_Engine
 
 #This is the target that compiles our executable
 all : $(OBJS)
-	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS_W) -o $(OBJ_NAME_W)
+	$(CC) $(OBJSW) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS_W) -o $(OBJ_NAME_W)
 
 linux : $(OBJS)
-	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS_L) -o $(OBJ_NAME_L)
+	$(CC) $(OBJSW) $(COMPILER_FLAGS) $(LINKER_FLAGS_L) -o $(OBJ_NAME_L)
 
 mac : $(OBJS)
-	$(CC) $(OBJS) $(COMPILER_FLAGS) $(MACSTUFF) $(LINKER_FLAGS_L) -D MAC  -o $(OBJ_NAME_M)
+	$(CC) $(OBJSM) $(COMPILER_FLAGS) $(MACSTUFF) $(LINKER_FLAGS_M)  -o $(OBJ_NAME_M)

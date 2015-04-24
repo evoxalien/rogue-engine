@@ -1,5 +1,7 @@
 #include "SoundManager.h"
 
+using namespace std;
+
 //Constructor
 Sound_Manager::Sound_Manager()
 {
@@ -33,7 +35,7 @@ void Sound_Manager::Init()
 
 //Loading of sound from file location given its filename, then specify an id, 
 //and type(music:0 , soundeffect:1)
-bool Sound_Manager::Load_Sound(std::string fileName, std::string id, int i)
+bool Sound_Manager::Load_Sound(string fileName, string id, int i)
 {
 	if(i == 0)
 	{
@@ -62,7 +64,7 @@ bool Sound_Manager::Load_Sound(std::string fileName, std::string id, int i)
 
 //Function call to play the background music with id and if looping 
 //(note: if called again then song will pause until called again and resume)
-void Sound_Manager::Play_Music(std::string id, int looping){
+void Sound_Manager::Play_Music(string id, int looping){
 	
 	if( Mix_PlayingMusic() == 0 )
 	{
@@ -82,7 +84,7 @@ void Sound_Manager::Play_Music(std::string id, int looping){
 }
 
 //Function call to play a sound effect with a slight delay(tigger should handle delay may need testing)
-void Sound_Manager::Play_Sound(std::string id, int looping){
+void Sound_Manager::Play_Sound(string id, int looping){
 	
 			Mix_PlayChannel( -1, m_SFX[id], looping );		
 		
@@ -99,7 +101,7 @@ void Sound_Manager::Stop()
 }
 
 //Function call to unload the sound depending on file type (music:0 , soundeffect:1) and specified id
-void Sound_Manager::Unload_Sound(std::string id, int i)
+void Sound_Manager::Unload_Sound(string id, int i)
 {
 	if(i == 0)
 	{

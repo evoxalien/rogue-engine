@@ -2,8 +2,9 @@
 #include "maproot.h"
 #include "menu.h"
 #include "window.h"
-#include "SDL_thread.h"
-#include "SDL_timer.h"
+//#include "SDL_thread.h"
+//#include "SDL_timer.h"
+#include "SDLincludes.h"
 
 using namespace std;
 

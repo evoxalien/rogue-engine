@@ -32,7 +32,7 @@ public:
 	OutputLog(string filename, bool initPrint)
 	{
 		print = initPrint; //Takes user's pref.
-		directory = "../../log/";
+		directory = "";
 		string stemp = directory + filename;
 		log_file.open( stemp.data());
 

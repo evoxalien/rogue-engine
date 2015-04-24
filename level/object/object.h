@@ -1,7 +1,8 @@
 //Object header file
 #ifndef OBJECT_H
 #define OBJECT_H
-#include "Box2D/Box2D.h"	//Includes all main Box2D headers
+//#include "Box2D/Box2D.h"	//Includes all main Box2D headers
+#include "Box2Dincludes.h"
 #include "behavior.h"
 #include "attributes.h"		//Includes <algorithm>
 #include "equipment.h"		//Includes <vector> and "item.h", which includes <iostream> and <cstdint>
