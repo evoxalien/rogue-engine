@@ -1,0 +1,17 @@
+background 0 0 1280 720
+../resources/img/backgrounds/NightSky.png
+platforms 7
+0 500 200 30
+../resources/img/shapes/OrangeSquare.png
+589 461 40 82
+../resources/img/shapes/OrangeSquare.png
+590 508 371 37
+../resources/img/shapes/OrangeSquare.png
+922 473 38 69
+../resources/img/shapes/OrangeSquare.png
+866 213 100 100
+../resources/img/shapes/OrangeSquare.png
+763 477 36 45
+../resources/img/shapes/OrangeSquare.png
+612 212 100 100
+../resources/img/shapes/OrangeSquare.png

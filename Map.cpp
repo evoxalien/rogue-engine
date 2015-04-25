@@ -114,7 +114,7 @@ void Map::exportMapFile(Uint32 timeStamp)
 	stringStream << timeStamp;
 
 	ofstream outFile;
-	outFile.open("maps/Map_" + stringStream.str() + ".txt");
+	outFile.open("../resources/maps/Map_" + stringStream.str() + ".txt");
 
 	outFile << "background " << bgX << " " << bgY << " ";
 	outFile << backgroundTexture.getWidth() << " ";
