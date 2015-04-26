@@ -50,6 +50,7 @@ Window::Window()
    
    width = 1024;
    height = 720;
+   
    //Calls and tests function to create SDL Window (documentation in link)
    //https://wiki.libsdl.org/SDL_CreateWindow
    windowPointer = SDL_CreateWindow("Rogue Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
@@ -286,10 +287,10 @@ bool Window::isWindowEvent(SDL_Event& event)
 
 bool Window::thisWindowEvent(SDL_Event& windowEvent)
 {
-   if(windowEvent.type == SDL_WINDOWEVENT && windowEvent.window.windowID == ID)
-      return true;
-   //else is unnecessary - John V. - Throws Warning.
-      return false;
+   if(windowEvent.window.windowID == ID)
+         return true;
+   
+   return false;
 }
 
 bool Window::render()

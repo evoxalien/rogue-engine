@@ -2,63 +2,61 @@
 #include "maproot.h"
 #include "menu.h"
 #include "window.h"
-//#include "SDL_thread.h"
-//#include "SDL_timer.h"
+#include "engineState.h"
 #include "SDLincludes.h"
 
 using namespace std;
 
-static int TestThread(void *ptr);
+EngineState currentState;
+Window *sideWindow = new Window(50,50,200,720);
+extern int SideMenuThread(void *ptr);
 
-//Just the main. Very boring
 int main(int argc, char *argv[])
 {
-   int menuChoice;
+   currentState.main = true;
    Window *mainWindow = new Window();
-   Window *sideWindow = new Window(50,50,200,720);
+   menu *mainMenu = NULL;
    maproot *aMap = NULL;
    gameroot *theGame = NULL;  
-   menu *mainMenu = NULL;
    SDL_Thread *thread;
-   int         threadReturnValue;
 
-   printf("\nSimple SDL_CreateThread test:");
+   /*
+   //Create a thread to run the side menu through all game states
+   thread = SDL_CreateThread(SideMenuThread, "SideMenuThread", (void *)NULL);
 
-   //Create a simple thread
-   thread = SDL_CreateThread(TestThread, "TestThread", (void *)NULL);
-
+   //Checks if thread was created properly, if so thread runs separately from main
    if (NULL == thread)
    {
       printf("\nSDL_CreateThread failed: %s\n", SDL_GetError());
    } 
    else 
    {
-      SDL_WaitThread(thread, &threadReturnValue);
-      printf("\nThread returned value: %d\n", threadReturnValue);
+      SDL_DetachThread(thread);
    }
-
+   */
 
    
    do
    {
-      mainMenu = new menu(mainWindow);
-	  menuChoice = mainMenu->execute();
-	  delete mainMenu;
+      mainMenu = new menu(mainWindow, &currentState);
+      mainMenu->execute();
+      delete mainMenu;
    
-      switch(menuChoice)
+      if(currentState.isGameRunning())
       {
          //Runs actual game loop
-         case 1: theGame = new gameroot(mainWindow);
-		         theGame->execute();
-				 delete theGame;
-	             break;
-         //Runs the map editor's functions
-         case 2: aMap = new maproot(mainWindow);
-		         aMap->execute();
-				 delete aMap;
-	             break;
+         theGame = new gameroot(mainWindow, &currentState);
+         theGame->execute();
+         delete theGame;
       }
-   }while(menuChoice != 3);
+	  else if(currentState.isMapeditorRunning())
+	  {
+	     //Runs the map editor's functions
+         aMap = new maproot(mainWindow, &currentState);
+         aMap->execute();
+         delete aMap;
+      }
+   }while(currentState.isMainRunning());
    
    delete mainWindow;
    delete sideWindow;
@@ -68,16 +66,15 @@ int main(int argc, char *argv[])
    return 0;
 }
 
-// Very simple thread. counts 0 to 9 delaying 50ms between increments
-static int TestThread(void *ptr)
+// Thread that runs the side menu
+extern int SideMenuThread(void *ptr)
 {
-    int i;
-
-    for (i = 0; i < 10; ++i)
-	{
-        printf("\nThread counter: %d", i);
-        SDL_Delay(50);
-    }
-
-    return i;
+   menu *sideMenu = NULL;
+      
+   while(currentState.isMainRunning())
+   {
+      sideMenu = new menu(sideWindow, &currentState);
+	  sideMenu->execute();
+	  delete sideMenu;
+   }
 }

@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "button.h"
 #include "window.h"
+#include "engineState.h"
 
 using namespace std;
 
@@ -16,8 +17,8 @@ class menu
 {
 private:
    bool Running;
-   int menuChoice;
    Window *window;
+   EngineState *engineState;
    SDL_Renderer *renderer;
    SDL_Event Event;
    bool initialize();
@@ -28,7 +29,8 @@ private:
   
  
 public:
-   menu(Window *mainWindow); 
+   menu(Window *mainWindow, EngineState *currentState);
+   ~menu();
    bool loadContent();
    int execute();
    void OnEvent(SDL_Event *Event);
@@ -38,13 +40,18 @@ public:
 };
 
 //Simple initializes
-menu::menu(Window *mainWindow)
+menu::menu(Window *mainWindow, EngineState *currentState)
 {
    Running = false;
    window = mainWindow;
+   engineState = currentState;
    renderer = NULL;
 }
 
+menu::~menu()
+{
+   close();
+}
 
 //Initialize all the SDL
 bool menu::initialize()
@@ -68,26 +75,29 @@ bool menu::initialize()
 
    renderer = window->getRenderer();
    
+   int tempWidth = window->getWidth();
+   int tempHeight = (window->getHeight()) / 3;
+   
    startButton.setRenderer(renderer);
    startButton.setFont("times");
-   startButton.setWidth(1024);
-   startButton.setHeight(240);
+   startButton.setWidth(tempWidth);
+   startButton.setHeight(tempHeight);
    startButton.setButtonColor(255, 255, 255);
    startButton.setText("Start Game");
    
    mapButton.setRenderer(renderer);
    mapButton.setFont("times");
-   mapButton.setWidth(1024);
-   mapButton.setHeight(240);
-   mapButton.setY(240);
+   mapButton.setWidth(tempWidth);
+   mapButton.setHeight(tempHeight);
+   mapButton.setY(tempHeight);
    mapButton.setButtonColor(255, 255, 255);
    mapButton.setText("Edit Map");
    
    exitButton.setRenderer(renderer);
    exitButton.setFont("times");
-   exitButton.setWidth(1024);
-   exitButton.setHeight(240);
-   exitButton.setY(480);
+   exitButton.setWidth(tempWidth);
+   exitButton.setHeight(tempHeight);
+   exitButton.setY((tempHeight + tempHeight));
    exitButton.setButtonColor(255, 255, 255);
    exitButton.setText("Exit Engine");
    
@@ -147,24 +157,24 @@ void menu::update()
       //Updates input object, holding current buttons pressed
       input.update(Event);
 	  
-	  if(input.getMouseButton(1))
+	  if(input.getMouseButton(1) && window->thisWindowEvent(Event))
 	     if(startButton.isClicked(input.getMouseX(),input.getMouseY()))
 		 {
-		    menuChoice = 1;
-			Running = false;
+		    engineState->gameroot = true;
+		    Running = false;
 		 }
       
-	  if(input.getMouseButton(1))
+	  if(input.getMouseButton(1) && window->thisWindowEvent(Event))
 	     if(mapButton.isClicked(input.getMouseX(),input.getMouseY()))
 		 {
-		    menuChoice = 2;
+		    engineState->mapeditor = true;
 			Running = false;
 		 }
 		    
-      if(input.getMouseButton(1))
+      if(input.getMouseButton(1) && window->thisWindowEvent(Event))
 	     if(exitButton.isClicked(input.getMouseX(),input.getMouseY()))
 		 {
-		    menuChoice = 3;
+		    engineState->main = false;
 			Running = false;
 		 }
 	  
@@ -212,8 +222,8 @@ int menu::execute()
       draw();
    }
 
-   close() ;
-   return menuChoice;
+   //close();
+   return 0;
 }
 
 //Free all the assets

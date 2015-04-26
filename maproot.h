@@ -13,6 +13,7 @@
 #include "Texture.h"
 #include "Map.cpp"
 #include "window.h"
+#include "engineState.h"
 //#include <thread>
 
 #define FPS_INTERVAL 1.0 //Seconds
@@ -34,6 +35,7 @@ private:
 
    bool Running;
    Window *window;
+   EngineState *engineState;
    SDL_Renderer *renderer;
    SDL_Event Event;
    Map map;
@@ -48,7 +50,7 @@ private:
    InputClass previousInput;
    
 public:
-   maproot(Window *mainWindow); 
+   maproot(Window *mainWindow, EngineState *currentState); 
    bool loadContent();
    int execute();
    void OnEvent(SDL_Event *Event);
@@ -72,10 +74,11 @@ std::chrono::duration<double> maproot::time_Of_Previous_Frame = std::chrono::dur
 
 
 //Simple initializes
-maproot::maproot(Window *mainWindow)
+maproot::maproot(Window *mainWindow, EngineState *currentState)
 {
    Running = false;
    window = mainWindow;
+   engineState = currentState;
    renderer = NULL;
 }
 
@@ -153,6 +156,7 @@ void maproot::OnEvent(SDL_Event *Event)
    
    if(Event->type == SDL_QUIT)
    {
+      engineState->mapeditor = false;
       Running = false;
    }
 }
@@ -228,7 +232,7 @@ int maproot::execute()
    }
 
 
-   while(Running)
+   while(Running && engineState->isMapeditorRunning())
    {
       maproot::start_Of_Current_Frame = std::chrono::high_resolution_clock::now();		//At the start of each frame, store the current time
       maproot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(maproot::start_Of_Current_Frame - maproot::start_Of_Previous_Frame);	//Number of clock cycles between frames

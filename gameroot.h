@@ -17,6 +17,7 @@
 #include "playerClass.h"
 #include "gameMap.cpp"
 #include "window.h"
+#include "engineState.h"
 /*
 #include "particlemanager.h"
 #include "particle.h"*/
@@ -44,6 +45,7 @@ private:
    
    bool Running;
    Window *window;
+   EngineState *engineState;
    SDL_Renderer *renderer;
    Texture texture;
    // Texture playerTexture;
@@ -52,7 +54,7 @@ private:
    LTimer fpsTimer;
    //The frames per second cap timer
    LTimer capTimer;
-   enum EngineState
+   enum GameState
    {
       Loading, //0
       RootMenu, //1
@@ -78,7 +80,7 @@ private:
       Test3 //21
    };
    
-   EngineState engineState;
+   GameState gameState;
    //GameState gameState;
    int EngineActiveState;
    playerClass Hero;
@@ -89,7 +91,7 @@ private:
    Sound_Manager soundManager;
  
 public:
-   gameroot(Window *mainWindow); 
+   gameroot(Window *mainWindow, EngineState *currentState); 
    bool loadContent();
    int execute();
    void OnEvent(SDL_Event *Event);
@@ -113,12 +115,13 @@ std::chrono::duration<double> gameroot::time_Of_Previous_Frame = std::chrono::du
 
 
 //Simple initializes
-gameroot::gameroot(Window *mainWindow)
+gameroot::gameroot(Window *mainWindow, EngineState *currentState)
 {
    Running = false;
    window = mainWindow;
+   engineState = currentState;
    renderer = NULL;
-   engineState = Loading;
+   gameState = Loading;
    
 }
 
@@ -242,6 +245,7 @@ void gameroot::OnEvent(SDL_Event *Event)
    
    if(Event->type == SDL_QUIT)
    {
+      engineState->gameroot = false;
       Running = false;
    }
 }
@@ -249,7 +253,7 @@ void gameroot::OnEvent(SDL_Event *Event)
 //Does nothing. Math and physics later
 void gameroot::update()
 {
-   EngineActiveState=engineState;
+   EngineActiveState=gameState;
    gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
 
    debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
@@ -263,7 +267,7 @@ void gameroot::update()
 	  //Checking if X has been clicked
       OnEvent(&Event);
 
-      if(engineState == Loading)
+      if(gameState == Loading)
       {
          Hero.playerKeyPress(input.getKeyDown());
          Hero.playerKeyRelease(input.getKeyUp());
@@ -307,18 +311,18 @@ void gameroot::draw()
    //Clear screen
    SDL_RenderClear(renderer);
 
-   if(engineState == Loading)
+   if(gameState == Loading)
    {
       GameMap.renderMap();
       // texture.render(0,0);
       // Hero.playerTexture.render(0,0);
       Hero.playerDraw();
    }
-   else if(engineState == GameRootMenu)
+   else if(gameState == GameRootMenu)
    {
       
    }
-   else if(engineState == GamePlaying1)
+   else if(gameState == GamePlaying1)
    {
          
    }
@@ -355,7 +359,7 @@ int gameroot::execute()
    }
 
 
-   while(Running)
+   while(Running && engineState->isGameRunning())
    {
       gameroot::start_Of_Current_Frame = std::chrono::high_resolution_clock::now();		//At the start of each frame, store the current time
       gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(gameroot::start_Of_Current_Frame - gameroot::start_Of_Previous_Frame);	//Number of clock cycles between frames
