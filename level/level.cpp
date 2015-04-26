@@ -6,6 +6,19 @@ Level::Level(std::string level_Path)
 	(*this).level_File.open(level_Path);
 	if((*this).level_File)
 	{
+		{
+			std::string temporary_String;
+			float temporary_Float;
+
+			(*this).level_File >> temporary_String;	//"background"
+			(*this).level_File >> temporary_Float;	//bgX
+			(*this).level_File >> temporary_Float;	//bgY
+			(*this).level_File >> temporary_Float;	//w
+			(*this).level_File >> temporary_Float;	//h
+			(*this).level_File >> temporary_String;	//background image file
+			(*this).level_File >> temporary_String;	//"platforms"
+		}
+
 		int number_Of_Objects = 0;
 		(*this).level_File >> number_Of_Objects;
 
@@ -23,7 +36,7 @@ Level::Level(std::string level_Path)
 		bool temporary_Use_Fixed_Rotation = false;
 		float temporary_Linear_Damping = 0;
 		float temporary_Angular_Damping = 0;
-		float temporary_Gravity_Scale = 0;
+		float temporary_Gravity_Scale = 1;
 		bool temporary_Allow_Physics_Sleep = false;
 		bool temporary_Initialize_Awake = true;
 		bool temporary_Initialize_Active = true;
@@ -35,6 +48,8 @@ Level::Level(std::string level_Path)
 		int temporary_Group_Index = 0;
 		float temporary_X_Half_Length = 1;
 		float temporary_Y_Half_Length = 1;
+		std::string temporary_String;
+
 		for(int i = 0; i < number_Of_Objects; i++)
 		{
 			(*this).level_File >> temporary_X_Position;
@@ -57,10 +72,15 @@ Level::Level(std::string level_Path)
 			(*this).level_File >> temporary_Group_Index;
 			(*this).level_File >> temporary_X_Half_Length;
 			(*this).level_File >> temporary_Y_Half_Length;
+			(*this).level_File >> temporary_String;							//Reads in the image path but does nothing with it at the moment, can be used for Animation later
 			(*this).level_Objects_Array[i] = Object(temporary_X_Position, temporary_Y_Position, temporary_Angle_In_Radians, temporary_Body_Type, temporary_Check_For_Dynamic_Tunneling, temporary_Use_Fixed_Rotation, temporary_Linear_Damping, temporary_Angular_Damping, temporary_Gravity_Scale, temporary_Allow_Physics_Sleep, temporary_Initialize_Awake, temporary_Initialize_Active, temporary_Density, temporary_Friction, temporary_Restitution, temporary_Exists_In_Layers, temporary_Collides_With_Layers, temporary_Group_Index, temporary_X_Half_Length, temporary_Y_Half_Length);
 			//(*this).level_Objects_Array[i] = temporary_Object;
 		}
 		(*this).level_File.close();
+	}
+	else
+	{
+		std::cerr << "File failed to open." << std::endl;
 	}
 }
 
