@@ -90,6 +90,8 @@ public:
 	int    currentFrameY;
 	float  playerMovementSpeed;
 	bool   playerDirection; // true = facing left false facing Right
+	bool Controller1Connected=false;
+	bool Controller2Connected=false;
 	string playerInputMode;
 	Animation playerAnimation;
 	SDL_Joystick* gGameController = NULL;
@@ -121,12 +123,17 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 	if (playerIndex==1)//player 1 file
 	{
 	   //parse the file
-	   inputFile.open("../resources/playerConfig/Player2Script.txt");
+	   // inputFile.open("../resources/playerConfig/Player2Script.txt");
+	   inputFile.open("../resources/playerConfig/Player1Script.txt");
 	}
 	if (playerIndex==2)//player 2 file
 	{
-	   inputFile.open("./resources/playerConfig/Player1Script.txt");
+	   inputFile.open("../resources/playerConfig/Player1Script.txt");
 		//parse the file
+	}
+	if (playerIndex==0)//player 1 set to controller but no controller defaults to keyboard
+	{
+	   inputFile.open("../resources/playerConfig/Player0Script.txt");
 	}
 
 	if(!inputFile)//file failed
@@ -198,6 +205,13 @@ void playerClass::InitSprite(SDL_Renderer* gRenderer)
 void playerClass::LoadSpriteContent()
 {
 	playerAnimation.LoadImage("../resources/TestCharacter.png");
+	// if (playerIndex==1)
+	// {
+	// }
+	// if (playerIndex==2)//../resources/
+	// {
+	// 	playerAnimation.LoadImage("TestCharacter2.png");
+	// }
 	// playerAnimation.LoadImage("playerConfig/TestCharacter.png");
 }
 
@@ -317,12 +331,23 @@ bool playerClass::init()
 		//Check for joysticks
 		if( SDL_NumJoysticks() < 1 )
 		{
-			printf( "Warning: No joysticks connected!\n" );
+			Controller1Connected=false;
+			playerInitalize(0);
+			// printf( "Warning: No joysticks connected!\n" );
 		}
 		else
 		{
 			//Load joystick
-			gGameController = SDL_JoystickOpen( 0 );
+			if (playerIndex==1&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>0)
+			{
+				Controller1Connected=true;
+				gGameController = SDL_JoystickOpen( 0 );
+			}
+			if (playerIndex==2&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>1)
+			{
+				Controller2Connected=true;
+				gGameController = SDL_JoystickOpen( 1 );
+			}
 			if( gGameController == NULL )
 			{
 				printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
@@ -464,6 +489,7 @@ void playerClass::UpdateSDLJoy(SDL_Event *Event)
 		/* code */
 		printf("howdy15\n");
 	}
+
 	// if (Event->type == SDL_JOYBUTTONDOWN)
 	// {
 	// 		printf("%i\n", SDL_JoystickNumButtons(gGameController));

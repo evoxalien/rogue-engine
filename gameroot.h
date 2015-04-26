@@ -84,6 +84,7 @@ private:
    //GameState gameState;
    int EngineActiveState;
    playerClass Hero;
+   playerClass Villain;
    bool initialize();
    InputClass input;
    
@@ -166,8 +167,23 @@ bool gameroot::initialize()
    fps_frames = 0; //frames passed since the last recorded fps.
    */
    Hero.playerInitalize(1);
+   Hero.playerX=0;
+   Hero.playerY=0;
+
    Hero.InitSprite(renderer);
-   Hero.init();
+   if (Hero.playerInputMode=="Gamepad")
+   {
+      Hero.init();
+   }
+   Villain.playerX=50;
+   Villain.playerY=50;
+   Villain.playerInitalize(2);
+   Villain.InitSprite(renderer);
+   if (Villain.playerInputMode=="Gamepad")
+   {
+      /* code */
+      Villain.init();
+   }
    //Sound Manager Initialize
    soundManager.Init();
 
@@ -178,15 +194,15 @@ bool gameroot::initialize()
 bool gameroot::loadContent()
 {
 
-   if(!texture.loadTexture("../../images/dino.png"))
-   {
-      error_log << "Texture failed to load.\n";
-      return false;
-   }
+   // if(!texture.loadTexture("../../images/dino.png"))
+   // {
+   //    error_log << "Texture failed to load.\n";
+   //    return false;
+   // }
    texture.setWidth(window->getWidth());
    texture.setHeight(window->getHeight());
    Hero.LoadSpriteContent();
-   
+   Villain.LoadSpriteContent();
    // if(!Hero.playerTexture.loadTexture("img/shapes/OrangeSquare.png"))
    // {
    //    error_log << "PLayerTexture Texture failed to load.\n";
@@ -238,9 +254,13 @@ void gameroot::OnEvent(SDL_Event *Event)
          }
 	  }
    }
-   if (Hero.playerInputMode=="Gamepad")
+   if (Hero.playerInputMode=="Gamepad"&&Hero.Controller1Connected==true)
    {
       Hero.UpdateSDLJoy(Event);
+   }
+   if (Villain.playerInputMode=="Gamepad"&&Villain.Controller2Connected==true)
+   {
+      Villain.UpdateSDLJoy(Event);
    }
    
    if(Event->type == SDL_QUIT)
@@ -269,10 +289,18 @@ void gameroot::update()
 
       if(gameState == Loading)
       {
-         Hero.playerKeyPress(input.getKeyDown());
-         Hero.playerKeyRelease(input.getKeyUp());
+         if (Hero.Controller1Connected==false)
+         {
+            Hero.playerKeyPress(input.getKeyDown());
+            Hero.playerKeyRelease(input.getKeyUp());
+         }
          Hero.playerUpdate(fpsTimer.getTicks());
-
+         if (Villain.Controller2Connected==false)
+         {
+            Villain.playerKeyPress(input.getKeyDown());
+            Villain.playerKeyRelease(input.getKeyUp());
+         }
+         Villain.playerUpdate(fpsTimer.getTicks());
 		/* if(input.getKeyDown() == SDLK_1)
          {
 			 soundManager.Play_Music("DarkSouls",-1);
@@ -316,6 +344,7 @@ void gameroot::draw()
       GameMap.renderMap();
       // texture.render(0,0);
       // Hero.playerTexture.render(0,0);
+      Villain.playerDraw();
       Hero.playerDraw();
    }
    else if(gameState == GameRootMenu)
@@ -382,7 +411,7 @@ void gameroot::close()
    texture.free();
    // Hero.playerTexture.free();
    Hero.close();
-
+   Villain.close();
   ////unloading of sounds
   // soundManager.Unload_Sound("DarkSouls",0);
   // soundManager.Unload_Sound("A2",0);
