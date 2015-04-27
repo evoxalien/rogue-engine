@@ -66,6 +66,10 @@ class Object
 		void set_Object_Pointer_Vector_Index(const std::uint16_t);	//Updates necessary Object members to store the index within the static Object pointer vector of the Object that they are contained within
 
 		//'Getters' and 'Setters' for private member variables
+		void setPosition(int x, int y);
+		b2Vec2 getPosition();
+		int getX();
+		int getY();
 };
 
 #endif

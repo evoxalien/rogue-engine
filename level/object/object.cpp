@@ -3,7 +3,7 @@
 
 //Initialization of static Object members
 std::vector<Object*> Object::object_Pointer_Vector;
-b2World Object::box2D_World(b2Vec2(0,-9.81));
+b2World Object::box2D_World(b2Vec2(0,9.81));
 b2BodyDef Object::box2D_Body_Definition;
 b2FixtureDef Object::box2D_Fixture_Definition;
 b2PolygonShape Object::box2D_Polygon_Shape;
@@ -249,4 +249,27 @@ void Object::set_Object_Pointer_Vector_Index(const std::uint16_t object_Pointer_
 	(*this).attributes.set_Containing_Object_Pointer_Vector_Index(object_Pointer_Vector_Index);
 	(*this).equipment.set_Containing_Object_Pointer_Vector_Index(object_Pointer_Vector_Index);
 	//(*this).animation.set_Containing_Object_Pointer_Vector_Index(object_Pointer_Vector_Index);
+}
+
+void Object::setPosition(int x, int y)
+{
+   const b2Vec2 position(((float32) x), ((float32) y));
+   physics->SetTransform(position, physics->GetAngle());
+}
+
+b2Vec2 Object::getPosition()
+{
+   return physics->GetPosition();
+}
+
+int Object::getX()
+{
+   b2Vec2 position = physics->GetPosition();
+   return ((int) position.x);
+}
+
+int Object::getY()
+{
+   b2Vec2 position = physics->GetPosition();
+   return ((int) position.y);
 }

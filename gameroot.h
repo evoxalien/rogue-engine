@@ -47,6 +47,8 @@ private:
    Window *window;
    EngineState *engineState;
    SDL_Renderer *renderer;
+   Level *gameLevel;
+   Texture *physicsObjects;
    Texture texture;
    // Texture playerTexture;
    SDL_Event Event;
@@ -122,8 +124,7 @@ gameroot::gameroot(Window *mainWindow, EngineState *currentState)
    window = mainWindow;
    engineState = currentState;
    renderer = NULL;
-   gameState = Loading;
-   
+   gameState = Loading; 
 }
 
 
@@ -154,6 +155,12 @@ bool gameroot::initialize()
    }
 
    GameMap.parseMapFile("mapTree", renderer);
+   gameLevel = new Level("../resources/maps/map1.txt");
+   physicsObjects = new Texture[gameLevel->getObjectCount()];
+   for(int i = 0; i < gameLevel->getObjectCount(); i++)
+   {
+      physicsObjects[i].setRenderer(renderer);
+   }
 
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
@@ -194,11 +201,18 @@ bool gameroot::initialize()
 bool gameroot::loadContent()
 {
 
-   // if(!texture.loadTexture("../../images/dino.png"))
-   // {
-   //    error_log << "Texture failed to load.\n";
-   //    return false;
-   // }
+    if(!texture.loadTexture("../resources/img/backgrounds/NightSky.png"))
+    {
+       error_log << "Texture failed to load.\n";
+       return false;
+    }
+   
+   for(int i = 0; i < gameLevel->getObjectCount(); i++)
+   {
+      physicsObjects[i].loadTexture("../resources/img/shapes/orangeSquare.png");
+	  physicsObjects[i].setWidth(200);
+	  physicsObjects[i].setHeight(30);
+   }
    texture.setWidth(window->getWidth());
    texture.setHeight(window->getHeight());
    Hero.LoadSpriteContent();
@@ -278,6 +292,7 @@ void gameroot::update()
 
    debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
 
+   gameLevel->update();
 
    while(SDL_PollEvent(&Event))
    {
@@ -341,8 +356,13 @@ void gameroot::draw()
 
    if(gameState == Loading)
    {
-      GameMap.renderMap();
-      // texture.render(0,0);
+      texture.render(0,0);
+      //GameMap.renderMap();
+      for(int i = 0; i < gameLevel->getObjectCount(); i++)
+      {
+         physicsObjects[i].render(gameLevel->getX(i),gameLevel->getY(i));
+      }
+      
       // Hero.playerTexture.render(0,0);
       Villain.playerDraw();
       Hero.playerDraw();

@@ -19,13 +19,13 @@ Level::Level(std::string level_Path)
 			(*this).level_File >> temporary_String;	//"platforms"
 		}
 
-		int number_Of_Objects = 0;
-		(*this).level_File >> number_Of_Objects;
+		//int number_Of_Objects = 0;
+		(*this).level_File >> number_Of_Objects_In_Level;
 
-		if(number_Of_Objects > Level::maximum_Number_Of_Objects)
+		if(number_Of_Objects_In_Level > Level::maximum_Number_Of_Objects)
 		{
-			std::cerr << "The number of Objects requested to generate (" << number_Of_Objects << ") exceeds the maximum number of Objects available for a level (" << Level::maximum_Number_Of_Objects << "); " << Level::maximum_Number_Of_Objects << " Objects will be created." << std::endl;
-			number_Of_Objects = Level::maximum_Number_Of_Objects;
+			std::cerr << "The number of Objects requested to generate (" << number_Of_Objects_In_Level << ") exceeds the maximum number of Objects available for a level (" << Level::maximum_Number_Of_Objects << "); " << Level::maximum_Number_Of_Objects << " Objects will be created." << std::endl;
+			number_Of_Objects_In_Level = Level::maximum_Number_Of_Objects;
 		}
 
 		float temporary_X_Position = 0;
@@ -50,7 +50,7 @@ Level::Level(std::string level_Path)
 		float temporary_Y_Half_Length = 1;
 		std::string temporary_String;
 
-		for(int i = 0; i < number_Of_Objects; i++)
+		for(int i = 0; i < number_Of_Objects_In_Level; i++)
 		{
 			(*this).level_File >> temporary_X_Position;
 			(*this).level_File >> temporary_Y_Position;
@@ -84,11 +84,46 @@ Level::Level(std::string level_Path)
 	}
 }
 
-void Level::display_Information() const
+void Level::update() const
 {
-//	float time_Step = (1.0 / 60);
-//	(*Object::active_World_Pointer).Step(time_Step,6,2);
-//	for(int i = 0; i < (*this).number_Of_Objects_In_Level; i++)
-//	{
-//	}
+   for(int i = 0; i < number_Of_Objects_In_Level; i++)
+   {
+      level_Objects_Array[i].update();
+   }
+}
+
+void Level::setPosition(int index,int x, int y)
+{
+   if(index >= 0 && index < number_Of_Objects_In_Level)
+      level_Objects_Array[index].setPosition(x,y);
+}
+
+b2Vec2 Level::getPosition(int index)
+{
+   b2Vec2 position(0.0, 0.0);
+   
+   if(index >= 0 && index < number_Of_Objects_In_Level)
+      return level_Objects_Array[index].getPosition();
+   else
+      return position;
+}
+int Level::getX(int index)
+{
+   if(index >= 0 && index < number_Of_Objects_In_Level)
+      return level_Objects_Array[index].getX();
+   else
+      return -999;
+}
+
+int Level::getY(int index)
+{
+   if(index >= 0 && index < number_Of_Objects_In_Level)
+      return level_Objects_Array[index].getY();
+   else
+      return -999;
+}
+
+int Level::getObjectCount()
+{
+   return number_Of_Objects_In_Level;
 }
