@@ -91,22 +91,23 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 					float temporary_Float;
 					uint16 temporary_Unsigned_16bit_Integer;
 
-					inputFile >> temporary_Float;
-					inputFile >> temporary_Integer;
-					inputFile >> temporary_Boolean;
-					inputFile >> temporary_Boolean;
-					inputFile >> temporary_Float;
-					inputFile >> temporary_Float;
-					inputFile >> temporary_Float;
-					inputFile >> temporary_Boolean;
-					inputFile >> temporary_Boolean;
-					inputFile >> temporary_Boolean;
-					inputFile >> temporary_Float;
-					inputFile >> temporary_Float;
-					inputFile >> temporary_Float;
-					inputFile >> temporary_Unsigned_16bit_Integer;
-					inputFile >> temporary_Unsigned_16bit_Integer;
-					inputFile >> temporary_Integer;
+					inputFile >> temporary_Float; //Initial Angle in Radians
+					inputFile >> temporary_Integer; //Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
+					inputFile >> temporary_Boolean; //Boolean for whether the Object should check for tunneling against Dynamic bodies, usually turned on for very fast objects such as bullets (0 only checks against Static and Kinematic bodies, 1 includes Dynamic bodies as well)
+					inputFile >> temporary_Boolean; //Boolean for whether to use fixed rotation (0 uses rotations, 1 fixes rotation)
+					inputFile >> temporary_Float; //Linear Damping slows Objects as they travel, not 100% sure how it affects movement, but I believe it's a constant force against the direction of movement so the Object eventually halts
+					inputFile >> temporary_Float; //Angular Damping slows an Objects rotation, similar to Linear Damping but will cause the Object to stop spinning over time
+					inputFile >> temporary_Float; //The Gravity Scale is a multiplier to determine how much force the Box2D World exerts on the Object
+					inputFile >> temporary_Boolean; //Boolean for whether Physics Sleep is allowed; if it is on, the Object enters a low-maintenence state until collided with (0 is no sleep, 1 is sleep enabled)
+					inputFile >> temporary_Boolean; //Boolean for whether the Object should enter into the World as 'Awake' or 'Asleep', see above (0 is Asleep, 1 is Awake)
+					inputFile >> temporary_Boolean; //Boolean for whether the Object should enter int othe World as 'Active' or 'Inactive'; I can't recall for sure, but I believe Inactive will be treated as if it's not present until activated (0 is Inactive, 1 is Active)
+					inputFile >> temporary_Float; //Density of the fixture that will be applied to the Object; higher densities will result in larger weights for the same size; I belive 0 should be avoided
+					inputFile >> temporary_Float; //The Friction of the fixture that will be applied to the Object; higher frictions will result in a faster loss of momentum when Objects come in constant contact with the Object
+					inputFile >> temporary_Float; //The Restitution of the fixture that will be applied to the Object; should generally be confined between 0 and 1- 0 will result in Objects sticking to one another, 1 will have them bounce apart with the energy conserved- most likely uses the lowest of the two in collisions
+					inputFile >> temporary_Unsigned_16bit_Integer; //Layers the Object exists in- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object exists in that layer, if 0, it does not
+					inputFile >> temporary_Unsigned_16bit_Integer; //Layers the Object can collide with- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object may potentially collide with another Object which exists in that layer
+					inputFile >> temporary_Integer; //Group Index of the Object- if 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; 
+													//if the pair is positive and the same, they will collide regardless of layers, and if the pair is negative and the same, they will never collide, regardless of layers
  				}
 				inputFile >> w;
 				inputFile >> h;
@@ -172,7 +173,8 @@ void Map::exportMapFile(Uint32 timeStamp)
 		outFile << ".8 ";		//The Restitution of the fixture that will be applied to the Object; should generally be confined between 0 and 1- 0 will result in Objects sticking to one another, 1 will have them bounce apart with the energy conserved- most likely uses the lowest of the two in collisions
 		outFile << "1 ";		//Layers the Object exists in- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object exists in that layer, if 0, it does not
 		outFile << "65535 ";	//Layers the Object can collide with- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object may potentially collide with another Object which exists in that layer
-		outFile << "0 ";		//Group Index of the Object- if 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; if the pair is positive and the same, they will collide regardless of layers, and if the pair is negative and the same, they will never collide, regardless of layers
+		outFile << "0 ";		//Group Index of the Object- if 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; 
+								//if the pair is positive and the same, they will collide regardless of layers, and if the pair is negative and the same, they will never collide, regardless of layers
 		//outFile << shape of Object;
 		outFile << (platforms[x].getWidth() / 2.0) << " ";		//Will change in the future depending on the shape of the Object
 		outFile << (platforms[x].getHeight() / 2.0) << "\n";	//Will change in the future depending on the shape of the Object
