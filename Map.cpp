@@ -155,7 +155,8 @@ void Map::exportMapFile(Uint32 timeStamp)
 		outFile << platCoords[x*2] << " ";
 		outFile << platCoords[x*2+1] << " ";
 		outFile << "0 ";	//Initial Angle in Radians
-		outFile <<  << " ";//outFile << "2 ";	//Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
+		//outFile << (int)ObjectInteraction.Dynamic << " ";
+		outFile << "2 ";	//Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
 		outFile << "0 ";	//Boolean for whether the Object should check for tunneling against Dynamic bodies, usually turned on for very fast objects such as bullets (0 only checks against Static and Kinematic bodies, 1 includes Dynamic bodies as well)
 		outFile << "0 ";	//Boolean for whether to use fixed rotation (0 uses rotations, 1 fixes rotation)
 		outFile << "0 ";	//Linear Damping slows Objects as they travel, not 100% sure how it affects movement, but I believe it's a constant force against the direction of movement so the Object eventually halts
