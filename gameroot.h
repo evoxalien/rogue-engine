@@ -18,6 +18,7 @@
 #include "gameMap.cpp"
 #include "window.h"
 #include "engineState.h"
+#include "GameMenu.h"
 /*
 #include "particlemanager.h"
 #include "particle.h"*/
@@ -89,7 +90,7 @@ private:
    playerClass Villain;
    bool initialize();
    InputClass input;
-   
+   GameMenu GameMenuObject;
    gameMap GameMap;
    Sound_Manager soundManager;
  

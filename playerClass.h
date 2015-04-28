@@ -204,14 +204,14 @@ void playerClass::InitSprite(SDL_Renderer* gRenderer)
 
 void playerClass::LoadSpriteContent()
 {
-	playerAnimation.LoadImage("../resources/TestCharacter.png");
-	// if (playerIndex==1)
-	// {
-	// }
-	// if (playerIndex==2)//../resources/
-	// {
-	// 	playerAnimation.LoadImage("TestCharacter2.png");
-	// }
+	if (playerIndex==1)
+	{
+		playerAnimation.LoadImage("../resources/TestCharacter.png");
+	}
+	if (playerIndex==2)//../resources/
+	{
+		playerAnimation.LoadImage("../resources/TestCharacter2.png");
+	}
 	// playerAnimation.LoadImage("playerConfig/TestCharacter.png");
 }
 
@@ -415,21 +415,6 @@ void playerClass::UpdateSDLJoy(SDL_Event *Event)
 	{
 		Actions.playerRight=false;
 	}
-	// if (SDL_JoystickGetButton(gGameController, 1)==1)
-	// {
-	// 	/* code */
-	// 	printf("down\n");
-	// }
-	// if (SDL_JoystickGetButton(gGameController, 2)==1)
-	// {
-	// 	/* code */
-	// 	printf("howdy2\n");
-	// }
-	// if (SDL_JoystickGetButton(gGameController, 3)==1)
-	// {
-	// 	/* code */
-	// 	printf("howdy3\n");
-	// }
 	if (SDL_JoystickGetButton(gGameController, 5)==1)
 	{
 		/* code */
