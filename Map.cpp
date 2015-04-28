@@ -176,8 +176,10 @@ void Map::exportMapFile(Uint32 timeStamp)
 		outFile << "0 ";		//Group Index of the Object- if 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; 
 								//if the pair is positive and the same, they will collide regardless of layers, and if the pair is negative and the same, they will never collide, regardless of layers
 		//outFile << shape of Object;
-		outFile << (platforms[x].getWidth() / 2.0) << " ";		//Will change in the future depending on the shape of the Object
-		outFile << (platforms[x].getHeight() / 2.0) << "\n";	//Will change in the future depending on the shape of the Object
+		outFile << (platforms[x].getWidth()) << " ";		//Will change in the future depending on the shape of the Object
+		//cout << (platforms[x].getWidth()) << " " << (platforms[x].getWidth() /2) << endl;
+		outFile << (platforms[x].getHeight()) << "\n";	//Will change in the future depending on the shape of the Object
+		//cout << (platforms[x].getHeight()) << " " << (platforms[x].getHeight() /2) << endl;
 		//}
 		outFile << platforms[x].getFilePath() << "\n";
 	}
