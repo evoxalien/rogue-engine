@@ -360,7 +360,7 @@ void gameroot::draw()
       //GameMap.renderMap();
       for(int i = 0; i < gameLevel->getObjectCount(); i++)
       {
-         physicsObjects[i].render(gameLevel->getX(i),gameLevel->getY(i));
+         physicsObjects[i].render(gameLevel->getX(i),gameLevel->getY(i), NULL, ((*(*Object::object_Pointer_Vector[i]).physics).GetAngle() * (180.0 / 3.1415926535897932384626433832795)));
       }
       
       // Hero.playerTexture.render(0,0);
