@@ -1,6 +1,6 @@
-#ifndef MENU_H_INCLUDED
+#ifndef GAMEMENUDAVID_H_INCLUDED
 
-#define MENU_H_INCLUDED
+#define GAMEMENUDAVID_H_INCLUDED
 
 #include "SDLincludes.h"
 #include <stdio.h>
@@ -8,8 +8,6 @@
 #include "input.h"
 #include "Texture.h"
 #include "button.h"
-#include "window.h"
-#include "engineState.h"
 
 using namespace std;
 
@@ -51,8 +49,6 @@ private:
       SDL_Event Event;
 	GameState gameState;
 public:
-	GameMenu();
-	~GameMenu();
 	int gameInt;
 	bool initialize(int passedEnum);
 	int execute();
