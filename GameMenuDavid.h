@@ -45,12 +45,12 @@ private:
 	button Button4;
 	button Button5;
 	button Button6;
-   InputClass input;
-      SDL_Event Event;
+	InputClass input;
+	SDL_Event Event;
 	GameState gameState;
 public:
 	int gameInt;
-	bool initialize(int passedEnum);
+	bool initialize(int passedEnum,SDL_Renderer *rendererIn);
 	int execute();
 	void OnEvent(SDL_Event *Event);
 	int update();
@@ -59,20 +59,20 @@ public:
 	void menu();
 };
 
-bool GameMenu::initialize(int passedEnum)
+bool GameMenu::initialize(int passedEnum,SDL_Renderer *rendererIn)
 {
 	gameInt=passedEnum;
-	// gameState=gameInt;
+	gameState=(GameState)gameInt;
 	if (gameState==GameRootMenu)
 	{
-		   // Button1.setRenderer(renderer);
+		   Button1.setRenderer(rendererIn);
 		   Button1.setFont("times");
 		   Button1.setWidth(100);
 		   Button1.setHeight(200);
 		   Button1.setButtonColor(255, 255, 255);
 		   Button1.setText("Start Game");
 		   
-		   // Button2.setRenderer(renderer);
+		   Button2.setRenderer(rendererIn);
 		   Button2.setFont("times");
 		   Button2.setWidth(100);
 		   Button2.setHeight(200);
@@ -109,8 +109,8 @@ int GameMenu::update()
 			gameInt=(int)gameState;
 			return gameInt;		
 		}
-
 	}
+
 }
 
 #endif
