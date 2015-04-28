@@ -45,7 +45,7 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 
 	ifstream inputFile;
 
-	filePath = "../resources/maps/" + filePath + ".txt";
+	filePath = filePath + ".txt";
 
 	inputFile.open(filePath);
 
@@ -155,7 +155,7 @@ void Map::exportMapFile(Uint32 timeStamp)
 		outFile << platCoords[x*2] << " ";
 		outFile << platCoords[x*2+1] << " ";
 		outFile << "0 ";	//Initial Angle in Radians
-		outFile << "2 ";	//Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
+		outFile <<  << " ";//outFile << "2 ";	//Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
 		outFile << "0 ";	//Boolean for whether the Object should check for tunneling against Dynamic bodies, usually turned on for very fast objects such as bullets (0 only checks against Static and Kinematic bodies, 1 includes Dynamic bodies as well)
 		outFile << "0 ";	//Boolean for whether to use fixed rotation (0 uses rotations, 1 fixes rotation)
 		outFile << "0 ";	//Linear Damping slows Objects as they travel, not 100% sure how it affects movement, but I believe it's a constant force against the direction of movement so the Object eventually halts
@@ -176,7 +176,7 @@ void Map::exportMapFile(Uint32 timeStamp)
 		outFile << "0 ";		//Group Index of the Object- if 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; 
 								//if the pair is positive and the same, they will collide regardless of layers, and if the pair is negative and the same, they will never collide, regardless of layers
 		//outFile << shape of Object;
-		outFile << (platforms[x].getWidth()) << " ";		//Will change in the future depending on the shape of the Object
+		outFile << (platforms[x].getWidth()gi) << " ";		//Will change in the future depending on the shape of the Object
 		//cout << (platforms[x].getWidth()) << " " << (platforms[x].getWidth() /2) << endl;
 		outFile << (platforms[x].getHeight()) << "\n";	//Will change in the future depending on the shape of the Object
 		//cout << (platforms[x].getHeight()) << " " << (platforms[x].getHeight() /2) << endl;

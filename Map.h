@@ -50,6 +50,21 @@ private:
 		Info
 	};
 
+	enum ObjectType
+	{
+		Rectangle,
+		Circle,
+		Line,
+		Dot
+	};
+
+	enum ObjectInteraction
+	{
+		Static,
+		Kinematic,
+		Dynamic
+	};
+
 	CursorState cState;
 	std::string keyboardInput;
 
