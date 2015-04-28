@@ -437,6 +437,10 @@ void gameroot::close()
   // soundManager.Unload_Sound("A2",0);
   // soundManager.Unload_Sound("SFX",1);
   // soundManager.Unload_Sound("gnt",1);
+	if(gameLevel != nullptr)
+	{
+		delete gameLevel;
+	}
 
 
    IMG_Quit();
