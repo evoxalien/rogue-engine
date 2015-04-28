@@ -5,13 +5,13 @@ platforms 7
 ../resources/../resources/img/shapes/OrangeSquare.png
 300 400 0 0 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 200 30
 ../resources/../resources/img/shapes/OrangeSquare.png
-323 266 0 2 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 100 100
+323 266 0 2 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 200 30
 ../resources/../resources/img/shapes/OrangeSquare.png
-93 292 0 2 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 100 100
+93 292 0 2 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 200 30
 ../resources/../resources/img/shapes/OrangeSquare.png
-396 79 0 2 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 100 100
+396 79 0 2 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 200 30
 ../resources/../resources/img/shapes/OrangeSquare.png
-239 140 0 2 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 100 100
+239 140 0 2 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 200 30
 ../resources/img/shapes/OrangeSquare.png
-66 34 0 2 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 100 100
+66 34 0 2 0 0 0 0 1 0 1 1 1 .5 .8 1 65535 0 200 30
 ../resources/img/shapes/OrangeSquare.png
