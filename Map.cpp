@@ -46,8 +46,9 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 	ifstream inputFile;
 
 	filePath = filePath + ".txt";
-
-	inputFile.open(filePath);
+	std::string filePath2 = "../resources/maps/" + filePath;
+	cout << filePath2 << endl;
+	inputFile.open(filePath2);
 
 	if(!inputFile)
 		return false;
