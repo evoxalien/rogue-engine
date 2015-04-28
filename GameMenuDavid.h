@@ -110,7 +110,65 @@ int GameMenu::update()
 			return gameInt;		
 		}
 	}
+	if (gameState== GameMenu1)
+	{
+		Button3.setRenderer(rendererIn);
+		Button3.setFont("times");
+		Button3.setWidth(100);
+		Button3.setHeight(200);
+		Button3.setButtonColor(255, 255, 255);
+		Button3.setText("1 player Keyboard");
 
+		Button4.setRenderer(rendererIn);
+		Button4.setFont("times");
+		Button4.setWidth(100);
+		Button4.setHeight(200);
+		Button4.setY(200);
+		Button4.setButtonColor(255, 255, 255);
+		Button4.setText("2 player Keyboard");
+		Button5.setRenderer(rendererIn);
+		Button5.setFont("times");
+		Button5.setWidth(100);
+		Button5.setHeight(200);
+		Button5.setY(400);
+		Button5.setButtonColor(255, 255, 255);
+		Button5.setText("1 player GamePad");
+
+		Button6.setRenderer(rendererIn);
+		Button6.setFont("times");
+		Button6.setWidth(100);
+		Button6.setHeight(200);
+		Button6.setY(600);
+		Button6.setButtonColor(255, 255, 255);
+		Button6.setText("2 player GamePad");
+
+		if(Button3.isClicked(input.getMouseX(),input.getMouseY()))
+		{
+			gameState=Loading;
+			gameInt=(int)gameState;
+			return gameInt;
+		}
+
+		if(Button4.isClicked(input.getMouseX(),input.getMouseY()))
+		{
+			gameState=GameMenu1;
+			gameInt=(int)gameState;
+			return gameInt;		
+		}
+		if(Button5.isClicked(input.getMouseX(),input.getMouseY()))
+		{
+			gameState=Loading;
+			gameInt=(int)gameState;
+			return gameInt;
+		}
+
+		if(Button6.isClicked(input.getMouseX(),input.getMouseY()))
+		{
+			gameState=GameMenu1;
+			gameInt=(int)gameState;
+			return gameInt;		
+		}
+	}
 }
 
 #endif
