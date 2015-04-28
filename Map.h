@@ -52,17 +52,26 @@ private:
 
 	enum ObjectType
 	{
-		Rectangle,
-		Circle,
-		Line,
-		Dot
+		Rectangle = 0,
+		Circle = 1,
+		Line = 2,
+		Dot = 3
 	};
 
 	enum ObjectInteraction
 	{
-		Static,
-		Kinematic,
-		Dynamic
+		Static = 0,
+		Kinematic = 1,
+		Dynamic = 2
+	};
+
+	struct Info
+	{
+		ObjectType objType = Rectangle;
+		ObjectInteraction objInteraction = Dynamic;
+		bool fixedRotation;
+		
+
 	};
 
 	CursorState cState;

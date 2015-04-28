@@ -156,7 +156,6 @@ void Map::exportMapFile(Uint32 timeStamp)
 		outFile << platCoords[x*2] << " ";
 		outFile << platCoords[x*2+1] << " ";
 		outFile << "0 ";	//Initial Angle in Radians
-		//outFile << (int)ObjectInteraction.Dynamic << " ";
 		outFile << "2 ";	//Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
 		outFile << "0 ";	//Boolean for whether the Object should check for tunneling against Dynamic bodies, usually turned on for very fast objects such as bullets (0 only checks against Static and Kinematic bodies, 1 includes Dynamic bodies as well)
 		outFile << "0 ";	//Boolean for whether to use fixed rotation (0 uses rotations, 1 fixes rotation)
