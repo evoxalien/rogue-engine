@@ -9,7 +9,7 @@ class Level
 {
 	private:
 		//Private static class variables
-		const static std::uint16_t maximum_Number_Of_Objects = 1000;
+		const static std::uint16_t maximum_Number_Of_Objects = 10;
 
 		//Private member variables
 		std::ifstream level_File;
@@ -27,7 +27,8 @@ class Level
 		//Static functions
 
 		//Member functions
-		void update() const;
+		void update_All();
+		void render_All();
 
 		//'Getters' and 'Setters' for private member variables
 		void setPosition(int index,int x, int y);

@@ -5,7 +5,7 @@
 #include "Texture.h"
 #include "input.h"
 #include <string>
-#include "Camera.cpp"
+#include "Camera.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>

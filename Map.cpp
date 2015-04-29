@@ -84,8 +84,6 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 
 				inputFile >> platCoords[x*2];
 				inputFile >> platCoords[x*2+1];
-				std::cout << platCoords[x*2] << std::endl;
-				std::cout << platCoords[x*2+1] << std::endl;
 				{
 					bool temporary_Boolean;
 					int temporary_Integer;

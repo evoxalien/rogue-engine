@@ -19,6 +19,7 @@
 #include "window.h"
 #include "engineState.h"
 #include "GameMenuDavid.h"
+#include "Camera.h"
 /*
 #include "particlemanager.h"
 #include "particle.h"*/
@@ -49,7 +50,6 @@ private:
    EngineState *engineState;
    SDL_Renderer *renderer;
    Level *gameLevel;
-   Texture *physicsObjects;
    Texture texture;
    // Texture playerTexture;
    SDL_Event Event;
@@ -141,6 +141,7 @@ bool gameroot::initialize()
    }
 
    renderer = window->getRenderer();
+	Object::SDL_Renderer_Pointer = renderer;
    
    //tell texture the renderer to use
    texture.setRenderer(renderer);
@@ -157,11 +158,6 @@ bool gameroot::initialize()
 
    GameMap.parseMapFile("mapTree", renderer);
    gameLevel = new Level("../resources/maps/map1.txt");
-   physicsObjects = new Texture[gameLevel->getObjectCount()];
-   for(int i = 0; i < gameLevel->getObjectCount(); i++)
-   {
-      physicsObjects[i].setRenderer(renderer);
-   }
 
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
@@ -208,12 +204,6 @@ bool gameroot::loadContent()
        return false;
     }
    
-   for(int i = 0; i < gameLevel->getObjectCount(); i++)
-   {
-      physicsObjects[i].loadTexture("../resources/img/shapes/orangeSquare.png");
-	  physicsObjects[i].setWidth(200);
-	  physicsObjects[i].setHeight(30);
-   }
    texture.setWidth(window->getWidth());
    texture.setHeight(window->getHeight());
    Hero.LoadSpriteContent();
@@ -293,7 +283,7 @@ void gameroot::update()
 
    debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
 
-   gameLevel->update();
+   gameLevel->update_All();
 
    while(SDL_PollEvent(&Event))
    {
@@ -358,11 +348,8 @@ void gameroot::draw()
    if(gameState == Loading)
    {
       texture.render(0,0);
+		(*gameLevel).render_All();
       //GameMap.renderMap();
-      for(int i = 0; i < gameLevel->getObjectCount(); i++)
-      {
-         physicsObjects[i].render(gameLevel->getX(i),gameLevel->getY(i), NULL, ((*(*Object::object_Pointer_Vector[i]).physics).GetAngle() * (180.0 / 3.1415926535897932384626433832795)));
-      }
       
       // Hero.playerTexture.render(0,0);
       Villain.playerDraw();
@@ -441,6 +428,7 @@ void gameroot::close()
 	if(gameLevel != nullptr)
 	{
 		delete gameLevel;
+		gameLevel = nullptr;
 	}
 
 

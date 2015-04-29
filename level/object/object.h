@@ -8,6 +8,8 @@
 #include "equipment.h"		//Includes <vector> and "item.h", which includes <iostream> and <cstdint>
 //#include "inventory.h"
 #include "status_effects.h"	//Includes "status_effect.h"
+#include "../../Animation.h"		//Includes "SDLincludes.h", <string>, <iostream>, <stdio.h>, and "Texture.h" which includes "SDLincludes.h"
+#include "../../Camera.h"
 
 class Object
 {
@@ -29,6 +31,8 @@ class Object
 		static b2FixtureDef box2D_Fixture_Definition;		//A static Box2D Physics Fixture Definition, which holds shape, restitution, density, and collision layer details; a body may contain multiple fixtures
 		static b2PolygonShape box2D_Polygon_Shape;			//A static Box2D Physics Shape, which is used by the fixture definition to define the area which the fixture will occupy
 		static float32 physics_Time_Step;
+		static SDL_Renderer* SDL_Renderer_Pointer;
+		static Camera* camera_Pointer;
 
 		//Private member variables; some members may be moving to derived classes or may become protected instead of private
 		b2Body* physics;							//A pointer to the Box2D body which holds information related to Physics
@@ -37,13 +41,14 @@ class Object
 		Equipment equipment;						//A member which holds information on Items which are contributing to a variety of the Object's game attributes
 		//Inventory inventory;						//A member which holds information on what Items are available to the Object to use or equip; Items here contribute to the attribute 'amount_Carried'
 		Status_Effects status_Effects;				//A member which holds information related to special effects that may be active on the Object, such as if a spell is increasing movement speed or regenerating health
-		//Animation animation;
+		Animation animation;
 		//Sound sound;
 
 	public:
 		//Constructors and Destructors
 		Object();									//Default constructor
-		Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float);	//Constructor for Physics, may need to be updated to handle multiple fixtures
+		//Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float);	//Constructor for Physics, may need to be updated to handle multiple fixtures
+		Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float, const std::string);//, const int, const int);
 		Object(const Behavior);						//Constructor for when there is an already existing Behavior the Object should follow
 		Object(const Attributes);					//Constructor for when the Attributes of an Object is known
 		Object(const Behavior, const Attributes);	//Constructor for when both the Behavior and Attributes of the Object are known
@@ -53,8 +58,9 @@ class Object
 		~Object();									//Destructor
 
 		//Public static functions
-		static void display_Information();	//For testing
-		static void update();
+		static void display_Information_All();	//For testing
+		static void step_Box2D_World();
+		static void update_All();
 
 		//'Getters' and 'Setters' for private static variables
 
@@ -63,6 +69,9 @@ class Object
 		Object& operator=(Object&&);				//Overloads the assignment operator, '=', for right hand values of Object type
 
 		//Public member functions
+		void update();
+		void render();
+
 		std::uint16_t get_Object_Pointer_Vector_Index() const;		//Rather than storing an additional index within Object itself, a member which already requires the index (behavior) is accessed for the necessary index of the Object within the static Object pointer vector
 		void set_Object_Pointer_Vector_Index(const std::uint16_t);	//Updates necessary Object members to store the index within the static Object pointer vector of the Object that they are contained within
 
