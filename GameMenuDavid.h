@@ -48,6 +48,8 @@ private:
 	InputClass input;
 	SDL_Event Event;
 	GameState gameState;
+
+	SDL_Renderer* renderer;
 public:
 	int gameInt;
 	bool initialize(int passedEnum,SDL_Renderer *rendererIn);
@@ -63,16 +65,17 @@ bool GameMenu::initialize(int passedEnum,SDL_Renderer *rendererIn)
 {
 	gameInt=passedEnum;
 	gameState=(GameState)gameInt;
+	renderer = rendererIn;
 	if (gameState==GameRootMenu)
 	{
-		   Button1.setRenderer(rendererIn);
+		   Button1.setRenderer(renderer);
 		   Button1.setFont("times");
 		   Button1.setWidth(100);
 		   Button1.setHeight(200);
 		   Button1.setButtonColor(255, 255, 255);
 		   Button1.setText("Start Game");
 		   
-		   Button2.setRenderer(rendererIn);
+		   Button2.setRenderer(renderer);
 		   Button2.setFont("times");
 		   Button2.setWidth(100);
 		   Button2.setHeight(200);
@@ -112,21 +115,21 @@ int GameMenu::update()
 	}
 	if (gameState== GameMenu1)
 	{
-		Button3.setRenderer(rendererIn);
+		Button3.setRenderer(renderer);
 		Button3.setFont("times");
 		Button3.setWidth(100);
 		Button3.setHeight(200);
 		Button3.setButtonColor(255, 255, 255);
 		Button3.setText("1 player Keyboard");
 
-		Button4.setRenderer(rendererIn);
+		Button4.setRenderer(renderer);
 		Button4.setFont("times");
 		Button4.setWidth(100);
 		Button4.setHeight(200);
 		Button4.setY(200);
 		Button4.setButtonColor(255, 255, 255);
 		Button4.setText("2 player Keyboard");
-		Button5.setRenderer(rendererIn);
+		Button5.setRenderer(renderer);
 		Button5.setFont("times");
 		Button5.setWidth(100);
 		Button5.setHeight(200);
@@ -134,7 +137,7 @@ int GameMenu::update()
 		Button5.setButtonColor(255, 255, 255);
 		Button5.setText("1 player GamePad");
 
-		Button6.setRenderer(rendererIn);
+		Button6.setRenderer(renderer);
 		Button6.setFont("times");
 		Button6.setWidth(100);
 		Button6.setHeight(200);
