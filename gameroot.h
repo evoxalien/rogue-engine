@@ -43,6 +43,7 @@ private:
    const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
    static std::chrono::high_resolution_clock::time_point start_Of_Previous_Frame;
    static std::chrono::high_resolution_clock::time_point start_Of_Current_Frame;
+   static uint32_t total_Frame_Time;
    static std::chrono::duration<double> time_Of_Previous_Frame;
    
    bool Running;
@@ -54,9 +55,9 @@ private:
    // Texture playerTexture;
    SDL_Event Event;
    //The frames per second timer
-   LTimer fpsTimer;
+   //LTimer fpsTimer;
    //The frames per second cap timer
-   LTimer capTimer;
+   //LTimer capTimer;
    enum GameState
    {
       Loading, //0
@@ -116,7 +117,7 @@ double gameroot::total_Time = 0;				//The amount of time the game has run from t
 std::chrono::high_resolution_clock::time_point gameroot::start_Of_Previous_Frame = std::chrono::high_resolution_clock::now();	//The time point that the previous instance of the main game loop (A 'frame') began
 std::chrono::high_resolution_clock::time_point gameroot::start_Of_Current_Frame = gameroot::start_Of_Previous_Frame;			//The time point at which the currently active frame began
 std::chrono::duration<double> gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame);	//The length of time the previous frame took to complete
-
+uint32_t gameroot::total_Frame_Time = 0;
 
 //Simple initializes
 gameroot::gameroot(Window *mainWindow, EngineState *currentState)
@@ -163,7 +164,7 @@ bool gameroot::initialize()
    Running = true;
   
    GLOBAL_FRAME_COUNTER = 0;
-   fpsTimer.start();
+   //fpsTimer.start();
    /*3
    previousTicks = 0;
    fps_lasttime = SDL_GetTicks(); //the last recorded time.
@@ -281,9 +282,15 @@ void gameroot::update()
    EngineActiveState=gameState;
    gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
 
-   debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
+   debug_log << "\ntest " << GLOBAL_FRAME_COUNTER << "\n";
 
+<<<<<<< Updated upstream
    gameLevel->update_All();
+=======
+   gameLevel->update();
+   Hero.playerUpdate(GLOBAL_FRAME_COUNTER);
+   Villain.playerUpdate(GLOBAL_FRAME_COUNTER);
+>>>>>>> Stashed changes
 
    while(SDL_PollEvent(&Event))
    {
@@ -300,13 +307,11 @@ void gameroot::update()
             Hero.playerKeyPress(input.getKeyDown());
             Hero.playerKeyRelease(input.getKeyUp());
          }
-         Hero.playerUpdate(fpsTimer.getTicks());
          if (Villain.Controller2Connected==false)
          {
             Villain.playerKeyPress(input.getKeyDown());
             Villain.playerKeyRelease(input.getKeyUp());
          }
-         Villain.playerUpdate(fpsTimer.getTicks());
 		/* if(input.getKeyDown() == SDLK_1)
          {
 			 soundManager.Play_Music("DarkSouls",-1);
@@ -329,6 +334,7 @@ void gameroot::update()
 			 soundManager.Stop();
          }*/
       }
+
 	  
    }  
       
@@ -340,7 +346,7 @@ void gameroot::update()
 void gameroot::draw()
 {
    //Start cap Timer
-   capTimer.start();
+   //capTimer.start();
 
    //Clear screen
    SDL_RenderClear(renderer);
@@ -368,14 +374,16 @@ void gameroot::draw()
    SDL_RenderPresent(renderer);
    
    ++GLOBAL_FRAME_COUNTER;   
-
+   cout << GLOBAL_FRAME_COUNTER << endl;
    //If frame finished early
-   int frameTicks = capTimer.getTicks();
+   //int frameTicks = capTimer.getTicks();
+   /*
    if( frameTicks < SCREEN_TICKS_PER_FRAME )
    {
       //Wait remaining time
       SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
    }
+   */
 
    //increment frame counter
 }
@@ -405,7 +413,17 @@ int gameroot::execute()
       update();
       draw();
 
+      gameroot::total_Frame_Time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - gameroot::start_Of_Current_Frame).count();
+
       //std::this_thread::sleep_for(std::chrono::nanoseconds(/*calculate number of nanoseconds to wait based on maximum frame rate and time taken so far*/));
+      //cout << endl << "Total Frame Time: " << gameroot::total_Frame_Time << endl;
+      //cout << "Total Time: " << gameroot::total_Time;
+
+      if(16 > gameroot::total_Frame_Time)
+      {
+         SDL_Delay((16) - gameroot::total_Frame_Time);
+      }
+
       gameroot::start_Of_Previous_Frame = gameroot::start_Of_Current_Frame;				//At the end of each frame, store the start time of the current frame to the previous frame
     }
 

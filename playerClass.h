@@ -550,7 +550,7 @@ void playerClass::UpdateGamePad()
 
 }
 
-void playerClass::playerUpdate(int gameTime)
+void playerClass::playerUpdate(int frame)
 {
 	//Animation Tracking
 	playerAnimation.setActive(true);
@@ -559,7 +559,7 @@ void playerClass::playerUpdate(int gameTime)
     
 	if(Actions.playerDown==true)
 	{
-		playerY += playerMovementSpeed;// * ((float)gameTime%6000);
+		playerY += playerMovementSpeed;// * ((float)frame%6000);
 		if (playerDirection) //true facing left false facing right
 		{
 			currentFrameY = 1;          
@@ -569,7 +569,7 @@ void playerClass::playerUpdate(int gameTime)
 	}
 	else if (Actions.playerUp==true)
 	{
-		playerY -= playerMovementSpeed; //* ((float)gameTime%6000);
+		playerY -= playerMovementSpeed; //* ((float)frame%6000);
 		if (playerDirection) //true facing left false facing right
 		{
 			currentFrameY = 5;          
@@ -579,13 +579,13 @@ void playerClass::playerUpdate(int gameTime)
 	}
 	else if (Actions.playerRight==true)
 	{
-		playerX += playerMovementSpeed;// * ((float)gameTime%6000);
+		playerX += playerMovementSpeed;// * ((float)frame%6000);
 		playerDirection=false;
 		currentFrameY = 2;
 	}
 	else if (Actions.playerLeft==true)
 	{
-		playerX -= playerMovementSpeed;// * ((float)gameTime%6000);
+		playerX -= playerMovementSpeed;// * ((float)frame%6000);
 		playerDirection=true;
 		currentFrameY = 3;
 	}
@@ -599,7 +599,7 @@ void playerClass::playerUpdate(int gameTime)
     playerAnimation.setCurrentFrame(currentFrameX,currentFrameY);
     
     //Update of the Animations depending on Game Time
-    playerAnimation.Update(gameTime);
+    playerAnimation.Update(frame);
 
 }
 

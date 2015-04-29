@@ -33,13 +33,15 @@ public:
 	
 	void LoadImage(string sfilename);
 	Texture Image;
-	void Update(int gameTime);
+	void Update(int frameRate);
 
 	void Draw();
 
+	void SetFramerate(int speed);
+
 private:
 	int frameCounter;
-	int switchFrame;
+	int frameSpeed;
 	bool active;
 	int PosX, PosY, currentFrameX, currentFrameY;
 	float amountofFramesX, amountofFramesY;

@@ -62,11 +62,11 @@ void Animation::Initialize( int x, int y, int framesX, int framesY)
 	{
 		frameCounter = 0;
 		active = false;
-		switchFrame = 100;
 		PosX = x;
 		PosY = y;
 		amountofFramesX = framesX;
 		amountofFramesY = framesY;
+		frameSpeed = 4;
 	}
 
 void Animation::LoadImage( string filename )
@@ -81,22 +81,27 @@ void Animation::LoadImage( string filename )
 	}
 }
 
+void Animation::SetFramerate(int speed)
+{
+	frameSpeed = speed;
+}
 
-void Animation::Update(int gameTime)
+void Animation::Update(int frame)
 	{
 		// to count to a certaint number then change frame, milliseconds since last frame
 		if (active)
-			frameCounter += ((int)gameTime%60);
-		else
-			frameCounter = 0;
+			if(frame % frameSpeed == 0)
+				frameCounter++;
 
-		if (frameCounter >= switchFrame)
+		cout << "FrameCounter " << frameCounter << endl;
+		if (frameCounter >= amountofFramesX)
 		{
+			currentFrameX = 0;
 			frameCounter = 0;
-			currentFrameX += getFrameWidth();
-			if (currentFrameX >= Image.getWidth())
-				currentFrameX = 0;
 		}
+		currentFrameX = getFrameWidth() * frameCounter;
+		
+		
 		SourceRect = {(int)currentFrameX, (int)currentFrameY * getFrameHeight(), getFrameWidth(), getFrameHeight()};
 	}
 
