@@ -284,13 +284,11 @@ void gameroot::update()
 
    debug_log << "\ntest " << GLOBAL_FRAME_COUNTER << "\n";
 
-<<<<<<< Updated upstream
+
    gameLevel->update_All();
-=======
-   gameLevel->update();
    Hero.playerUpdate(GLOBAL_FRAME_COUNTER);
    Villain.playerUpdate(GLOBAL_FRAME_COUNTER);
->>>>>>> Stashed changes
+
 
    while(SDL_PollEvent(&Event))
    {
