@@ -91,13 +91,13 @@ void RootMenu::initilizeMenu(SDL_Renderer *rendererIn)
 	x=0; y=0;
 
 	BackGround[index].setRenderer(renderer);
-	BackGround[index].loadTexture("../resources/../resources/img/backgrounds/NightSky.png");
+	BackGround[index].loadTexture("../resources/img/backgrounds/NightSky.png");
 	BackGround[index].setWidth(1280 );
 	BackGround[index].setHeight(720);
 	index++;
 
 	BackGround[index].setRenderer(renderer);
-	BackGround[index].loadTexture("../resources/../resources/img/backgrounds/NightSky.png");
+	BackGround[index].loadTexture("../resources/img/backgrounds/NightSky.png");
 	BackGround[index].setWidth(1280 );
 	BackGround[index].setHeight(720);
 	index++;
