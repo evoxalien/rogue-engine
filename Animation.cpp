@@ -93,7 +93,7 @@ void Animation::Update(int frame)
 			if(frame % frameSpeed == 0)
 				frameCounter++;
 
-		cout << "FrameCounter " << frameCounter << endl;
+		//cout << "FrameCounter " << frameCounter << endl;
 		if (frameCounter >= amountofFramesX)
 		{
 			currentFrameX = 0;

@@ -19,7 +19,7 @@
 #include "engineState.h"
 #include "GameMenuDavid.h"
 #include "Camera.h"
-#include "RootMenu.h"
+//#include "RootMenu.h"
 /*
 #include "particlemanager.h"
 #include "particle.h"*/
@@ -91,7 +91,7 @@ private:
    GameMenu GameMenuObject;
    gameMap GameMap;
    Sound_Manager soundManager;
-   RootMenu rootMenuObject;
+   //RootMenu rootMenuObject;
 public:
    gameroot(Window *mainWindow, EngineState *currentState); 
    bool loadContent();
