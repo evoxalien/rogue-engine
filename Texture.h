@@ -65,7 +65,8 @@ class Texture
 		   //final surface to return
 		   SDL_Texture* newTexture = NULL;
 		   
-		   path = "../resources/" + path;
+		   if(path.compare(0,13, "../resources") != true)
+		   		path = "../resources/" + path;
 
 		   //load surface at path
 		   SDL_Surface* loadSurface = IMG_Load(path.c_str());

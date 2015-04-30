@@ -9,7 +9,7 @@
 #include <chrono>
 #include "log.h"
 #include "input.h"
-#include "ltimer.h"
+//#include "ltimer.h"
 #include "Texture.h"
 #include "Map.cpp"
 #include "window.h"
@@ -30,6 +30,7 @@ private:
    const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
    static std::chrono::high_resolution_clock::time_point start_Of_Previous_Frame;
    static std::chrono::high_resolution_clock::time_point start_Of_Current_Frame;
+   static uint32_t total_Frame_Time;
    static std::chrono::duration<double> time_Of_Previous_Frame;
    
 
@@ -39,10 +40,7 @@ private:
    SDL_Renderer *renderer;
    SDL_Event Event;
    Map map;
-   //The frames per second timer
-   LTimer fpsTimer;
-   //The frames per second cap timer
-   LTimer capTimer;
+
   
    //GameState gameState;
    bool initialize();
@@ -66,12 +64,12 @@ public:
 
 };
 
-double maproot::maximum_Frame_Rate = 120;		//Sets the maximum number of times the main game loop can execute in a single second
-double maproot::total_Time = 0;				//The amount of time the game has run from the start of the program
-std::chrono::high_resolution_clock::time_point maproot::start_Of_Previous_Frame = std::chrono::high_resolution_clock::now();	//The time point that the previous instance of the main game loop (A 'frame') began
-std::chrono::high_resolution_clock::time_point maproot::start_Of_Current_Frame = maproot::start_Of_Previous_Frame;			//The time point at which the currently active frame began
-std::chrono::duration<double> maproot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame);	//The length of time the previous frame took to complete
-
+double maproot::maximum_Frame_Rate = 120;      //Sets the maximum number of times the main game loop can execute in a single second
+double maproot::total_Time = 0;          //The amount of time the game has run from the start of the program
+std::chrono::high_resolution_clock::time_point maproot::start_Of_Previous_Frame = std::chrono::high_resolution_clock::now(); //The time point that the previous instance of the main game loop (A 'frame') began
+std::chrono::high_resolution_clock::time_point maproot::start_Of_Current_Frame = maproot::start_Of_Previous_Frame;       //The time point at which the currently active frame began
+std::chrono::duration<double> maproot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame); //The length of time the previous frame took to complete
+uint32_t maproot::total_Frame_Time = 0;
 
 //Simple initializes
 maproot::maproot(Window *mainWindow, EngineState *currentState)
@@ -109,13 +107,7 @@ bool maproot::initialize()
   
 
    GLOBAL_FRAME_COUNTER = 0;
-   fpsTimer.start();
-   /*
-   previousTicks = 0;
-   fps_lasttime = SDL_GetTicks(); //the last recorded time.
-   fps_current = 0; //the current FPS.
-   fps_frames = 0; //frames passed since the last recorded fps.
-   */
+  
 
    
    return true;
@@ -193,8 +185,6 @@ void maproot::update()
 //Draws to screen
 void maproot::draw()
 {
-   //Start cap Timer
-   capTimer.start();
 
    //Clear screen
    SDL_RenderClear(renderer);
@@ -204,14 +194,6 @@ void maproot::draw()
    SDL_RenderPresent(renderer);
    
    ++GLOBAL_FRAME_COUNTER;   
-
-   //If frame finished early
-   int frameTicks = capTimer.getTicks();
-   if( frameTicks < SCREEN_TICKS_PER_FRAME )
-   {
-      //Wait remaining time
-      SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
-   }
 
    //increment frame counter
 }
@@ -234,15 +216,25 @@ int maproot::execute()
 
    while(Running && engineState->isMapeditorRunning())
    {
-      maproot::start_Of_Current_Frame = std::chrono::high_resolution_clock::now();		//At the start of each frame, store the current time
-      maproot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(maproot::start_Of_Current_Frame - maproot::start_Of_Previous_Frame);	//Number of clock cycles between frames
+      maproot::start_Of_Current_Frame = std::chrono::high_resolution_clock::now();    //At the start of each frame, store the current time
+      maproot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(maproot::start_Of_Current_Frame - maproot::start_Of_Previous_Frame);  //Number of clock cycles between frames
 
-	  //update and redraw window
+     //update and redraw window
       update();
       draw();
 
+      maproot::total_Frame_Time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - maproot::start_Of_Current_Frame).count();
+
       //std::this_thread::sleep_for(std::chrono::nanoseconds(/*calculate number of nanoseconds to wait based on maximum frame rate and time taken so far*/));
-      maproot::start_Of_Previous_Frame = maproot::start_Of_Current_Frame;				//At the end of each frame, store the start time of the current frame to the previous frame
+      //cout << endl << "Total Frame Time: " << maproot::total_Frame_Time << endl;
+      //cout << "Total Time: " << maproot::total_Time;
+
+      if((SCREEN_TICKS_PER_FRAME) > maproot::total_Frame_Time)
+      {
+         SDL_Delay((SCREEN_TICKS_PER_FRAME) - maproot::total_Frame_Time);
+      }
+
+      maproot::start_Of_Previous_Frame = maproot::start_Of_Current_Frame;            //At the end of each frame, store the start time of the current frame to the previous frame
     }
 
    close() ;

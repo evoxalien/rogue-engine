@@ -10,7 +10,6 @@
 #include "log.h"
 #include "input.h"
 #include "SoundManager.h"
-#include "ltimer.h"
 #include "Texture.h"
 #include "mathutil.h"
 #include "startMenu.h"
@@ -55,10 +54,7 @@ private:
    Texture texture;
    // Texture playerTexture;
    SDL_Event Event;
-   //The frames per second timer
-   //LTimer fpsTimer;
-   //The frames per second cap timer
-   //LTimer capTimer;
+
    enum GameState
    {
       Loading, //0
@@ -164,14 +160,8 @@ bool gameroot::initialize()
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
   
-   GLOBAL_FRAME_COUNTER = 0;
-   //fpsTimer.start();
-   /*3
-   previousTicks = 0;
-   fps_lasttime = SDL_GetTicks(); //the last recorded time.
-   fps_current = 0; //the current FPS.
-   fps_frames = 0; //frames passed since the last recorded fps.
-   */
+   GLOBAL_FRAME_COUNTER = 0; //This is necessary for the animation timing in the animation class. 
+
    Hero.playerInitalize(1);
    Hero.playerX=0;
    Hero.playerY=0;
@@ -210,35 +200,7 @@ bool gameroot::loadContent()
    texture.setHeight(window->getHeight());
    Hero.LoadSpriteContent();
    Villain.LoadSpriteContent();
-   // if(!Hero.playerTexture.loadTexture("img/shapes/OrangeSquare.png"))
-   // {
-   //    error_log << "PLayerTexture Texture failed to load.\n";
-   //    return false;
-   // }
-   // Hero.playerTexture.setWidth(30);
-   // Hero.playerTexture.setHeight(30);
 
-   // Test Loading of sounds
-   /*if(!soundManager.Load_Sound("Song.mp3","DarkSouls",0))
-	{
-      printf("sound failed to load 1.\n");
-      return false;
-    }
-   if(!soundManager.Load_Sound("Song2.mp3","A2",0))
-	   {
-      printf("sound failed to load 2.\n");
-      return false;
-   }
-   if(!soundManager.Load_Sound("potion.wav","SFX",1))
-	   {
-      printf("sound failed to load 3.\n");
-      return false;
-   }
-   if(!soundManager.Load_Sound("gnt.wav","gnt",1))
-	   {
-      printf("sound failed to load 3.\n");
-      return false;
-   }*/
    
    return true;
 
@@ -311,27 +273,7 @@ void gameroot::update()
             Villain.playerKeyPress(input.getKeyDown());
             Villain.playerKeyRelease(input.getKeyUp());
          }
-		/* if(input.getKeyDown() == SDLK_1)
-         {
-			 soundManager.Play_Music("DarkSouls",-1);
-         }
-		 if(input.getKeyDown() == SDLK_2)
-		 {
-			soundManager.Play_Music("A2",-1);
-		 }
-		 if(input.getKeyDown() == SDLK_3)
-		 {
-			 soundManager.Play_Sound("SFX",0);
-		 }
-		 if(input.getKeyDown() == SDLK_4)
-		 {
-			 soundManager.Play_Sound("gnt",0);
-		 }
-         if(input.getKeyDown() == SDLK_p)
-         {
-			 soundManager.Stop_Sound();
-			 soundManager.Stop();
-         }*/
+
       }
 
 	  
@@ -344,8 +286,6 @@ void gameroot::update()
 //Draws to screen
 void gameroot::draw()
 {
-   //Start cap Timer
-   //capTimer.start();
 
    //Clear screen
    SDL_RenderClear(renderer);
@@ -372,19 +312,7 @@ void gameroot::draw()
    //update screen
    SDL_RenderPresent(renderer);
    
-   ++GLOBAL_FRAME_COUNTER;   
-   cout << GLOBAL_FRAME_COUNTER << endl;
-   //If frame finished early
-   //int frameTicks = capTimer.getTicks();
-   /*
-   if( frameTicks < SCREEN_TICKS_PER_FRAME )
-   {
-      //Wait remaining time
-      SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
-   }
-   */
-
-   //increment frame counter
+   ++GLOBAL_FRAME_COUNTER;// Counts up the frames in the engine at the end of every draw. 
 }
 
 //Actual game loop
@@ -418,9 +346,9 @@ int gameroot::execute()
       //cout << endl << "Total Frame Time: " << gameroot::total_Frame_Time << endl;
       //cout << "Total Time: " << gameroot::total_Time;
 
-      if(16 > gameroot::total_Frame_Time)
+      if((SCREEN_TICKS_PER_FRAME) > gameroot::total_Frame_Time)
       {
-         SDL_Delay((16) - gameroot::total_Frame_Time);
+         SDL_Delay((SCREEN_TICKS_PER_FRAME) - gameroot::total_Frame_Time);
       }
 
       gameroot::start_Of_Previous_Frame = gameroot::start_Of_Current_Frame;				//At the end of each frame, store the start time of the current frame to the previous frame
