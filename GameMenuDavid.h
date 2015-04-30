@@ -39,19 +39,19 @@ private:
       Test2, //20
       Test3 //21
    };
+	InputClass input;
+	SDL_Event Event;
+	GameState gameState;
+	SDL_Renderer* renderer;
+public:
 	button Button1;
 	button Button2;
 	button Button3;
 	button Button4;
 	button Button5;
 	button Button6;
-	InputClass input;
-	SDL_Event Event;
-	GameState gameState;
-
-	SDL_Renderer* renderer;
-public:
 	int gameInt;
+	bool p1k=false,p2k=false,p1g=false,p2g=false;
 	bool initialize(int passedEnum,SDL_Renderer *rendererIn);
 	int execute();
 	void OnEvent(SDL_Event *Event);
@@ -71,16 +71,16 @@ bool GameMenu::initialize(int passedEnum,SDL_Renderer *rendererIn)
 		   Button1.setRenderer(renderer);
 		   Button1.setFont("times");
 		   Button1.setWidth(100);
-		   Button1.setHeight(200);
-		   Button1.setButtonColor(255, 255, 255);
+		   Button1.setHeight(100);
+		   Button1.setButtonColor(255, 55, 255);
 		   Button1.setText("Start Game");
 		   
 		   Button2.setRenderer(renderer);
 		   Button2.setFont("times");
 		   Button2.setWidth(100);
-		   Button2.setHeight(200);
-		   Button2.setY(200);
-		   Button2.setButtonColor(255, 255, 255);
+		   Button2.setHeight(100);
+		   Button2.setY(2);
+		   Button2.setButtonColor(255, 55, 255);
 		   Button2.setText("Settings");
 	}
 	 //initialize image subsystem to load png files
@@ -119,7 +119,7 @@ int GameMenu::update()
 		Button3.setFont("times");
 		Button3.setWidth(100);
 		Button3.setHeight(200);
-		Button3.setButtonColor(255, 255, 255);
+		Button3.setButtonColor(255, 55, 255);
 		Button3.setText("1 player Keyboard");
 
 		Button4.setRenderer(renderer);
@@ -127,14 +127,14 @@ int GameMenu::update()
 		Button4.setWidth(100);
 		Button4.setHeight(200);
 		Button4.setY(200);
-		Button4.setButtonColor(255, 255, 255);
+		Button4.setButtonColor(255, 55, 255);
 		Button4.setText("2 player Keyboard");
 		Button5.setRenderer(renderer);
 		Button5.setFont("times");
 		Button5.setWidth(100);
 		Button5.setHeight(200);
 		Button5.setY(400);
-		Button5.setButtonColor(255, 255, 255);
+		Button5.setButtonColor(255, 55, 255);
 		Button5.setText("1 player GamePad");
 
 		Button6.setRenderer(renderer);
@@ -142,13 +142,14 @@ int GameMenu::update()
 		Button6.setWidth(100);
 		Button6.setHeight(200);
 		Button6.setY(600);
-		Button6.setButtonColor(255, 255, 255);
+		Button6.setButtonColor(255, 55, 255);
 		Button6.setText("2 player GamePad");
 
 		if(Button3.isClicked(input.getMouseX(),input.getMouseY()))
 		{
 			gameState=Loading;
 			gameInt=(int)gameState;
+			p1k=true;
 			return gameInt;
 		}
 
@@ -156,12 +157,14 @@ int GameMenu::update()
 		{
 			gameState=GameMenu1;
 			gameInt=(int)gameState;
+			p2k=true;
 			return gameInt;		
 		}
 		if(Button5.isClicked(input.getMouseX(),input.getMouseY()))
 		{
 			gameState=Loading;
 			gameInt=(int)gameState;
+			p1g=true;
 			return gameInt;
 		}
 
@@ -169,9 +172,38 @@ int GameMenu::update()
 		{
 			gameState=GameMenu1;
 			gameInt=(int)gameState;
+			p2g=true;
 			return gameInt;		
 		}
 	}
 }
+
+
+void GameMenu::draw()
+{
+   //Clear screen
+   SDL_RenderClear(renderer);
+   if (gameState==GameRootMenu)
+   {
+   		Button1.draw();
+   		Button2.draw();
+   }
+   if (gameState==GameMenu1)
+   {
+	   	Button3.draw();
+   		Button4.draw();
+   		Button5.draw();
+   		Button6.draw();
+   }
+   //update screen
+   SDL_RenderPresent(renderer);
+}
+
+void GameMenu::close()
+{
+   TTF_Quit();
+   IMG_Quit();
+}
+
 
 #endif

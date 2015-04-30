@@ -20,6 +20,7 @@
 #include "engineState.h"
 #include "GameMenuDavid.h"
 #include "Camera.h"
+#include "RootMenu.h"
 /*
 #include "particlemanager.h"
 #include "particle.h"*/
@@ -61,7 +62,7 @@ private:
    enum GameState
    {
       Loading, //0
-      RootMenu, //1
+      RootMenu1, //1
       EngineStartMenu, //2
       EngineSettingMenu, //3
       EngineMenu1, //4
@@ -94,7 +95,7 @@ private:
    GameMenu GameMenuObject;
    gameMap GameMap;
    Sound_Manager soundManager;
- 
+   RootMenu rootMenuObject;
 public:
    gameroot(Window *mainWindow, EngineState *currentState); 
    bool loadContent();
@@ -174,7 +175,7 @@ bool gameroot::initialize()
    Hero.playerInitalize(1);
    Hero.playerX=0;
    Hero.playerY=0;
-
+   rootMenuObject.initilizeMenu(renderer);
    Hero.InitSprite(renderer);
    if (Hero.playerInputMode=="Gamepad")
    {
@@ -352,9 +353,8 @@ void gameroot::draw()
    if(gameState == Loading)
    {
       texture.render(0,0);
-		(*gameLevel).render_All();
+      (*gameLevel).render_All();
       //GameMap.renderMap();
-      
       // Hero.playerTexture.render(0,0);
       Villain.playerDraw();
       Hero.playerDraw();
@@ -368,6 +368,7 @@ void gameroot::draw()
          
    }
    
+   rootMenuObject.displayPlatMenu();
    //update screen
    SDL_RenderPresent(renderer);
    
