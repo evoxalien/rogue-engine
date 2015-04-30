@@ -165,7 +165,7 @@ bool gameroot::initialize()
    Hero.playerInitalize(1);
    Hero.playerX=0;
    Hero.playerY=0;
-   rootMenuObject.initilizeMenu(renderer);
+   // rootMenuObject.initilizeMenu(renderer);
    Hero.InitSprite(renderer);
    if (Hero.playerInputMode=="Gamepad")
    {
@@ -308,7 +308,7 @@ void gameroot::draw()
          
    }
    
-   rootMenuObject.displayPlatMenu();
+   // rootMenuObject.displayPlatMenu();
    //update screen
    SDL_RenderPresent(renderer);
    
