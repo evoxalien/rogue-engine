@@ -12,6 +12,7 @@
 #include "Texture.h"
 // #include "Gamepad.h"
 #include <stdint.h>
+#include "level/object/object.h"
 
 #define MAX_CONTROLLERS 4
 SDL_GameController *ControllerHandles[MAX_CONTROLLERS];
@@ -88,6 +89,7 @@ public:
 	int    playerH;
 	int    currentFrameX;
 	int    currentFrameY;
+	float  player_Acceleration_Rate;
 	float  playerMovementSpeed;
 	bool   playerDirection; // true = facing left false facing Right
 	bool Controller1Connected=false;
@@ -112,6 +114,7 @@ public:
 	void close();
 	void UpdateSDLJoy(SDL_Event *Event);
 	Texture playerTexture;
+	Object object;
 };
 
 
@@ -190,6 +193,9 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 	inputFile >> CurrentData;
 	inputFile >> playerHealth;
 	// LoadSpriteContent();
+	(*this).object = Object(50, 50, 0, 2, 0, 1, 0, 0, 1, 0, 1, 1, 1, .8, 0, 1, 65535, 0, 20, 20);
+	(*this).player_Acceleration_Rate = 100000;
+	(*this).playerMovementSpeed = 5000000;
     
     //Needed a return type for success was throwing a warning John V.
     return true;
@@ -556,10 +562,18 @@ void playerClass::playerUpdate(int frame)
 	playerAnimation.setActive(true);
     
     currentFrameX = playerAnimation.getFrameX();
+
+	b2Vec2 linear_Velocity = (*(*this).object.physics).GetLinearVelocity();
+	float change_In_X_Velocity = 0;
+	float change_In_Y_Velocity = 0;
     
 	if(Actions.playerDown==true)
 	{
-		playerY += playerMovementSpeed;// * ((float)frame%6000);
+		if(linear_Velocity.y < (*this).playerMovementSpeed)
+		{
+			change_In_Y_Velocity = (*this).player_Acceleration_Rate;
+		}
+//		playerY += playerMovementSpeed;// * ((float)frame%6000);
 		if (playerDirection) //true facing left false facing right
 		{
 			currentFrameY = 1;          
@@ -569,7 +583,11 @@ void playerClass::playerUpdate(int frame)
 	}
 	else if (Actions.playerUp==true)
 	{
-		playerY -= playerMovementSpeed; //* ((float)frame%6000);
+		if(linear_Velocity.y > ((*this).playerMovementSpeed * -1.0))
+		{
+			change_In_Y_Velocity = ((*this).player_Acceleration_Rate * -1.0);
+		}
+//		playerY -= playerMovementSpeed; //* ((float)frame%6000);
 		if (playerDirection) //true facing left false facing right
 		{
 			currentFrameY = 5;          
@@ -579,13 +597,21 @@ void playerClass::playerUpdate(int frame)
 	}
 	else if (Actions.playerRight==true)
 	{
-		playerX += playerMovementSpeed;// * ((float)frame%6000);
+		if(linear_Velocity.x < (*this).playerMovementSpeed)
+		{
+			change_In_X_Velocity = (*this).player_Acceleration_Rate;
+		}
+//		playerX += playerMovementSpeed;// * ((float)frame%6000);
 		playerDirection=false;
 		currentFrameY = 2;
 	}
 	else if (Actions.playerLeft==true)
 	{
-		playerX -= playerMovementSpeed;// * ((float)frame%6000);
+		if(linear_Velocity.x > ((*this).playerMovementSpeed * -1.0))
+		{
+			change_In_X_Velocity = ((*this).player_Acceleration_Rate * -1.0);
+		}
+//		playerX -= playerMovementSpeed;// * ((float)frame%6000);
 		playerDirection=true;
 		currentFrameY = 3;
 	}
@@ -594,8 +620,10 @@ void playerClass::playerUpdate(int frame)
 		playerAnimation.setActive(false);
 		currentFrameX = 0;
 	}
+
+	(*(*this).object.physics).ApplyForce(b2Vec2(change_In_X_Velocity * (*(*this).object.physics).GetMass() * Object::physics_Time_Step, change_In_Y_Velocity * (*(*this).object.physics).GetMass() * Object::physics_Time_Step), (*(*this).object.physics).GetWorldCenter(), true);
     //Smooth the Animation Transitions
-    playerAnimation.setPosition(playerX,playerY);
+    playerAnimation.setPosition((*(*this).object.physics).GetPosition().x - 20, (*(*this).object.physics).GetPosition().y - 20);
     playerAnimation.setCurrentFrame(currentFrameX,currentFrameY);
     
     //Update of the Animations depending on Game Time

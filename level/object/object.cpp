@@ -3,7 +3,7 @@
 
 //Initialization of static Object members
 std::vector<Object*> Object::object_Pointer_Vector;
-b2World Object::box2D_World(b2Vec2(0,9.81));
+b2World Object::box2D_World(b2Vec2(0,25));
 b2BodyDef Object::box2D_Body_Definition;
 b2FixtureDef Object::box2D_Fixture_Definition;
 b2PolygonShape Object::box2D_Polygon_Shape;
@@ -22,7 +22,7 @@ Object::Object()
 }
 
 //
-/*Object::Object(const float x_Position, const float y_Position, const float angle_In_Radians, const int body_Type, const bool check_For_Dynamic_Tunneling, const bool use_Fixed_Rotation, const float linear_Damping, const float angular_Damping, const float gravity_Scale, const bool allow_Physics_Sleep, const bool initialize_Awake, const bool initialize_Active, const float density, const float friction, const float restitution, const uint16 exists_In_Layers, const uint16 collides_With_Layers, const int group_Index, const float x_Half_Length, const float y_Half_Length)
+Object::Object(const float x_Position, const float y_Position, const float angle_In_Radians, const int body_Type, const bool check_For_Dynamic_Tunneling, const bool use_Fixed_Rotation, const float linear_Damping, const float angular_Damping, const float gravity_Scale, const bool allow_Physics_Sleep, const bool initialize_Awake, const bool initialize_Active, const float density, const float friction, const float restitution, const uint16 exists_In_Layers, const uint16 collides_With_Layers, const int group_Index, const float x_Half_Length, const float y_Half_Length)
 {
 	std::cout << "Object(Physics components)" << std::endl;
 
@@ -74,7 +74,7 @@ Object::Object()
 
 	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
 	Object::object_Pointer_Vector.push_back(this);
-}*/
+}
 
 Object::Object(const float x_Position, const float y_Position, const float angle_In_Radians, const int body_Type, const bool check_For_Dynamic_Tunneling, const bool use_Fixed_Rotation, const float linear_Damping, const float angular_Damping, const float gravity_Scale, const bool allow_Physics_Sleep, const bool initialize_Awake, const bool initialize_Active, const float density, const float friction, const float restitution, const uint16 exists_In_Layers, const uint16 collides_With_Layers, const int group_Index, const float x_Half_Length, const float y_Half_Length, const std::string animation_File_Path)//, const int amountofFramesX, const int amountofFramesY)
 {

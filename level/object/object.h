@@ -22,6 +22,7 @@ class Object
 //	friend class Sound;				//Shouldn't need access unless we implement directional sounds
 //	friend class Level;				//Shouldn't need access, just creates and stores Objects
 	friend class gameroot;
+	friend class playerClass;
 
 	private:
 		//Private static class variables
@@ -47,7 +48,7 @@ class Object
 	public:
 		//Constructors and Destructors
 		Object();									//Default constructor
-		//Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float);	//Constructor for Physics, may need to be updated to handle multiple fixtures
+		Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float);	//Constructor for Physics, may need to be updated to handle multiple fixtures
 		Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float, const std::string);//, const int, const int);
 		Object(const Behavior);						//Constructor for when there is an already existing Behavior the Object should follow
 		Object(const Attributes);					//Constructor for when the Attributes of an Object is known
