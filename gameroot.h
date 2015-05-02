@@ -19,7 +19,7 @@
 #include "engineState.h"
 #include "GameMenuDavid.h"
 #include "Camera.h"
-//#include "RootMenu.h"
+#include "RootMenu.h"
 /*
 #include "particlemanager.h"
 #include "particle.h"*/
@@ -91,7 +91,11 @@ private:
    GameMenu GameMenuObject;
    gameMap GameMap;
    Sound_Manager soundManager;
-   //RootMenu rootMenuObject;
+   RootMenu rootMenuObject;
+   int menuchoice=0;
+   SDL_Color menuColor={0xFF,0xA5,0x00,0xFF};
+   SDL_Color textColor = {0xFF,0xA5,0xA5,0xFF};
+   bool newMenu=false;
 public:
    gameroot(Window *mainWindow, EngineState *currentState); 
    bool loadContent();
@@ -123,7 +127,7 @@ gameroot::gameroot(Window *mainWindow, EngineState *currentState)
    window = mainWindow;
    engineState = currentState;
    renderer = NULL;
-   gameState = Loading; 
+   gameState = GameRootMenu; 
 }
 
 
@@ -162,24 +166,13 @@ bool gameroot::initialize()
   
    GLOBAL_FRAME_COUNTER = 0; //This is necessary for the animation timing in the animation class. 
 
-   Hero.playerInitalize(1);
+   rootMenuObject.initilizeMenu(renderer);
    Hero.playerX=0;
    Hero.playerY=0;
-   // rootMenuObject.initilizeMenu(renderer);
    Hero.InitSprite(renderer);
-   if (Hero.playerInputMode=="Gamepad")
-   {
-      Hero.init();
-   }
    Villain.playerX=50;
    Villain.playerY=50;
-   Villain.playerInitalize(2);
    Villain.InitSprite(renderer);
-   if (Villain.playerInputMode=="Gamepad")
-   {
-      /* code */
-      Villain.init();
-   }
    //Sound Manager Initialize
    soundManager.Init();
 
@@ -198,8 +191,6 @@ bool gameroot::loadContent()
    
    texture.setWidth(window->getWidth());
    texture.setHeight(window->getHeight());
-   Hero.LoadSpriteContent();
-   Villain.LoadSpriteContent();
 
    
    return true;
@@ -215,13 +206,13 @@ void gameroot::OnEvent(SDL_Event *Event)
    if(Event->type == SDL_WINDOWEVENT)
    {
       if(Event->window.windowID == window->ID)
-	  {
-	     if(Event->window.event == SDL_WINDOWEVENT_CLOSE)
-		 {
-		    Event->type = SDL_QUIT;
+     {
+        if(Event->window.event == SDL_WINDOWEVENT_CLOSE)
+       {
+          Event->type = SDL_QUIT;
             SDL_PushEvent(Event);
          }
-	  }
+     }
    }
    if (Hero.playerInputMode=="Gamepad"&&Hero.Controller1Connected==true)
    {
@@ -243,32 +234,174 @@ void gameroot::OnEvent(SDL_Event *Event)
 void gameroot::update()
 {
    EngineActiveState=gameState;
-   gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
+
+   gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();   //Add the time of the last frame to the total time
 
    debug_log << "\ntest " << GLOBAL_FRAME_COUNTER << "\n";
 
+   if (gameState==GamePlaying1)
+   {
+      gameLevel->update_All();
+      Hero.playerUpdate(GLOBAL_FRAME_COUNTER);
+      Villain.playerUpdate(GLOBAL_FRAME_COUNTER);
+   }
+   //Game Menu Starting
+   if (gameState == GameRootMenu)
+   {
+      switch (menuchoice)
+      {
+         case 0:
+         rootMenuObject.Root[0].loadTextRender("Start", menuColor);
+         rootMenuObject.Root[1].loadTextRender("other Start", textColor);
+         break;
+         case 1:
+         rootMenuObject.Root[0].loadTextRender("Start", textColor);
+         rootMenuObject.Root[1].loadTextRender("other Start", menuColor);
+         break;
+      }
+   }
+   if (gameState == GameMenu1)
+   {
+      switch (menuchoice)
+      {
+         case 0:
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", menuColor);
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         break;
+         
+         case 1:
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", menuColor);
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         break;
+         
+         case 2:
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", menuColor);
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         break;
 
-   gameLevel->update_All();
-   Hero.playerUpdate(GLOBAL_FRAME_COUNTER);
-   Villain.playerUpdate(GLOBAL_FRAME_COUNTER);
+         case 3:
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", menuColor);
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+         break;
+      }
+   }
+   if (gameState==Loading)
+   {
+      if (Hero.p1k==true)
+      {
+      Hero.playerInitalize(1);
+      Villain.playerInitalize(2);
+      }
+      if (Villain.p2k==true)
+      Villain.playerInitalize(2);
+      if (Hero.p1g==true)
+      {
+      Hero.playerInitalize(1);
+      Villain.playerInitalize(2);
+         
+
+         Hero.init();
+      }
+      if (Villain.p2g==true)
+       {
+      Villain.playerInitalize(2);
+         Villain.init();
+         
+       }  
+      Hero.LoadSpriteContent();
+      Villain.LoadSpriteContent();
+      gameState=GamePlaying1;
+   }
 
 
    while(SDL_PollEvent(&Event))
    {
       //Updates input object, holding current buttons pressed
       input.update(Event);
-	  
-	  //Checking if X has been clicked
+     
+     //Checking if X has been clicked
       OnEvent(&Event);
 
-      if(gameState == Loading)
+      if (gameState== GameRootMenu)
       {
-         if (Hero.Controller1Connected==false)
+         if (input.getKeyDown()==SDLK_UP)
+         {
+            menuchoice--;
+            if (menuchoice<0)
+               menuchoice=1;
+         }
+         if (input.getKeyDown()==SDLK_DOWN)
+         {
+             menuchoice++;
+            if (menuchoice>1)
+               menuchoice=0;
+         }
+         if (input.getKeyDown()==SDLK_RETURN)
+         {
+            if (menuchoice==0)
+               gameState=GameMenu1;
+            if (menuchoice==1)
+               gameState=GamePlaying1;
+         }
+      }
+      if (gameState== GameMenu1)
+      {
+         if (input.getKeyUp()==SDLK_RETURN)
+         {
+            newMenu=true;
+         }
+         if (input.getKeyDown()==SDLK_UP)
+         {
+            menuchoice--;
+            if (menuchoice<0)
+               menuchoice=3;
+         }
+         if (input.getKeyDown()==SDLK_DOWN)
+         {
+             menuchoice++;
+            if (menuchoice>3)
+               menuchoice=0;
+         }
+         if (input.getKeyDown()==SDLK_RETURN&&newMenu==true)
+         {
+            if (menuchoice==0) //1 player on keyboard
+            {
+               Hero.p1k=true;
+            }
+            if (menuchoice==1) // 2 players on keyboard
+            {
+               Hero.p1k=true;
+               Villain.p2k=true;  
+            }
+            if (menuchoice==2) // 1 player on game pad
+            {
+               Hero.p1g=true;
+            }
+            if (menuchoice==3) // 2 players on gamepad
+            {
+               Hero.p1g=true;
+               Villain.p2g=true;
+            }
+            gameState=Loading;
+         }
+      }
+
+      if(gameState == GamePlaying1)
+      {
+         if (Hero.Controller1Connected==false&&Hero.p1k==true)
          {
             Hero.playerKeyPress(input.getKeyDown());
             Hero.playerKeyRelease(input.getKeyUp());
          }
-         if (Villain.Controller2Connected==false)
+         if (Villain.Controller2Connected==false&&Villain.p2k==true)
          {
             Villain.playerKeyPress(input.getKeyDown());
             Villain.playerKeyRelease(input.getKeyUp());
@@ -290,25 +423,28 @@ void gameroot::draw()
    //Clear screen
    SDL_RenderClear(renderer);
 
-   if(gameState == Loading)
+   if(gameState == GamePlaying1)
    {
       texture.render(0,0);
       (*gameLevel).render_All();
       //GameMap.renderMap();
       // Hero.playerTexture.render(0,0);
-      Villain.playerDraw();
+      if (Villain.p2k==true||Villain.p2g==true)
+      {
+         Villain.playerDraw();
+         /* code */
+      }
       Hero.playerDraw();
    }
-   else if(gameState == GameRootMenu)
+    if(gameState == GameRootMenu)
    {
-      
+      rootMenuObject.displayPlatMenu();   
    }
-   else if(gameState == GamePlaying1)
+   if(gameState == GameMenu1)
    {
-         
+      rootMenuObject.displayPlatMenu1();
    }
    
-   // rootMenuObject.displayPlatMenu();
    //update screen
    SDL_RenderPresent(renderer);
    

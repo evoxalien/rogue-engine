@@ -66,20 +66,20 @@ private:
 public:
 	struct PlayerAction //holds the flags of the buttons that are being pressed
 	{
-		bool  playerUp;
-		bool  playerDown;
-		bool  playerLeft;
-		bool  playerRight;
-		bool  playerActivate;
-		bool  playerUse;
-		bool  playerAttack;
-		bool  playerSpecial;
-		bool  playerStart;
-		bool  playerBack;
-		bool  playerJump;
-		bool  playerExit;
-		bool  playerLeftShoulder;
-		bool playerRightShoulder;
+		bool  playerUp=false;
+		bool  playerDown=false;
+		bool  playerLeft=false;
+		bool  playerRight=false;
+		bool  playerActivate=false;
+		bool  playerUse=false;
+		bool  playerAttack=false;
+		bool  playerSpecial=false;
+		bool  playerStart=false;
+		bool  playerBack=false;
+		bool  playerJump=false;
+		bool  playerExit=false;
+		bool  playerLeftShoulder=false;
+		bool playerRightShoulder=false;
 	};
 	PlayerAction Actions;
 	SDL_Rect whiteBoxRect;
@@ -96,6 +96,7 @@ public:
 	bool Controller2Connected=false;
 	string playerInputMode;
 	Animation playerAnimation;
+	bool p1k=false,p2k=false,p1g=false,p2g=false;
 	SDL_Joystick* gGameController = NULL;
 	void InitSprite(SDL_Renderer* gRenderer);
 	void loadSpriteContent();
@@ -123,21 +124,30 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 {
 	ifstream inputFile;
 	playerIndex=playerIndexPassed;
-	if (playerIndex==1)//player 1 file
-	{
 	   //parse the file
 	   // inputFile.open("../resources/playerConfig/Player2Script.txt");
-	   inputFile.open("../resources/playerConfig/Player1Script.txt");
-	}
-	if (playerIndex==2)//player 2 file
+
+	if (playerIndex==1&&p1k==true)//player 1 file
 	{
-	   inputFile.open("../resources/playerConfig/Player1Script.txt");
-		//parse the file
+	   inputFile.open("../resources/playerConfig/Player1KScript.txt");
 	}
-	if (playerIndex==0)//player 1 set to controller but no controller defaults to keyboard
+	if (playerIndex==1&&p1g==true)//player 1 file
 	{
-	   inputFile.open("../resources/playerConfig/Player0Script.txt");
+	   inputFile.open("../resources/playerConfig/Player1GScript.txt");
 	}
+	if (playerIndex==2&&p2k==true)//player 2 file
+	{
+	   inputFile.open("../resources/playerConfig/Player2KScript.txt");
+	}
+	if (playerIndex==2&&p2g==true)//player 2 file
+	{
+	   inputFile.open("../resources/playerConfig/Player2GScript.txt");
+	}
+
+	// if (playerIndex==0)//player 1 set to controller but no controller defaults to keyboard
+	// {
+	//    inputFile.open("../resources/playerConfig/Player0Script.txt");
+	// }
 
 	if(!inputFile)//file failed
 		return false;
@@ -343,17 +353,23 @@ bool playerClass::init()
 		}
 		else
 		{
-			//Load joystick
-			if (playerIndex==1&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>0)
+			if (p1g==true)
 			{
 				Controller1Connected=true;
 				gGameController = SDL_JoystickOpen( 0 );
 			}
-			if (playerIndex==2&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>1)
+			if (p2g==true)
 			{
 				Controller2Connected=true;
 				gGameController = SDL_JoystickOpen( 1 );
 			}
+			//Load joystick
+			// if (playerIndex==1&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>0)
+			// {
+			// }
+			// if (playerIndex==2&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>1)
+			// {
+			// }
 			if( gGameController == NULL )
 			{
 				printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
