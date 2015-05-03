@@ -1,6 +1,7 @@
 #ifndef MAP_H_
 #define MAP_H_
 
+#include "PopupMenu.h"
 #include "SDLincludes.h"
 #include "Texture.h"
 #include "input.h"
@@ -15,6 +16,7 @@ const int PLATMAX = 100;
 class Map
 {
 private:
+	PopupMenu pMenu;
 	bool rightClickMenuShown;
 	Texture rightClickMenuText[10];
 	bool anchorPointsShown;
@@ -47,7 +49,8 @@ private:
 	{
 		Testing,
 		Select,
-		Info
+		Info,
+		Doors
 	};
 
 	enum ObjectType
@@ -86,8 +89,6 @@ public:
 	void destroyAnchorPoints();
 	void displayAnchorPoints();
 	void createPlatMenu(int plat, int x, int y);
-	void destroyPlatMenu();
-	void displayPlatMenu();
 	void processKeyboard(InputClass input, InputClass prevInput);
 	void processMouse(InputClass input, InputClass prevInput);
 	void rightClickAction(InputClass input, InputClass prevInput);
