@@ -54,7 +54,7 @@ void RootMenu::initilizeMenu(SDL_Renderer *rendererIn)
 
 	Root[index].setRenderer(renderer);
 	Root[index].setFont("calibri", 20);
-	Root[index].loadTextRender("other start", textColor);
+	Root[index].loadTextRender("Settings Dont touch", textColor);
 	RootShape[index] = {x, y, Root[index].getWidth(), Root[index].getHeight()};
 	y += Root[index].getHeight();
 	index++;

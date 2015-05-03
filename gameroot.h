@@ -255,11 +255,11 @@ void gameroot::update()
       {
          case 0:
          rootMenuObject.Root[0].loadTextRender("Start", menuColor);
-         rootMenuObject.Root[1].loadTextRender("other Start", textColor);
+         rootMenuObject.Root[1].loadTextRender("Settings Dont touch", textColor);
          break;
          case 1:
          rootMenuObject.Root[0].loadTextRender("Start", textColor);
-         rootMenuObject.Root[1].loadTextRender("other Start", menuColor);
+         rootMenuObject.Root[1].loadTextRender("Settings Dont touch", menuColor);
          break;
       }
    }
@@ -369,7 +369,7 @@ void gameroot::update()
             if (menuchoice==0)
                gameState=GameMenu1;
             if (menuchoice==1)
-               gameState=GamePlaying1;
+               gameState=GameMenu2;
          }
       }
       if (gameState== GameMenu1)
