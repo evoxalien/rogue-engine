@@ -10,6 +10,7 @@
 #include "log.h"
 #include "input.h"
 #include "SoundManager.h"
+#include "ltimer.h"
 #include "Texture.h"
 #include "mathutil.h"
 #include "startMenu.h"
@@ -18,8 +19,6 @@
 #include "window.h"
 #include "engineState.h"
 #include "GameMenuDavid.h"
-#include "Camera.h"
-#include "RootMenu.h"
 /*
 #include "particlemanager.h"
 #include "particle.h"*/
@@ -43,23 +42,25 @@ private:
    const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
    static std::chrono::high_resolution_clock::time_point start_Of_Previous_Frame;
    static std::chrono::high_resolution_clock::time_point start_Of_Current_Frame;
-   static uint32_t total_Frame_Time;
    static std::chrono::duration<double> time_Of_Previous_Frame;
    
    bool Running;
    Window *window;
    EngineState *engineState;
    SDL_Renderer *renderer;
-   Level *gameLevel;
+   Level gameLevel;
+   Texture *physicsObjects;
    Texture texture;
-   Camera camera;
    // Texture playerTexture;
    SDL_Event Event;
-
+   //The frames per second timer
+   LTimer fpsTimer;
+   //The frames per second cap timer
+   LTimer capTimer;
    enum GameState
    {
       Loading, //0
-      RootMenu1, //1
+      RootMenu, //1
       EngineStartMenu, //2
       EngineSettingMenu, //3
       EngineMenu1, //4
@@ -92,11 +93,7 @@ private:
    GameMenu GameMenuObject;
    gameMap GameMap;
    Sound_Manager soundManager;
-   RootMenu rootMenuObject;
-   int menuchoice=0;
-   SDL_Color menuColor={0xFF,0xA5,0x00,0xFF};
-   SDL_Color textColor = {0xFF,0xA5,0xA5,0xFF};
-   bool newMenu=false;
+ 
 public:
    gameroot(Window *mainWindow, EngineState *currentState); 
    bool loadContent();
@@ -119,7 +116,7 @@ double gameroot::total_Time = 0;				//The amount of time the game has run from t
 std::chrono::high_resolution_clock::time_point gameroot::start_Of_Previous_Frame = std::chrono::high_resolution_clock::now();	//The time point that the previous instance of the main game loop (A 'frame') began
 std::chrono::high_resolution_clock::time_point gameroot::start_Of_Current_Frame = gameroot::start_Of_Previous_Frame;			//The time point at which the currently active frame began
 std::chrono::duration<double> gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame);	//The length of time the previous frame took to complete
-uint32_t gameroot::total_Frame_Time = 0;
+
 
 //Simple initializes
 gameroot::gameroot(Window *mainWindow, EngineState *currentState)
@@ -128,7 +125,7 @@ gameroot::gameroot(Window *mainWindow, EngineState *currentState)
    window = mainWindow;
    engineState = currentState;
    renderer = NULL;
-   gameState = GameRootMenu; 
+   gameState = Loading; 
 }
 
 
@@ -144,11 +141,7 @@ bool gameroot::initialize()
    }
 
    renderer = window->getRenderer();
-	Object::SDL_Renderer_Pointer = renderer;
    
-	gameroot::camera.setBoundRect(0,0,5000,5000);
-	Object::camera_Pointer = &camera;
-
    //tell texture the renderer to use
    texture.setRenderer(renderer);
    
@@ -164,19 +157,41 @@ bool gameroot::initialize()
 
    GameMap.parseMapFile("mapTree", renderer);
    gameLevel = new Level("../resources/maps/map1.txt");
+   physicsObjects = new Texture[gameLevel->getObjectCount()];
+   for(int i = 0; i < gameLevel->getObjectCount(); i++)
+   {
+      physicsObjects[i].setRenderer(renderer);
+   }
 
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
   
-   GLOBAL_FRAME_COUNTER = 0; //This is necessary for the animation timing in the animation class. 
-
-   rootMenuObject.initilizeMenu(renderer);
+   GLOBAL_FRAME_COUNTER = 0;
+   fpsTimer.start();
+   /*3
+   previousTicks = 0;
+   fps_lasttime = SDL_GetTicks(); //the last recorded time.
+   fps_current = 0; //the current FPS.
+   fps_frames = 0; //frames passed since the last recorded fps.
+   */
+   Hero.playerInitalize(1);
    Hero.playerX=0;
    Hero.playerY=0;
+
    Hero.InitSprite(renderer);
+   if (Hero.playerInputMode=="Gamepad")
+   {
+      Hero.init();
+   }
    Villain.playerX=50;
    Villain.playerY=50;
+   Villain.playerInitalize(2);
    Villain.InitSprite(renderer);
+   if (Villain.playerInputMode=="Gamepad")
+   {
+      /* code */
+      Villain.init();
+   }
    //Sound Manager Initialize
    soundManager.Init();
 
@@ -193,9 +208,45 @@ bool gameroot::loadContent()
        return false;
     }
    
+   for(int i = 0; i < gameLevel->getObjectCount(); i++)
+   {
+      physicsObjects[i].loadTexture("../resources/img/shapes/orangeSquare.png");
+	  physicsObjects[i].setWidth(200);
+	  physicsObjects[i].setHeight(30);
+   }
    texture.setWidth(window->getWidth());
    texture.setHeight(window->getHeight());
+   Hero.LoadSpriteContent();
+   Villain.LoadSpriteContent();
+   // if(!Hero.playerTexture.loadTexture("img/shapes/OrangeSquare.png"))
+   // {
+   //    error_log << "PLayerTexture Texture failed to load.\n";
+   //    return false;
+   // }
+   // Hero.playerTexture.setWidth(30);
+   // Hero.playerTexture.setHeight(30);
 
+   // Test Loading of sounds
+   /*if(!soundManager.Load_Sound("Song.mp3","DarkSouls",0))
+	{
+      printf("sound failed to load 1.\n");
+      return false;
+    }
+   if(!soundManager.Load_Sound("Song2.mp3","A2",0))
+	   {
+      printf("sound failed to load 2.\n");
+      return false;
+   }
+   if(!soundManager.Load_Sound("potion.wav","SFX",1))
+	   {
+      printf("sound failed to load 3.\n");
+      return false;
+   }
+   if(!soundManager.Load_Sound("gnt.wav","gnt",1))
+	   {
+      printf("sound failed to load 3.\n");
+      return false;
+   }*/
    
    return true;
 
@@ -210,13 +261,13 @@ void gameroot::OnEvent(SDL_Event *Event)
    if(Event->type == SDL_WINDOWEVENT)
    {
       if(Event->window.windowID == window->ID)
-     {
-        if(Event->window.event == SDL_WINDOWEVENT_CLOSE)
-       {
-          Event->type = SDL_QUIT;
+	  {
+	     if(Event->window.event == SDL_WINDOWEVENT_CLOSE)
+		 {
+		    Event->type = SDL_QUIT;
             SDL_PushEvent(Event);
          }
-     }
+	  }
    }
    if (Hero.playerInputMode=="Gamepad"&&Hero.Controller1Connected==true)
    {
@@ -226,10 +277,7 @@ void gameroot::OnEvent(SDL_Event *Event)
    {
       Villain.UpdateSDLJoy(Event);
    }
-   if (Villain.playerInputMode=="Gamepad"&&Villain.Controller3Connected==true)
-   {
-      Villain.UpdateSDLJoy(Event);
-   }
+   
    if(Event->type == SDL_QUIT)
    {
       engineState->gameroot = false;
@@ -241,166 +289,56 @@ void gameroot::OnEvent(SDL_Event *Event)
 void gameroot::update()
 {
    EngineActiveState=gameState;
+   gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();	//Add the time of the last frame to the total time
 
-   gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();   //Add the time of the last frame to the total time
+   debug_log << "test " << GLOBAL_FRAME_COUNTER << "\n";
 
-   debug_log << "\ntest " << GLOBAL_FRAME_COUNTER << "\n";
-
-   if (gameState==GamePlaying1)
-   {
-		(*Object::camera_Pointer).Update_Camera(((*Hero.object.physics).GetPosition().x - ((*Object::camera_Pointer).getCamW() / Object::meters_Per_Pixel / 2.0)), ((*Hero.object.physics).GetPosition().y - ((*Object::camera_Pointer).getCamH() / Object::meters_Per_Pixel / 2.0)));
-      gameLevel->update_All();
-      Hero.playerUpdate(GLOBAL_FRAME_COUNTER);
-      Villain.playerUpdate(GLOBAL_FRAME_COUNTER);
-   }
-   //Game Menu Starting
-   if (gameState == GameRootMenu)
-   {
-      switch (menuchoice)
-      {
-         case 0:
-         rootMenuObject.Root[0].loadTextRender("Start", menuColor);
-         rootMenuObject.Root[1].loadTextRender("Settings Dont touch", textColor);
-         break;
-         case 1:
-         rootMenuObject.Root[0].loadTextRender("Start", textColor);
-         rootMenuObject.Root[1].loadTextRender("Settings Dont touch", menuColor);
-         break;
-      }
-   }
-   if (gameState == GameMenu1)
-   {
-      rootMenuObject.UpdateGameMenu1(menuchoice);
-   }
-   if (gameState==Loading)
-   {
-      if (Hero.p1k==true)
-      {
-         Hero.playerInitalize(1);
-         Villain.playerInitalize(2);
-      }
-      if (Villain.p2k==true)
-      {
-         Villain.playerInitalize(2);
-      }
-      if (Hero.p1g==true)
-      {
-         Hero.playerInitalize(1);
-         Villain.playerInitalize(2);
-         Hero.init();
-      }
-      if (Villain.p2g==true)
-      {
-         Villain.playerInitalize(2);
-         Villain.init();
-      }  
-      if (Hero.mix==true&&Villain.mix==true)
-      {
-         Hero.playerInitalize(1);
-         Villain.playerInitalize(2);
-         Villain.init();
-      }
-      Hero.LoadSpriteContent();
-      Villain.LoadSpriteContent();
-      gameState=GamePlaying1;
-   }
-
+   gameLevel->update();
 
    while(SDL_PollEvent(&Event))
    {
       //Updates input object, holding current buttons pressed
       input.update(Event);
-     
-     //Checking if X has been clicked
+	  
+	  //Checking if X has been clicked
       OnEvent(&Event);
 
-      if (gameState== GameRootMenu)
+      if(gameState == Loading)
       {
-         if (input.getKeyDown()==SDLK_UP)
-         {
-            menuchoice--;
-            if (menuchoice<0)
-               menuchoice=1;
-         }
-         if (input.getKeyDown()==SDLK_DOWN)
-         {
-             menuchoice++;
-            if (menuchoice>1)
-               menuchoice=0;
-         }
-         if (input.getKeyDown()==SDLK_RETURN)
-         {
-            if (menuchoice==0)
-               gameState=GameMenu1;
-            if (menuchoice==1)
-               gameState=GameMenu2;
-         }
-      }
-      if (gameState== GameMenu1)
-      {
-         if (input.getKeyUp()==SDLK_RETURN)
-         {
-            newMenu=true;
-         }
-         if (input.getKeyDown()==SDLK_UP)
-         {
-            menuchoice--;
-            if (menuchoice<0)
-               menuchoice=4;
-         }
-         if (input.getKeyDown()==SDLK_DOWN)
-         {
-             menuchoice++;
-            if (menuchoice>4)
-               menuchoice=0;
-         }
-         if (input.getKeyDown()==SDLK_RETURN&&newMenu==true)
-         {
-            switch (menuchoice)
-            {
-               case 0:
-               Hero.p1k=true;
-               break;
-               case 1:
-               Hero.p1k=true;
-               Villain.p2k=true;  
-               break;
-               case 2:
-               Hero.p1g=true;
-               break;
-               case 3:
-               Hero.p1g=true;
-               Villain.p2g=true;
-               break;
-               case 4:
-               Hero.mix=true;
-               Villain.mix=true;
-               break;
-            }
-            gameState=Loading;
-         }
-      }
-
-      if(gameState == GamePlaying1)
-      {
-         if (Hero.Controller1Connected==false&&Hero.p1k==true)
+         if (Hero.Controller1Connected==false)
          {
             Hero.playerKeyPress(input.getKeyDown());
             Hero.playerKeyRelease(input.getKeyUp());
          }
-         if (Hero.Controller1Connected==false&&Hero.mix==true)
-         {
-            Hero.playerKeyPress(input.getKeyDown());
-            Hero.playerKeyRelease(input.getKeyUp());
-         }
-         if (Villain.Controller2Connected==false&&Villain.p2k==true)
+         Hero.playerUpdate(fpsTimer.getTicks());
+         if (Villain.Controller2Connected==false)
          {
             Villain.playerKeyPress(input.getKeyDown());
             Villain.playerKeyRelease(input.getKeyUp());
          }
-
+         Villain.playerUpdate(fpsTimer.getTicks());
+		/* if(input.getKeyDown() == SDLK_1)
+         {
+			 soundManager.Play_Music("DarkSouls",-1);
+         }
+		 if(input.getKeyDown() == SDLK_2)
+		 {
+			soundManager.Play_Music("A2",-1);
+		 }
+		 if(input.getKeyDown() == SDLK_3)
+		 {
+			 soundManager.Play_Sound("SFX",0);
+		 }
+		 if(input.getKeyDown() == SDLK_4)
+		 {
+			 soundManager.Play_Sound("gnt",0);
+		 }
+         if(input.getKeyDown() == SDLK_p)
+         {
+			 soundManager.Stop_Sound();
+			 soundManager.Stop();
+         }*/
       }
-
 	  
    }  
       
@@ -411,36 +349,48 @@ void gameroot::update()
 //Draws to screen
 void gameroot::draw()
 {
+   //Start cap Timer
+   capTimer.start();
 
    //Clear screen
    SDL_RenderClear(renderer);
 
-   if(gameState == GamePlaying1)
+   if(gameState == Loading)
    {
       texture.render(0,0);
-      (*gameLevel).render_All();
       //GameMap.renderMap();
-      // Hero.playerTexture.render(0,0);
-      if (Villain.p2k==true||Villain.p2g==true||Villain.mix==true)
+      for(int i = 0; i < gameLevel->getObjectCount(); i++)
       {
-         Villain.playerDraw();
-         /* code */
+         physicsObjects[i].render(gameLevel->getX(i),gameLevel->getY(i), NULL, ((*(*Object::object_Pointer_Vector[i]).physics).GetAngle() * (180.0 / 3.1415926535897932384626433832795)));
       }
+      
+      // Hero.playerTexture.render(0,0);
+      Villain.playerDraw();
       Hero.playerDraw();
    }
-    if(gameState == GameRootMenu)
+   else if(gameState == GameRootMenu)
    {
-      rootMenuObject.displayPlatMenu();   
+      
    }
-   if(gameState == GameMenu1)
+   else if(gameState == GamePlaying1)
    {
-      rootMenuObject.displayPlatMenu1();
+         
    }
    
    //update screen
    SDL_RenderPresent(renderer);
    
-   ++GLOBAL_FRAME_COUNTER;// Counts up the frames in the engine at the end of every draw. 
+   ++GLOBAL_FRAME_COUNTER;   
+
+   //If frame finished early
+   int frameTicks = capTimer.getTicks();
+   if( frameTicks < SCREEN_TICKS_PER_FRAME )
+   {
+      //Wait remaining time
+      SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
+   }
+
+   //increment frame counter
 }
 
 //Actual game loop
@@ -468,17 +418,7 @@ int gameroot::execute()
       update();
       draw();
 
-      gameroot::total_Frame_Time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - gameroot::start_Of_Current_Frame).count();
-
       //std::this_thread::sleep_for(std::chrono::nanoseconds(/*calculate number of nanoseconds to wait based on maximum frame rate and time taken so far*/));
-      //cout << endl << "Total Frame Time: " << gameroot::total_Frame_Time << endl;
-      //cout << "Total Time: " << gameroot::total_Time;
-
-      if((SCREEN_TICKS_PER_FRAME) > gameroot::total_Frame_Time)
-      {
-         SDL_Delay((SCREEN_TICKS_PER_FRAME) - gameroot::total_Frame_Time);
-      }
-
       gameroot::start_Of_Previous_Frame = gameroot::start_Of_Current_Frame;				//At the end of each frame, store the start time of the current frame to the previous frame
     }
 
@@ -501,7 +441,6 @@ void gameroot::close()
 	if(gameLevel != nullptr)
 	{
 		delete gameLevel;
-		gameLevel = nullptr;
 	}
 
 

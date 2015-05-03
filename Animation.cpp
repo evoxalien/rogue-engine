@@ -62,11 +62,11 @@ void Animation::Initialize( int x, int y, int framesX, int framesY)
 	{
 		frameCounter = 0;
 		active = false;
+		switchFrame = 100;
 		PosX = x;
 		PosY = y;
 		amountofFramesX = framesX;
 		amountofFramesY = framesY;
-		frameSpeed = 4;
 	}
 
 void Animation::LoadImage( string filename )
@@ -81,27 +81,22 @@ void Animation::LoadImage( string filename )
 	}
 }
 
-void Animation::SetFramerate(int speed)
-{
-	frameSpeed = speed;
-}
 
-void Animation::Update(int frame)
+void Animation::Update(int gameTime)
 	{
 		// to count to a certaint number then change frame, milliseconds since last frame
 		if (active)
-			if(frame % frameSpeed == 0)
-				frameCounter++;
-
-		//cout << "FrameCounter " << frameCounter << endl;
-		if (frameCounter >= amountofFramesX)
-		{
-			currentFrameX = 0;
+			frameCounter += ((int)gameTime%60);
+		else
 			frameCounter = 0;
+
+		if (frameCounter >= switchFrame)
+		{
+			frameCounter = 0;
+			currentFrameX += getFrameWidth();
+			if (currentFrameX >= Image.getWidth())
+				currentFrameX = 0;
 		}
-		currentFrameX = getFrameWidth() * frameCounter;
-		
-		
 		SourceRect = {(int)currentFrameX, (int)currentFrameY * getFrameHeight(), getFrameWidth(), getFrameHeight()};
 	}
 
@@ -109,7 +104,6 @@ void Animation::Draw()
 	{
 		//SourceRect = {(int)currentFrameX, (int)currentFrameY * getFrameHeight(), getFrameWidth(), getFrameHeight()};
 		//printf("Drawing Image");
-//		Image.render(PosX,PosY, &SourceRect);
-		(*this).Image.render(static_cast<int>(((*this).getPosX() - (*Object::camera_Pointer).getCamX()) * Object::meters_Per_Pixel), static_cast<int>(((*this).getPosY() - (*Object::camera_Pointer).getCamY()) * Object::meters_Per_Pixel), (*this).getFrameWidth() * Object::meters_Per_Pixel, (*this).getFrameHeight() * Object::meters_Per_Pixel, &(*this).SourceRect);
+		Image.render(PosX,PosY, &SourceRect);
 		//SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	}

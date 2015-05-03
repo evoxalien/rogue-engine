@@ -12,7 +12,6 @@
 #include "Texture.h"
 // #include "Gamepad.h"
 #include <stdint.h>
-#include "level/object/object.h"
 
 #define MAX_CONTROLLERS 4
 SDL_GameController *ControllerHandles[MAX_CONTROLLERS];
@@ -66,20 +65,20 @@ private:
 public:
 	struct PlayerAction //holds the flags of the buttons that are being pressed
 	{
-		bool  playerUp=false;
-		bool  playerDown=false;
-		bool  playerLeft=false;
-		bool  playerRight=false;
-		bool  playerActivate=false;
-		bool  playerUse=false;
-		bool  playerAttack=false;
-		bool  playerSpecial=false;
-		bool  playerStart=false;
-		bool  playerBack=false;
-		bool  playerJump=false;
-		bool  playerExit=false;
-		bool  playerLeftShoulder=false;
-		bool playerRightShoulder=false;
+		bool  playerUp;
+		bool  playerDown;
+		bool  playerLeft;
+		bool  playerRight;
+		bool  playerActivate;
+		bool  playerUse;
+		bool  playerAttack;
+		bool  playerSpecial;
+		bool  playerStart;
+		bool  playerBack;
+		bool  playerJump;
+		bool  playerExit;
+		bool  playerLeftShoulder;
+		bool playerRightShoulder;
 	};
 	PlayerAction Actions;
 	SDL_Rect whiteBoxRect;
@@ -89,16 +88,12 @@ public:
 	int    playerH;
 	int    currentFrameX;
 	int    currentFrameY;
-	float  player_Acceleration_Rate;
 	float  playerMovementSpeed;
 	bool   playerDirection; // true = facing left false facing Right
 	bool Controller1Connected=false;
 	bool Controller2Connected=false;
-	bool Controller3Connected=false;
 	string playerInputMode;
 	Animation playerAnimation;
-	bool p1k=false,p2k=false,p1g=false,p2g=false;
-	bool mix=false;
 	SDL_Joystick* gGameController = NULL;
 	void InitSprite(SDL_Renderer* gRenderer);
 	void loadSpriteContent();
@@ -117,7 +112,6 @@ public:
 	void close();
 	void UpdateSDLJoy(SDL_Event *Event);
 	Texture playerTexture;
-	Object object;
 };
 
 
@@ -126,30 +120,21 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 {
 	ifstream inputFile;
 	playerIndex=playerIndexPassed;
+	if (playerIndex==1)//player 1 file
+	{
 	   //parse the file
 	   // inputFile.open("../resources/playerConfig/Player2Script.txt");
-
-	if (playerIndex==1&&(p1k==true||mix==true))//player 1 file
-	{
-	   inputFile.open("../resources/playerConfig/Player1KScript.txt");
+	   inputFile.open("../resources/playerConfig/Player1Script.txt");
 	}
-	if (playerIndex==1&&p1g==true)//player 1 file
+	if (playerIndex==2)//player 2 file
 	{
-	   inputFile.open("../resources/playerConfig/Player1GScript.txt");
+	   inputFile.open("../resources/playerConfig/Player1Script.txt");
+		//parse the file
 	}
-	if (playerIndex==2&&p2k==true)//player 2 file
+	if (playerIndex==0)//player 1 set to controller but no controller defaults to keyboard
 	{
-	   inputFile.open("../resources/playerConfig/Player2KScript.txt");
+	   inputFile.open("../resources/playerConfig/Player0Script.txt");
 	}
-	if (playerIndex==2&&(p2g==true||mix==true))//player 2 file
-	{
-	   inputFile.open("../resources/playerConfig/Player2GScript.txt");
-	}
-
-	// if (playerIndex==0)//player 1 set to controller but no controller defaults to keyboard
-	// {
-	//    inputFile.open("../resources/playerConfig/Player0Script.txt");
-	// }
 
 	if(!inputFile)//file failed
 		return false;
@@ -205,9 +190,6 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 	inputFile >> CurrentData;
 	inputFile >> playerHealth;
 	// LoadSpriteContent();
-	(*this).object = Object(50, 50, 0, 2, 0, 1, 0, 0, 1, 0, 1, 1, 1, .8, 0, 1, 65535, 0, 20, 20);
-	(*this).player_Acceleration_Rate = 100000;
-	(*this).playerMovementSpeed = 5000000;
     
     //Needed a return type for success was throwing a warning John V.
     return true;
@@ -355,28 +337,17 @@ bool playerClass::init()
 		}
 		else
 		{
-			if (p1g==true)
+			//Load joystick
+			if (playerIndex==1&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>0)
 			{
 				Controller1Connected=true;
 				gGameController = SDL_JoystickOpen( 0 );
 			}
-			if (p2g==true&&mix==false)
+			if (playerIndex==2&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>1)
 			{
 				Controller2Connected=true;
 				gGameController = SDL_JoystickOpen( 1 );
 			}
-			if (mix==true)
-			{
-				Controller3Connected=true;
-				gGameController = SDL_JoystickOpen( 0 );
-			}
-			//Load joystick
-			// if (playerIndex==1&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>0)
-			// {
-			// }
-			// if (playerIndex==2&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>1)
-			// {
-			// }
 			if( gGameController == NULL )
 			{
 				printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
@@ -413,65 +384,96 @@ void playerClass::close()
 void playerClass::UpdateSDLJoy(SDL_Event *Event)
 {
 	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerUp)==1)
+	{
 		Actions.playerUp=true;
+	}
 	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerDown)==1)
+	{
 		Actions.playerDown=true;
+	}
 	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerLeft)==1)
+	{
 		Actions.playerLeft=true;
+	}
 	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerRight)==1)
+	{
 		Actions.playerRight=true;
+	}
 	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerUp)==0)
+	{
 		Actions.playerUp=false;
+	}
 	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerDown)==0)
+	{
 		Actions.playerDown=false;
+	}
 	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerLeft)==0)
+	{
 		Actions.playerLeft=false;
+	}
 	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerRight)==0)
+	{
 		Actions.playerRight=false;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerBack)==1)
-		Actions.playerBack=true;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerStart)==1)
-		Actions.playerStart=true;
+	}
+	if (SDL_JoystickGetButton(gGameController, 5)==1)
+	{
+		/* code */
+		printf("howdy5\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 4)==1)
+	{
+		/* code */
+		printf("howdy4\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 6)==1)
+	{
+		/* code */
+		printf("howdy6\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 7)==1)
+	{
+		/* code */
+		printf("howdy7\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 8)==1)
+	{
+		/* code */
+		printf("howdy8\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 9)==1)
+	{
+		/* code */
+		printf("howdy9\n");
+	}
 	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerA)==1)
-		Actions.playerAttack=true;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerB)==1)
-		Actions.playerActivate=true;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerX)==1)
-		Actions.playerUse=true;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerY)==1)
-		Actions.playerSpecial=true;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerRightShoulder)==1)
+	{
 		Actions.playerJump=true;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerBack)==0)
-		Actions.playerBack=false;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerStart)==0)
-		Actions.playerStart=false;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerA)==0)
-		Actions.playerAttack=false;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerB)==0)
-		Actions.playerActivate=false;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerX)==0)
-		Actions.playerUse=false;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerY)==0)
-		Actions.playerSpecial=false;
-	if (SDL_JoystickGetButton(gGameController, playerControlsGamePad.playerRightShoulder)==0)
-		Actions.playerJump=false;
-	// if (SDL_JoystickGetButton(gGameController, 6)==0)
-	// {
-	// 	printf("howdy6\n");
-	// }
-	// if (SDL_JoystickGetButton(gGameController, 7)==1)
-	// {
-	// 	printf("howdy7\n");
-	// }
-	// if (SDL_JoystickGetButton(gGameController, 8)==1)
-	// {
-	// 	printf("howdy8\n");
-	// }
-	// if (SDL_JoystickGetButton(gGameController, 14)==1)
-	// {
-	// 	printf("howdy14\n");
-	// }
+	}
+	if (SDL_JoystickGetButton(gGameController, 11)==1)
+	{
+		/* code */
+		printf("howdy11\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 12)==1)
+	{
+		/* code */
+		printf("howdy12\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 13)==1)
+	{
+		/* code */
+		printf("howdy13\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 14)==1)
+	{
+		/* code */
+		printf("howdy14\n");
+	}
+	if (SDL_JoystickGetButton(gGameController, 15)==1)
+	{
+		/* code */
+		printf("howdy15\n");
+	}
 
 	// if (Event->type == SDL_JOYBUTTONDOWN)
 	// {
@@ -548,32 +550,26 @@ void playerClass::UpdateGamePad()
 
 }
 
-void playerClass::playerUpdate(int frame)
+void playerClass::playerUpdate(int gameTime)
 {
 	//Animation Tracking
 	playerAnimation.setActive(true);
     
     currentFrameX = playerAnimation.getFrameX();
-
-	b2Vec2 linear_Velocity = (*(*this).object.physics).GetLinearVelocity();
-	float change_In_X_Velocity = 0;
-	float change_In_Y_Velocity = 0;
     
 	if(Actions.playerDown==true)
 	{
-		if(linear_Velocity.y < (*this).playerMovementSpeed)
+		playerY += playerMovementSpeed;// * ((float)gameTime%6000);
+		if (playerDirection) //true facing left false facing right
 		{
-			change_In_Y_Velocity = (*this).player_Acceleration_Rate;
+			currentFrameY = 1;          
+		}else{
+			currentFrameY = 0;
 		}
-//		playerY += playerMovementSpeed;// * ((float)frame%6000);
 	}
 	else if (Actions.playerUp==true)
 	{
-		if(linear_Velocity.y > ((*this).playerMovementSpeed * -1.0))
-		{
-			change_In_Y_Velocity = ((*this).player_Acceleration_Rate * -1.0);
-		}
-//		playerY -= playerMovementSpeed; //* ((float)frame%6000);
+		playerY -= playerMovementSpeed; //* ((float)gameTime%6000);
 		if (playerDirection) //true facing left false facing right
 		{
 			currentFrameY = 5;          
@@ -583,62 +579,27 @@ void playerClass::playerUpdate(int frame)
 	}
 	else if (Actions.playerRight==true)
 	{
-		if(linear_Velocity.x < (*this).playerMovementSpeed)
-		{
-			change_In_X_Velocity = (*this).player_Acceleration_Rate;
-		}
-//		playerX += playerMovementSpeed;// * ((float)frame%6000);
+		playerX += playerMovementSpeed;// * ((float)gameTime%6000);
 		playerDirection=false;
 		currentFrameY = 2;
 	}
 	else if (Actions.playerLeft==true)
 	{
-		if(linear_Velocity.x > ((*this).playerMovementSpeed * -1.0))
-		{
-			change_In_X_Velocity = ((*this).player_Acceleration_Rate * -1.0);
-		}
-//		playerX -= playerMovementSpeed;// * ((float)frame%6000);
+		playerX -= playerMovementSpeed;// * ((float)gameTime%6000);
 		playerDirection=true;
 		currentFrameY = 3;
 	}
-	else if (linear_Velocity.y > 3)
-	{
-		if (playerDirection) //true facing left false facing right
-		{
-			currentFrameY = 7;
-		}else{
-			currentFrameY = 6;          
-		}
-	}
-	else if (linear_Velocity.y < -3)
-	{
-		if (playerDirection) //true facing left false facing right
-		{
-			currentFrameY = 5;          
-		}else{
-			currentFrameY = 4;
-		} 
-	}
-
 	else
 	{
-		if (playerDirection) //true facing left false facing right
-		{
-			currentFrameY = 1;          
-		}else{
-			currentFrameY = 0;
-		}
-		// currentFrameX = 0;
-		// playerAnimation.setActive(false);
+		playerAnimation.setActive(false);
+		currentFrameX = 0;
 	}
-
-	(*(*this).object.physics).ApplyForce(b2Vec2(change_In_X_Velocity * (*(*this).object.physics).GetMass() * Object::physics_Time_Step, change_In_Y_Velocity * (*(*this).object.physics).GetMass() * Object::physics_Time_Step), (*(*this).object.physics).GetWorldCenter(), true);
     //Smooth the Animation Transitions
-    playerAnimation.setPosition((*(*this).object.physics).GetPosition().x - 20, (*(*this).object.physics).GetPosition().y - 20);
+    playerAnimation.setPosition(playerX,playerY);
     playerAnimation.setCurrentFrame(currentFrameX,currentFrameY);
     
     //Update of the Animations depending on Game Time
-    playerAnimation.Update(frame);
+    playerAnimation.Update(gameTime);
 
 }
 
