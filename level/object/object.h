@@ -32,6 +32,7 @@ class Object
 		static b2FixtureDef box2D_Fixture_Definition;		//A static Box2D Physics Fixture Definition, which holds shape, restitution, density, and collision layer details; a body may contain multiple fixtures
 		static b2PolygonShape box2D_Polygon_Shape;			//A static Box2D Physics Shape, which is used by the fixture definition to define the area which the fixture will occupy
 		static float32 physics_Time_Step;
+		static float meters_Per_Pixel;
 		static SDL_Renderer* SDL_Renderer_Pointer;
 		static Camera* camera_Pointer;
 

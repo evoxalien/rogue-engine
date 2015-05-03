@@ -8,6 +8,7 @@ b2BodyDef Object::box2D_Body_Definition;
 b2FixtureDef Object::box2D_Fixture_Definition;
 b2PolygonShape Object::box2D_Polygon_Shape;
 float32 Object::physics_Time_Step = 1.0 / 60;
+float Object::meters_Per_Pixel = 2;
 SDL_Renderer* Object::SDL_Renderer_Pointer = nullptr;
 Camera* Object::camera_Pointer = nullptr;
 
@@ -315,7 +316,7 @@ void Object::update()
 //
 void Object::render()
 {
-	(*this).animation.Image.render(static_cast<int>((*(*this).physics).GetPosition().x - ((*this).animation.Image.getWidth() / 2.0)), static_cast<int>((*(*this).physics).GetPosition().y - ((*this).animation.Image.getHeight() / 2.0)), NULL, static_cast<double>((*(*this).physics).GetAngle() * (180.0 / 3.1415926535898)));
+	(*this).animation.Image.render(static_cast<int>((((*(*this).physics).GetPosition().x - ((*this).animation.Image.getWidth() / 2.0)) - (*Object::camera_Pointer).getCamX()) * Object::meters_Per_Pixel), static_cast<int>((((*(*this).physics).GetPosition().y - ((*this).animation.Image.getHeight() / 2.0)) - (*Object::camera_Pointer).getCamY()) * Object::meters_Per_Pixel), static_cast<int>((*this).animation.Image.getWidth() * Object::meters_Per_Pixel), static_cast<int>((*this).animation.Image.getHeight() * Object::meters_Per_Pixel), NULL, static_cast<double>((*(*this).physics).GetAngle() * (180.0 / 3.1415926535898)));
 }
 
 //Rather than storing an additional index within Object itself, a member which already requires the index is accessed for the necessary index of the Object within the static Object pointer vector

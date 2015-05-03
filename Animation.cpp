@@ -109,6 +109,7 @@ void Animation::Draw()
 	{
 		//SourceRect = {(int)currentFrameX, (int)currentFrameY * getFrameHeight(), getFrameWidth(), getFrameHeight()};
 		//printf("Drawing Image");
-		Image.render(PosX,PosY, &SourceRect);
+//		Image.render(PosX,PosY, &SourceRect);
+		(*this).Image.render(static_cast<int>(((*this).getPosX() - (*Object::camera_Pointer).getCamX()) * Object::meters_Per_Pixel), static_cast<int>(((*this).getPosY() - (*Object::camera_Pointer).getCamY()) * Object::meters_Per_Pixel), (*this).getFrameWidth() * Object::meters_Per_Pixel, (*this).getFrameHeight() * Object::meters_Per_Pixel, &(*this).SourceRect);
 		//SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	}

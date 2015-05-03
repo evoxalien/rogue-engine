@@ -52,6 +52,7 @@ private:
    SDL_Renderer *renderer;
    Level *gameLevel;
    Texture texture;
+   Camera camera;
    // Texture playerTexture;
    SDL_Event Event;
 
@@ -145,6 +146,9 @@ bool gameroot::initialize()
    renderer = window->getRenderer();
 	Object::SDL_Renderer_Pointer = renderer;
    
+	gameroot::camera.setBoundRect(0,0,5000,5000);
+	Object::camera_Pointer = &camera;
+
    //tell texture the renderer to use
    texture.setRenderer(renderer);
    
@@ -244,6 +248,7 @@ void gameroot::update()
 
    if (gameState==GamePlaying1)
    {
+		(*Object::camera_Pointer).Update_Camera(((*Hero.object.physics).GetPosition().x - ((*Object::camera_Pointer).getCamW() / Object::meters_Per_Pixel / 2.0)), ((*Hero.object.physics).GetPosition().y - ((*Object::camera_Pointer).getCamH() / Object::meters_Per_Pixel / 2.0)));
       gameLevel->update_All();
       Hero.playerUpdate(GLOBAL_FRAME_COUNTER);
       Villain.playerUpdate(GLOBAL_FRAME_COUNTER);

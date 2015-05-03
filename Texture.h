@@ -175,6 +175,12 @@ class Texture
 			SDL_RenderCopyEx(renderer, texture, clip, &renderArea, angle, center, flip);
 		}
 
+		void render(int x, int y, int width, int height, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE)
+		{
+			SDL_Rect renderArea = {x, y, width, height};
+			SDL_RenderCopyEx((*this).renderer, (*this).texture, clip, &renderArea, angle, center, flip);
+		}
+
 		//Gets image dimensions
 		int getWidth()
 		{
