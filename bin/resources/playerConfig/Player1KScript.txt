@@ -12,12 +12,12 @@ Left
 Right
 100
 Jump
-120
-Health
-50
+101
 Pause
-13
+27
 Exit
 8
 PlayerName
 Alex
+Health
+50

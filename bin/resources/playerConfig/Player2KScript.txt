@@ -14,7 +14,7 @@ Right
 Jump
 44
 Pause
-108
+13
 Exit
 107
 PlayerName

@@ -265,48 +265,7 @@ void gameroot::update()
    }
    if (gameState == GameMenu1)
    {
-      switch (menuchoice)
-      {
-         case 0:
-         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", menuColor);
-         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
-         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-         rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
-         break;
-         
-         case 1:
-         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", menuColor);
-         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
-         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-         rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
-         break;
-         
-         case 2:
-         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", menuColor);
-         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
-         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
-         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-         rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
-         break;
-
-         case 3:
-         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", menuColor);
-         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
-         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
-         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-         rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
-         break;
-
-         case 4:
-         rootMenuObject.Menu[4].loadTextRender("1 player on Each", menuColor);
-         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
-         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
-         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-         break;
-      }
+      rootMenuObject.UpdateGameMenu1(menuchoice);
    }
    if (gameState==Loading)
    {
