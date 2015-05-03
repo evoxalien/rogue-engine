@@ -3,13 +3,21 @@
 
 //Initialization of static Object members
 std::vector<Object*> Object::object_Pointer_Vector;
+
 b2World Object::box2D_World(b2Vec2(0,25));
 b2BodyDef Object::box2D_Body_Definition;
 b2FixtureDef Object::box2D_Fixture_Definition;
 b2PolygonShape Object::box2D_Polygon_Shape;
-float32 Object::physics_Time_Step = 1.0 / 60;
-float Object::meters_Per_Pixel = 2;
+float32 Object::physics_Time_Step = 0.01666666666666666666666666666667;
+
+float Object::meters_Per_Pixel = 1.0;
+float Object::standard_Meters_Per_Pixel = 10.0;
+float Object::maximum_Meters_Per_Pixel = 50.0;
+float Object::minimum_Meters_Per_Pixel = .1;
+float Object::change_In_Meters_Per_Pixel = .1;
+
 SDL_Renderer* Object::SDL_Renderer_Pointer = nullptr;
+
 Camera* Object::camera_Pointer = nullptr;
 
 //Default Object constructor; adds a pointer to the Object to the Object pointer vector
@@ -264,6 +272,15 @@ void Object::update_All()
 		(*Object::object_Pointer_Vector[i]).attributes.update();	//Updates health, stamina, and mana based on effective regeneration rates
 //		(*Object::object_Pointer_Vector[i]).animation.Update(/*pass gametime*/);
 	}
+}
+
+//
+void Object::update_Meters_Per_Pixel(Sint32 meters_Per_Pixel_Changes)
+{
+	std::cout << meters_Per_Pixel_Changes << std::endl;
+	Object::meters_Per_Pixel = Object::meters_Per_Pixel + (meters_Per_Pixel_Changes * Object::change_In_Meters_Per_Pixel);
+	Object::meters_Per_Pixel = min(Object::meters_Per_Pixel, Object::maximum_Meters_Per_Pixel);
+	Object::meters_Per_Pixel = max(Object::meters_Per_Pixel, Object::minimum_Meters_Per_Pixel);
 }
 
 //Overloads the copy assignment operator, '=' with a normal Object as the target, to avoid changing the index contained in the appropriate members which reference the pointer to the containing Object in the Object pointer vector

@@ -48,7 +48,7 @@ Window::Window()
       }
    }
    
-   width = 1024;
+   width = 1280;
    height = 720;
    
    //Calls and tests function to create SDL Window (documentation in link)

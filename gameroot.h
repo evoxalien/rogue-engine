@@ -148,6 +148,7 @@ bool gameroot::initialize()
    
 	gameroot::camera.setBoundRect(0,0,5000,5000);
 	Object::camera_Pointer = &camera;
+	Object::meters_Per_Pixel = Object::standard_Meters_Per_Pixel;
 
    //tell texture the renderer to use
    texture.setRenderer(renderer);
@@ -218,6 +219,10 @@ void gameroot::OnEvent(SDL_Event *Event)
          }
      }
    }
+	else if((*Event).type == SDL_MOUSEWHEEL)
+	{
+		Object::update_Meters_Per_Pixel((*Event).wheel.y);
+	}
    if (Hero.playerInputMode=="Gamepad"&&Hero.Controller1Connected==true)
    {
       Hero.UpdateSDLJoy(Event);

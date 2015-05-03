@@ -17,7 +17,7 @@ private:
 	SDL_Rect camera;
 
 	//CAMERA CONSTANTS
-	const int CAMERA_WIDTH = 1282;
+	const int CAMERA_WIDTH = 1280;
 	const int CAMERA_HEIGHT = 720;
 
 	//CAMERA TYPE
