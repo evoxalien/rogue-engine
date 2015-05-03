@@ -277,7 +277,7 @@ void RootMenu::UpdateGameMenu2(int choice)
       switch (choice)
       {
       	case 0:
-      	Control[1].loadTextRender("<Left Keyboard Style>", MenuColor);
+      	Control[1].loadTextRender("<Left Keyboard Style>", menuColor);
       	Control[2].loadTextRender("Up            W", textColor);
 		Control[3].loadTextRender("Down          S", textColor);
 		Control[4].loadTextRender("Left          A", textColor);
@@ -289,7 +289,7 @@ void RootMenu::UpdateGameMenu2(int choice)
 		Control[10].loadTextRender("Pause        ESC", textColor);
 		break;
 		case 1:
-      	Control[1].loadTextRender("<Right Keyboard Style>", MenuColor);
+      	Control[1].loadTextRender("<Right Keyboard Style>", menuColor);
       	Control[2].loadTextRender("Up            UP", textColor);
 		Control[3].loadTextRender("Down          DOWN", textColor);
 		Control[4].loadTextRender("Left          LEFT", textColor);
@@ -300,13 +300,13 @@ void RootMenu::UpdateGameMenu2(int choice)
 		Control[9].loadTextRender("Jump 		 ,", textColor);
 		Control[10].loadTextRender("Pause        Enter", textColor);
 		break;
-		case 2;
-      	Control[1].loadTextRender("<GamePad Style>", MenuColor);
+		case 2:
+      	Control[1].loadTextRender("<GamePad Style>", menuColor);
       	Control[2].loadTextRender("Up            UP", textColor);
 		Control[3].loadTextRender("Down          DOWN", textColor);
 		Control[4].loadTextRender("Left          LEFT", textColor);
 		Control[5].loadTextRender("Right         RIGHT", textColor);
-		Control[6].loadTextRender("Use 		     A", textColor);
+		Control[6].loadTextRender("Use 		      A", textColor);
 		Control[7].loadTextRender("Activate      X", textColor);
 		Control[8].loadTextRender("Special       Y", textColor);
 		Control[9].loadTextRender("Jump 		 B", textColor);
@@ -319,7 +319,7 @@ void RootMenu::UpdateGameMenu3(int choice)
       switch (choice)
       {
       	case 0:
-      	Control[1].loadTextRender("<Left Keyboard Style>", MenuColor);
+      	Control[1].loadTextRender("<Left Keyboard Style>", menuColor);
       	Control[2].loadTextRender("Up            W", textColor);
 		Control[3].loadTextRender("Down          S", textColor);
 		Control[4].loadTextRender("Left          A", textColor);
@@ -331,7 +331,7 @@ void RootMenu::UpdateGameMenu3(int choice)
 		Control[10].loadTextRender("Pause        ESC", textColor);
 		break;
 		case 1:
-      	Control[1].loadTextRender("<Right Keyboard Style>", MenuColor);
+      	Control[1].loadTextRender("<Right Keyboard Style>", menuColor);
       	Control[2].loadTextRender("Up            UP", textColor);
 		Control[3].loadTextRender("Down          DOWN", textColor);
 		Control[4].loadTextRender("Left          LEFT", textColor);
@@ -342,8 +342,8 @@ void RootMenu::UpdateGameMenu3(int choice)
 		Control[9].loadTextRender("Jump 		 ,", textColor);
 		Control[10].loadTextRender("Pause        Enter", textColor);
 		break;
-		case 2;
-      	Control[1].loadTextRender("<GamePad Style>", MenuColor);
+		case 2:
+      	Control[1].loadTextRender("<GamePad Style>", menuColor);
       	Control[2].loadTextRender("Up            UP", textColor);
 		Control[3].loadTextRender("Down          DOWN", textColor);
 		Control[4].loadTextRender("Left          LEFT", textColor);
