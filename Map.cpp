@@ -86,36 +86,29 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 
 				inputFile >> platCoords[x*2];
 				inputFile >> platCoords[x*2+1];
-				{
-					bool temporary_Boolean;
-					int temporary_Integer;
-					float temporary_Float;
-					uint16 temporary_Unsigned_16bit_Integer;
 
-					inputFile >> temporary_Float; //Initial Angle in Radians
-					inputFile >> temporary_Integer; //Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
-					inputFile >> temporary_Boolean; //Boolean for whether the Object should check for tunneling against Dynamic bodies, usually turned on for very fast objects such as bullets (0 only checks against Static and Kinematic bodies, 1 includes Dynamic bodies as well)
-					inputFile >> temporary_Boolean; //Boolean for whether to use fixed rotation (0 uses rotations, 1 fixes rotation)
-					inputFile >> temporary_Float; //Linear Damping slows Objects as they travel, not 100% sure how it affects movement, but I believe it's a constant force against the direction of movement so the Object eventually halts
-					inputFile >> temporary_Float; //Angular Damping slows an Objects rotation, similar to Linear Damping but will cause the Object to stop spinning over time
-					inputFile >> temporary_Float; //The Gravity Scale is a multiplier to determine how much force the Box2D World exerts on the Object
-					inputFile >> temporary_Boolean; //Boolean for whether Physics Sleep is allowed; if it is on, the Object enters a low-maintenence state until collided with (0 is no sleep, 1 is sleep enabled)
-					inputFile >> temporary_Boolean; //Boolean for whether the Object should enter into the World as 'Awake' or 'Asleep', see above (0 is Asleep, 1 is Awake)
-					inputFile >> temporary_Boolean; //Boolean for whether the Object should enter int othe World as 'Active' or 'Inactive'; I can't recall for sure, but I believe Inactive will be treated as if it's not present until activated (0 is Inactive, 1 is Active)
-					inputFile >> temporary_Float; //Density of the fixture that will be applied to the Object; higher densities will result in larger weights for the same size; I belive 0 should be avoided
-					inputFile >> temporary_Float; //The Friction of the fixture that will be applied to the Object; higher frictions will result in a faster loss of momentum when Objects come in constant contact with the Object
-					inputFile >> temporary_Float; //The Restitution of the fixture that will be applied to the Object; should generally be confined between 0 and 1- 0 will result in Objects sticking to one another, 1 will have them bounce apart with the energy conserved- most likely uses the lowest of the two in collisions
-					inputFile >> temporary_Unsigned_16bit_Integer; //Layers the Object exists in- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object exists in that layer, if 0, it does not
-					inputFile >> temporary_Unsigned_16bit_Integer; //Layers the Object can collide with- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object may potentially collide with another Object which exists in that layer
-					inputFile >> temporary_Integer; //Group Index of the Object- if 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; 
-													//if the pair is positive and the same, they will collide regardless of layers, and if the pair is negative and the same, they will never collide, regardless of layers
- 				}
+				inputFile >> physicsObjs[x].angle; //Initial Angle in Radians
+				inputFile >> physicsObjs[x].bodyType; //Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
+				inputFile >> physicsObjs[x].tunneling; //Boolean for whether the Object should check for tunneling against Dynamic bodies, usually turned on for very fast objects such as bullets (0 only checks against Static and Kinematic bodies, 1 includes Dynamic bodies as well)
+				inputFile >> physicsObjs[x].fixedRotation; //Boolean for whether to use fixed rotation (0 uses rotations, 1 fixes rotation)
+				inputFile >> physicsObjs[x].linearDampening; //Linear Damping slows Objects as they travel, not 100% sure how it affects movement, but I believe it's a constant force against the direction of movement so the Object eventually halts
+				inputFile >> physicsObjs[x].angularDampening; //Angular Damping slows an Objects rotation, similar to Linear Damping but will cause the Object to stop spinning over time
+				inputFile >> physicsObjs[x].gravityScale; //The Gravity Scale is a multiplier to determine how much force the Box2D World exerts on the Object
+				inputFile >> physicsObjs[x].physicsSleep; //Boolean for whether Physics Sleep is allowed; if it is on, the Object enters a low-maintenence state until collided with (0 is no sleep, 1 is sleep enabled)
+				inputFile >> physicsObjs[x].sleepAwake; //Boolean for whether the Object should enter into the World as 'Awake' or 'Asleep', see above (0 is Asleep, 1 is Awake)
+				inputFile >> physicsObjs[x].activeInactive; //Boolean for whether the Object should enter int othe World as 'Active' or 'Inactive'; I can't recall for sure, but I believe Inactive will be treated as if it's not present until activated (0 is Inactive, 1 is Active)
+				inputFile >> physicsObjs[x].density; //Density of the fixture that will be applied to the Object; higher densities will result in larger weights for the same size; I belive 0 should be avoided
+				inputFile >> physicsObjs[x].friction; //The Friction of the fixture that will be applied to the Object; higher frictions will result in a faster loss of momentum when Objects come in constant contact with the Object
+				inputFile >> physicsObjs[x].restitution; //The Restitution of the fixture that will be applied to the Object; should generally be confined between 0 and 1- 0 will result in Objects sticking to one another, 1 will have them bounce apart with the energy conserved- most likely uses the lowest of the two in collisions
+				inputFile >> physicsObjs[x].layer; //Layers the Object exists in- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object exists in that layer, if 0, it does not
+				inputFile >> physicsObjs[x].layersCanCollide; //Layers the Object can collide with- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object may potentially collide with another Object which exists in that layer
+				inputFile >> physicsObjs[x].collisionGroupIndex; //Group Index of the Object- if 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; 
+												//if the pair is positive and the same, they will collide regardless of layers, and if the pair is negative and the same, they will never collide, regardless of layers
 				inputFile >> w;
 				inputFile >> h;
 
-				float tempFloat;
-				inputFile >> tempFloat;
-				inputFile >> tempFloat;
+				inputFile >> physicsObjs[x].xVel;
+				inputFile >> physicsObjs[x].yVel;
 
 				inputFile >> texturePath;
 				platforms[x].loadTexture(texturePath);
@@ -173,33 +166,34 @@ void Map::exportMapFile(Uint32 timeStamp)
 	{
 		outFile << platCoords[x*2] << " ";
 		outFile << platCoords[x*2+1] << " ";
-		outFile << "0 ";	//Initial Angle in Radians
-		outFile << "2 ";	//Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
-		outFile << "0 ";	//Boolean for whether the Object should check for tunneling against Dynamic bodies, usually turned on for very fast objects such as bullets (0 only checks against Static and Kinematic bodies, 1 includes Dynamic bodies as well)
-		outFile << "0 ";	//Boolean for whether to use fixed rotation (0 uses rotations, 1 fixes rotation)
-		outFile << "0 ";	//Linear Damping slows Objects as they travel, not 100% sure how it affects movement, but I believe it's a constant force against the direction of movement so the Object eventually halts
-		outFile << "0 ";	//Angular Damping slows an Objects rotation, similar to Linear Damping but will cause the Object to stop spinning over time
-		outFile << "1 ";	//The Gravity Scale is a multiplier to determine how much force the Box2D World exerts on the Object
-		outFile << "0 ";	//Boolean for whether Physics Sleep is allowed; if it is on, the Object enters a low-maintenence state until collided with (0 is no sleep, 1 is sleep enabled)
-		outFile << "1 ";	//Boolean for whether the Object should enter into the World as 'Awake' or 'Asleep', see above (0 is Asleep, 1 is Awake)
-		outFile << "1 ";	//Boolean for whether the Object should enter int othe World as 'Active' or 'Inactive'; I can't recall for sure, but I believe Inactive will be treated as if it's not present until activated (0 is Inactive, 1 is Active)
-
+		outFile << physicsObjs[x].angle << " ";  //Initial Angle in Radians
+		outFile << physicsObjs[x].bodyType << " ";  //Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
+		outFile << physicsObjs[x].tunneling << " ";  //Boolean for whether the Object should check for tunneling against Dynamic bodies, usually turned on for very fast objects such as bullets (0 only checks against Static and Kinematic bodies, 1 includes Dynamic bodies as well)
+		outFile << physicsObjs[x].fixedRotation << " ";  //Boolean for whether to use fixed rotation (0 uses rotations, 1 fixes rotation)
+		outFile << physicsObjs[x].linearDampening << " ";  //Linear Damping slows Objects as they travel, not 100% sure how it affects movement, but I believe it's a constant force against the direction of movement so the Object eventually halts
+		outFile << physicsObjs[x].angularDampening << " ";  //Angular Damping slows an Objects rotation, similar to Linear Damping but will cause the Object to stop spinning over time
+		outFile << physicsObjs[x].gravityScale << " ";  //The Gravity Scale is a multiplier to determine how much force the Box2D World exerts on the Object
+		outFile << physicsObjs[x].physicsSleep << " ";  //Boolean for whether Physics Sleep is allowed; if it is on, the Object enters a low-maintenence state until collided with (0 is no sleep, 1 is sleep enabled)
+		outFile << physicsObjs[x].sleepAwake << " ";  //Boolean for whether the Object should enter into the World as 'Awake' or 'Asleep', see above (0 is Asleep, 1 is Awake)
+		outFile << physicsObjs[x].activeInactive << " ";  //Boolean for whether the Object should enter int othe World as 'Active' or 'Inactive'; I can't recall for sure, but I believe Inactive will be treated as if it's not present until activated (0 is Inactive, 1 is Active)
+		outFile << physicsObjs[x].density << " ";	 //Density of the fixture that will be applied to the Object; higher densities will result in larger weights for the same size; I belive 0 should be avoided
+		outFile << physicsObjs[x].friction << " "; 	 //The Friction of the fixture that will be applied to the Object; higher frictions will result in a faster loss of momentum when Objects come in constant contact with the Object
+		outFile << physicsObjs[x].restitution << " "; 	 //The Restitution of the fixture that will be applied to the Object; should generally be confined between 0 and 1- 0 will result in Objects sticking to one another, 1 will have them bounce apart with the energy conserved- most likely uses the lowest of the two in collisions
+		outFile << physicsObjs[x].layer << " ";  	 //Layers the Object exists in- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object exists in that layer, if 0, it does not
+		outFile << physicsObjs[x].layersCanCollide << " ";   //Layers the Object can collide with- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object may potentially collide with another Object which exists in that layer
+		outFile << physicsObjs[x].collisionGroupIndex << " ";  //Group Index of the Object- if 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; 
 		//outFile << number of fixtures;
 		//for(/*number of fixtures the Object has*/)		//Will be implemented in the future when we have support for multiple fixtures
 		//{
-		outFile << "1 ";		//Density of the fixture that will be applied to the Object; higher densities will result in larger weights for the same size; I belive 0 should be avoided
-		outFile << ".5 ";		//The Friction of the fixture that will be applied to the Object; higher frictions will result in a faster loss of momentum when Objects come in constant contact with the Object
-		outFile << ".8 ";		//The Restitution of the fixture that will be applied to the Object; should generally be confined between 0 and 1- 0 will result in Objects sticking to one another, 1 will have them bounce apart with the energy conserved- most likely uses the lowest of the two in collisions
-		outFile << "1 ";		//Layers the Object exists in- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object exists in that layer, if 0, it does not
-		outFile << "65535 ";	//Layers the Object can collide with- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object may potentially collide with another Object which exists in that layer
-		outFile << "0 ";		//Group Index of the Object- if 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; 
+		
 								//if the pair is positive and the same, they will collide regardless of layers, and if the pair is negative and the same, they will never collide, regardless of layers
 		//outFile << shape of Object;
 		outFile << (platforms[x].getWidth()) << " ";		//Will change in the future depending on the shape of the Object
 		//cout << (platforms[x].getWidth()) << " " << (platforms[x].getWidth() /2) << endl;
 		outFile << (platforms[x].getHeight()) << " ";	//Will change in the future depending on the shape of the Object
 		//cout << (platforms[x].getHeight()) << " " << (platforms[x].getHeight() /2) << endl;
-		outFile << "0 0\n";
+		outFile << physicsObjs[x].xVel << " ";
+		outFile << physicsObjs[x].yVel << "\n";
 		//}
 		outFile << platforms[x].getFilePath() << "\n";
 	}
@@ -318,10 +312,79 @@ void Map::createMenu(int plat, int x, int y)
 	}
 	else
 	if(mState == PhysicsProps)
-	{
-		pMenu.addMenuEntry("Physics Stuff", "Bullshit");
-		pMenu.addMenuEntry("Fucking", "Bullshit");
-		pMenu.addMenuEntry("Long entry is long", "Such Bullshit");
+	{	
+		ss << physicsObjs[plat].angle;  //Initial Angle in Radians
+		pMenu.addMenuEntry("Angle", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].bodyType;  //Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
+		pMenu.addMenuEntry("Body Type", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].tunneling;  //Boolean for whether the Object should check for tunneling against Dynamic bodies, usually turned on for very fast objects such as bullets (0 only checks against Static and Kinematic bodies, 1 includes Dynamic bodies as well)
+		pMenu.addMenuEntry("Tunneling", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].fixedRotation;  //Boolean for whether to use fixed rotation (0 uses rotations, 1 fixes rotation)
+		pMenu.addMenuEntry("Fixed Rotation", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].linearDampening;  //Linear Damping slows Objects as they travel, not 100% sure how it affects movement, but I believe it's a constant force against the direction of movement so the Object eventually halts
+		pMenu.addMenuEntry("Linear Dampening", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].angularDampening;  //Angular Damping slows an Objects rotation, similar to Linear Damping but will cause the Object to stop spinning over time
+		pMenu.addMenuEntry("Angular Dampening", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].gravityScale;  //The Gravity Scale is a multiplier to determine how much force the Box2D World exerts on the Object
+		pMenu.addMenuEntry("Gravity Scale", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].physicsSleep;  //Boolean for whether Physics Sleep is allowed; if it is on, the Object enters a low-maintenence state until collided with (0 is no sleep, 1 is sleep enabled)
+		pMenu.addMenuEntry("Physics Sleep", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].sleepAwake;  //Boolean for whether the Object should enter into the World as 'Awake' or 'Asleep', see above (0 is Asleep, 1 is Awake)
+		pMenu.addMenuEntry("Sleep Awake", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].activeInactive;  //Boolean for whether the Object should enter int othe World as 'Active' or 'Inactive'; I can't recall for sure, but I believe Inactive will be treated as if it's not present until activated (0 is Inactive, 1 is Active)
+		pMenu.addMenuEntry("Active Inactive", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].density;	 //Density of the fixture that will be applied to the Object; higher densities will result in larger weights for the same size; I belive 0 should be avoided
+		pMenu.addMenuEntry("Density", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].friction; 	 //The Friction of the fixture that will be applied to the Object; higher frictions will result in a faster loss of momentum when Objects come in constant contact with the Object
+		pMenu.addMenuEntry("Friction", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].restitution; 	 //The Restitution of the fixture that will be applied to the Object; should generally be confined between 0 and 1- 0 will result in Objects sticking to one another, 1 will have them bounce apart with the energy conserved- most likely uses the lowest of the two in collisions
+		pMenu.addMenuEntry("Restitution", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].layer;  	 //Layers the Object exists in- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object exists in that layer, if 0, it does not
+		pMenu.addMenuEntry("Layer", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].layersCanCollide;   //Layers the Object can collide with- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object may potentially collide with another Object which exists in that layer
+		pMenu.addMenuEntry("Layers Can Collide", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].collisionGroupIndex;  //Group Index of the Object- if 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; 
+		pMenu.addMenuEntry("Collision Group Index", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].xVel;
+		pMenu.addMenuEntry("X Velocity", ss.str());
+		ss.str(std::string());
+
+		ss << physicsObjs[plat].yVel;
+		pMenu.addMenuEntry("Y Velocity", ss.str());
+		ss.str(std::string());
+
 	}
 }
 
@@ -644,7 +707,11 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 					currentInputStringTexture.loadTextRender(keyboardInput, inputTextColor);
 				}
 			}
-		break; 
+		break;
+		//Cursor state is Events
+		case Events :
+
+		break;
 	}
 }
 
@@ -960,8 +1027,8 @@ void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 				break;
 			case SDLK_4 :
 				unfocus();
-				cState = Doors;
-				cursorTextTexture.loadTextRender("   Doors", textColor);
+				cState = Events;
+				cursorTextTexture.loadTextRender("   Events", textColor);
 				break;
 		}
 	}

@@ -53,7 +53,7 @@ private:
 		Testing,
 		Select,
 		Info,
-		Doors
+		Events
 	};
 
 	enum MenuState
@@ -63,32 +63,31 @@ private:
 		PhysicsProps
 	};
 
-	enum ObjectType
+	struct PhysObj
 	{
-		Rectangle = 0,
-		Circle = 1,
-		Line = 2,
-		Dot = 3
-	};
-
-	enum ObjectInteraction
-	{
-		Static = 0,
-		Kinematic = 1,
-		Dynamic = 2
-	};
-
-	struct Info
-	{
-		ObjectType objType = Rectangle;
-		ObjectInteraction objInteraction = Dynamic;
+		float angle; //radians
+		int bodyType;
+		bool tunneling;
 		bool fixedRotation;
-		
-
+		float linearDampening;
+		float angularDampening;
+		float gravityScale;
+		bool physicsSleep;
+		bool sleepAwake;
+		bool activeInactive;
+		float density;
+		float friction;
+		float restitution;
+		Uint16 layer;
+		Uint16 layersCanCollide;
+		int collisionGroupIndex;
+		float xVel;
+		float yVel;
 	};
 
 	CursorState cState;
 	MenuState mState;
+	PhysObj physicsObjs[PLATMAX];
 	std::string keyboardInput;
 
 
