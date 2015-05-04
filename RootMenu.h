@@ -103,26 +103,26 @@ void RootMenu::initilizeMenu(SDL_Renderer *rendererIn)
 	y += Menu[index].getHeight();
 	index++;
 
-	Menu[index].setRenderer(renderer);
-	Menu[index].setFont("calibri", 20);
-	Menu[index].loadTextRender("1 player on GamePad", textColor);
-	MenuShape[index] = {x, y, Menu[index].getWidth(), Menu[index].getHeight()};
-	y += Menu[index].getHeight();
-	index++;
-	
 	// Menu[index].setRenderer(renderer);
 	// Menu[index].setFont("calibri", 20);
-	// Menu[index].loadTextRender("2 players on GamePad", textColor);
+	// Menu[index].loadTextRender("1 player on GamePad", textColor);
 	// MenuShape[index] = {x, y, Menu[index].getWidth(), Menu[index].getHeight()};
 	// y += Menu[index].getHeight();
 	// index++;
+	
+	// // Menu[index].setRenderer(renderer);
+	// // Menu[index].setFont("calibri", 20);
+	// // Menu[index].loadTextRender("2 players on GamePad", textColor);
+	// // MenuShape[index] = {x, y, Menu[index].getWidth(), Menu[index].getHeight()};
+	// // y += Menu[index].getHeight();
+	// // index++;
 
-	Menu[index].setRenderer(renderer);
-	Menu[index].setFont("calibri", 20);
-	Menu[index].loadTextRender("1 player on Each", textColor);
-	MenuShape[index] = {x, y, Menu[index].getWidth(), Menu[index].getHeight()};
-	y += Menu[index].getHeight();
-	index++;
+	// Menu[index].setRenderer(renderer);
+	// Menu[index].setFont("calibri", 20);
+	// Menu[index].loadTextRender("1 player on Each", textColor);
+	// MenuShape[index] = {x, y, Menu[index].getWidth(), Menu[index].getHeight()};
+	// y += Menu[index].getHeight();
+	// index++;
 
 	x=0; y=0;
 	index =0; 
