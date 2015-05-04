@@ -20,7 +20,7 @@ class Object
 //	friend class Status_Effects;	//Allows Status_Effects access to Object's private and protected member variables and functions; communicates to attributes
 	friend class Animation;			//Allows Animation access to Object's private and protected member variables and functions; communicates to physics
 //	friend class Sound;				//Shouldn't need access unless we implement directional sounds
-//	friend class Level;				//Shouldn't need access, just creates and stores Objects
+	friend class Level;				//Shouldn't need access, just creates and stores Objects
 	friend class gameroot;
 	friend class playerClass;
 

@@ -36,6 +36,7 @@ class gameroot
 private:
    static double maximum_Frame_Rate;
    static double total_Time;
+   const static std::uint8_t maximum_Number_Of_Levels = 50;
 
 
    
@@ -99,6 +100,8 @@ private:
    bool newMenu=false;
    bool mTrue = true;
    int player1Choice, player2Choice, intiWorks=0;
+   std::string level_File_Path_Array[gameroot::maximum_Number_Of_Levels];
+   std::ifstream levels_List_File;
 public:
    gameroot(Window *mainWindow, EngineState *currentState); 
    bool loadContent();
@@ -165,7 +168,22 @@ bool gameroot::initialize()
    }
 
    GameMap.parseMapFile("mapTree", renderer);
-   gameLevel = new Level("../resources/maps/map1.txt");
+	for(std::uint8_t i = 0; i < gameroot::maximum_Number_Of_Levels; i++)
+	{
+		(*this).level_File_Path_Array[i] = "";
+	}
+
+	(*this).levels_List_File.open("../resources/maps/mapFileList.txt");
+	if((*this).levels_List_File)
+	{
+		int i = 0;
+		while((*this).levels_List_File >> (*this).level_File_Path_Array[i])
+		{
+			i++;
+		}
+	}
+   
+   gameLevel = new Level("../resources/maps/" + (*this).level_File_Path_Array[1] + ".txt");
 
    //sets boolean to true. This boolean determines if the game loop continues
    Running = true;
@@ -230,6 +248,59 @@ void gameroot::OnEvent(SDL_Event *Event)
    else if((*Event).type == SDL_MOUSEWHEEL)
    {
       Object::update_Meters_Per_Pixel((*Event).wheel.y);
+   }
+   else if((*Event).type == SDL_KEYDOWN)
+   {
+	if((*this).input.getKeyDown() == SDLK_0)
+	{
+		(*gameLevel).load_Level("../resources/maps/" + (*this).level_File_Path_Array[0] + ".txt");
+		std::cerr << "0" << std::endl;
+	}
+	else if((*this).input.getKeyDown() == SDLK_1)
+	{
+		(*gameLevel).load_Level("../resources/maps/" + (*this).level_File_Path_Array[1] + ".txt");
+		std::cerr << "1" << std::endl;
+	}
+	else if((*this).input.getKeyDown() == SDLK_2)
+	{
+		(*gameLevel).load_Level("../resources/maps/" + (*this).level_File_Path_Array[2] + ".txt");
+		std::cerr << "2" << std::endl;
+	}
+	else if((*this).input.getKeyDown() == SDLK_3)
+	{
+		(*gameLevel).load_Level("../resources/maps/" + (*this).level_File_Path_Array[3] + ".txt");
+		std::cerr << "3" << std::endl;
+	}
+	else if((*this).input.getKeyDown() == SDLK_4)
+	{
+		(*gameLevel).load_Level("../resources/maps/" + (*this).level_File_Path_Array[4] + ".txt");
+		std::cerr << "4" << std::endl;
+	}
+	else if((*this).input.getKeyDown() == SDLK_5)
+	{
+//		(*gameLevel).load_Level("../resources/maps/" + (*this).level_File_Path_Array[5] + ".txt");
+		std::cerr << "5" << std::endl;
+	}
+	else if((*this).input.getKeyDown() == SDLK_6)
+	{
+//		(*gameLevel).load_Level("../resources/maps/" + (*this).level_File_Path_Array[6] + ".txt");
+		std::cerr << "6" << std::endl;
+	}
+	else if((*this).input.getKeyDown() == SDLK_7)
+	{
+//		(*gameLevel).load_Level("../resources/maps/" + (*this).level_File_Path_Array[7] + ".txt");
+		std::cerr << "7" << std::endl;
+	}
+	else if((*this).input.getKeyDown() == SDLK_8)
+	{
+//		(*gameLevel).load_Level("../resources/maps/" + (*this).level_File_Path_Array[8] + ".txt");
+		std::cerr << "8" << std::endl;
+	}
+	else if((*this).input.getKeyDown() == SDLK_9)
+	{
+//		(*gameLevel).load_Level("../resources/maps/" + (*this).level_File_Path_Array[9] + ".txt");
+		std::cerr << "9" << std::endl;
+	}
    }
    
    if (Hero.playerInputMode=="Gamepad"&&Hero.Controller1Connected==true)

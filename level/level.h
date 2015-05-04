@@ -29,6 +29,7 @@ class Level
 		//Member functions
 		void update_All();
 		void render_All();
+		void load_Level(std::string);
 
 		//'Getters' and 'Setters' for private member variables
 		void setPosition(int index,int x, int y);
