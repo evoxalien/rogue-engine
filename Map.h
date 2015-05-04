@@ -1,12 +1,12 @@
 #ifndef MAP_H_
 #define MAP_H_
 
-#include "PopupMenu.h"
-#include "SDLincludes.h"
-#include "Texture.h"
+#include "popupMenu.h"
+#include "sdlIncludes.h"
+#include "texture.h"
 #include "input.h"
 #include <string>
-#include "Camera.h"
+#include "camera.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>

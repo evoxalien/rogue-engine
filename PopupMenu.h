@@ -1,8 +1,8 @@
 #ifndef POPUPMENU_H_
 #define POPUPMENU_H_
 
-#include "SDLincludes.h"
-#include "Texture.h"
+#include "sdlIncludes.h"
+#include "texture.h"
 #include <iostream>
 
 const int ENTRYMAX = 100;

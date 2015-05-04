@@ -1,9 +1,9 @@
 #ifndef PARTICLE_H_
 #define PARTICLE_H_
 
-#include "SDLincludes.h"
-#include "Texture.h"
-#include "mathutil.h"
+#include "sdlIncludes.h"
+#include "texture.h"
+#include "mathUtil.h"
 #include <cmath>
 #include <stdlib.h>
 

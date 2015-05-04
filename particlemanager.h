@@ -1,10 +1,10 @@
 #ifndef PARTICLE_MANAGER_
 #define PARTICLE_MANAGER_
-#include "SDLincludes.h"
+#include "sdlIncludes.h"
 #include "particle.h"
-#include "particlestate.h"
-#include "Texture.h"
-#include "mathutil.h"
+#include "particleState.h"
+#include "texture.h"
+#include "mathUtil.h"
 #include <cmath>
 #include <stdlib.h>
 

@@ -8,9 +8,9 @@
 #include <string>
 #include "inputDavid.h"
 #include "input.h"
-#include "Animation.cpp"
-#include "Texture.h"
-// #include "Gamepad.h"
+#include "animation.cpp"
+#include "texture.h"
+// #include "gamepad.h"
 #include <stdint.h>
 #include "level/object/object.h"
 

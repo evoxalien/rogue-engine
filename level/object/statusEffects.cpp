@@ -1,5 +1,5 @@
 //Status_Effects cpp file; friend of Object class
-#include "status_effects.h"
+#include "statusEffects.h"
 
 //Default Status_Effects constructor
 Status_Effects::Status_Effects()

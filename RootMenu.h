@@ -1,11 +1,11 @@
 #ifndef ROOTMENU_H_
 #define ROOTMENU_H_
 
-#include "SDLincludes.h"
-#include "Texture.h"
+#include "sdlIncludes.h"
+#include "texture.h"
 #include "input.h"
 #include <string>
-#include "Camera.h"
+#include "camera.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>

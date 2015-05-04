@@ -11,8 +11,8 @@
 #include "equipment.cpp"
 //#include "inventory.cpp"
 
-#include "status_effect.cpp"
-#include "status_effects.cpp"
+#include "statusEffect.cpp"
+#include "statusEffects.cpp"
 
 //#include ""
 

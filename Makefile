@@ -1,8 +1,8 @@
 #OBJS specifies which files to compile as part of the project
 
 
-OBJSW = main.cpp SoundManager.cpp log.cpp vector2d.cpp Camera.cpp level/level.cpp level/object/objectcpps.cpp mingw_dev_lib/include/Box2D/Box2Dcpps.cpp
-OBJSM = main.cpp SoundManager.cpp log.cpp vector2d.cpp Camera.cpp level/level.cpp level/object/objectcpps.cpp
+OBJSW = main.cpp soundManager.cpp log.cpp vector2D.cpp camera.cpp level/level.cpp level/object/objectcpps.cpp mingw_dev_lib/include/Box2D/Box2Dcpps.cpp
+OBJSM = main.cpp soundManager.cpp log.cpp vector2D.cpp camera.cpp level/level.cpp level/object/objectcpps.cpp
 
 
 #CC specifies which compiler we're using

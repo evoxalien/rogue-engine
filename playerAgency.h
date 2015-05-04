@@ -2,13 +2,13 @@
 
 #define PLAYERAGENCY_H_INCLUDED
 
-#include "SDLincludes.h"
+#include "sdlIncludes.h"
 //#include "SDL.h"
 #include <stdio.h>
 #include <string>
 #include "inputDavid.h"
 #include "input.h"
-#include "Gamepad.h"
+#include "gamepad.h"
 using namespace std;
 
 

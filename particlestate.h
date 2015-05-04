@@ -1,9 +1,9 @@
 #ifndef PARTICLE_STATE_H_
 #define PARTICLE_STATE_H_
-#include "vector2d.h"
+#include "vector2D.h"
 #include <cmath>
-#include "mathutil.h"
-#include "particlemanager.h"
+#include "mathUtil.h"
+#include "particleManager.h"
 
 
 enum ParticleType { None, IgnoreGravity};

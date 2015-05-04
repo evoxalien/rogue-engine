@@ -7,9 +7,9 @@
 #include "attributes.h"		//Includes <algorithm>
 #include "equipment.h"		//Includes <vector> and "item.h", which includes <iostream> and <cstdint>
 //#include "inventory.h"
-#include "status_effects.h"	//Includes "status_effect.h"
-#include "../../Animation.h"		//Includes "SDLincludes.h", <string>, <iostream>, <stdio.h>, and "Texture.h" which includes "SDLincludes.h"
-#include "../../Camera.h"
+#include "statusEffects.h"	//Includes "status_effect.h"
+#include "../../animation.h"		//Includes "SDLincludes.h", <string>, <iostream>, <stdio.h>, and "Texture.h" which includes "SDLincludes.h"
+#include "../../camera.h"
 
 class Object
 {

@@ -1,4 +1,4 @@
-#include "vector2d.h"
+#include "vector2D.h"
  
 // Used Daniel Soltyka's Vector Library as my guidline for this.
 // Source : http://www.danielsoltyka.com/programming/2010/05/30/c-vector2d-rectangle-classes/

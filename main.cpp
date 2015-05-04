@@ -1,9 +1,9 @@
-#include "gameroot.h"
-#include "maproot.h"
+#include "gameRoot.h"
+#include "mapRoot.h"
 #include "menu.h"
 #include "window.h"
 #include "engineState.h"
-#include "SDLincludes.h"
+#include "sdlIncludes.h"
 
 using namespace std;
 

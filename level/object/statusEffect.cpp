@@ -1,5 +1,5 @@
 //Status_Effect cpp file
-#include "status_effect.h"
+#include "statusEffect.h"
 
 Status_Effect::Status_Effect()
 {

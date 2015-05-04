@@ -2,7 +2,7 @@
 
 #define MAPROOT_H_INCLUDED
 
-#include "SDLincludes.h"
+#include "sdlIncludes.h"
 #include <iostream>
 #include <stdio.h>
 #include <string>
@@ -10,8 +10,8 @@
 #include "log.h"
 #include "input.h"
 //#include "ltimer.h"
-#include "Texture.h"
-#include "Map.cpp"
+#include "texture.h"
+#include "map.cpp"
 #include "window.h"
 #include "engineState.h"
 //#include <thread>

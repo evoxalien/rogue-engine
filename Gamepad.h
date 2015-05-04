@@ -1,7 +1,7 @@
 #ifndef GAMEPAD_H
 #define GAMEPAD_H
  
-#include "SDLincludes.h"
+#include "sdlIncludes.h"
 #include <stdio.h>
 // #include <sys/mman.h>
 #include <stdint.h>

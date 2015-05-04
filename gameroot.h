@@ -2,24 +2,24 @@
 
 #define GAMEROOT_H_INCLUDED
 
-#include "SDLincludes.h"
+#include "sdlIncludes.h"
 #include <stdio.h>
 #include <cstdlib>
 #include <chrono>
 #include "level/level.h"   //Includes level and all Object header files and all Object component header files, including Box2D's, along with <fstream>, <string>, <algorithm>, <iostream>, <vector>, <cstdint> but excluding inherited classes (Player, NonPlayerCharacter)
 #include "log.h"
 #include "input.h"
-#include "SoundManager.h"
-#include "Texture.h"
-#include "mathutil.h"
+#include "soundManager.h"
+#include "texture.h"
+#include "mathUtil.h"
 #include "startMenu.h"
 #include "playerClass.h"
 #include "gameMap.cpp"
 #include "window.h"
 #include "engineState.h"
-#include "GameMenuDavid.h"
-#include "Camera.h"
-#include "RootMenu.h"
+#include "gameMenuDavid.h"
+#include "camera.h"
+#include "rootMenu.h"
 /*
 #include "particlemanager.h"
 #include "particle.h"*/

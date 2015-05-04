@@ -1,7 +1,7 @@
 //Status_Effects header file; friend of Object class
 #ifndef STATUS_EFFECTS_H
 #define STATUS_EFFECTS_H
-#include "status_effect.h"
+#include "statusEffect.h"
 
 class Status_Effects
 {

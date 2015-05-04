@@ -3,7 +3,7 @@
 #define WINDOW_H_INCLUDED
 
 #include <stdio.h>
-#include "SDLincludes.h"
+#include "sdlIncludes.h"
 
 
 class Window

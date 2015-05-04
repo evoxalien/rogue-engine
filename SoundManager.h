@@ -2,7 +2,7 @@
 #define Sound_Manager_H
 //#include <SDL.h>
 //#include <SDL_mixer.h>
-#include "SDLincludes.h"
+#include "sdlIncludes.h"
 #include <stdio.h>
 #include <map>
 #include <string>

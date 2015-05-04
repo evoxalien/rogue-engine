@@ -2,11 +2,11 @@
 
 #define GAMEMENUDAVID_H_INCLUDED
 
-#include "SDLincludes.h"
+#include "sdlIncludes.h"
 #include <stdio.h>
 #include <string>
 #include "input.h"
-#include "Texture.h"
+#include "texture.h"
 #include "button.h"
 
 using namespace std;

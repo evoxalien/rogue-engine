@@ -1,6 +1,6 @@
 #ifndef MATH_UTILITIES
 #define MATH_UTILITIES
-#include "vector2d.h"
+#include "vector2D.h"
 #define MMM_PIE_ 3.14159265358979323846  /* pi */
 
 /* Purpose: Generate a New Random Int within Range */

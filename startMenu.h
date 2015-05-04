@@ -2,7 +2,7 @@
 
 #define STARTMENU_H_INCLUDED
 
-#include "SDLincludes.h"
+#include "sdlIncludes.h"
 //#include "SDL.h"
 #include <stdio.h>
 #include <string>
