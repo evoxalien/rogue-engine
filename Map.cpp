@@ -9,12 +9,13 @@
 Map::Map()
 {
 	numPlatforms = 0;
-	textColor = {0, 0, 0, 0xFF};
+	textColor = {0xFF, 0xFF, 0xFF, 0xFF};
 	camera.setBoundRect(0,0,5000,5000);
 	render = NULL;
 	drawText = false;
 	movePlatform = false;
 	anchorPointsShown = false;
+	mouseOverMenuEntry = false;
 	moveStep = 1;
 	cState = Testing;
 	for(int x = 0; x < 4; x++)
@@ -29,11 +30,6 @@ Map::~Map()
 	for(int x = 0; x < numPlatforms; x++)
 	{
 		platforms[x].free();
-	}
-
-	for(int x = 0; x < 10; x++)
-	{
-		rightClickMenuText[x].free();
 	}
 
 	cursorTextTexture.free();
@@ -133,9 +129,13 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 	for(int x = 0; x < 4; x++)
 	{
 		anchorPoints[x].setRenderer(render);
-		anchorPoints[x].loadTexture("img/shapes/WhiteSquare.png");
+		anchorPoints[x].loadTexture("../resources/img/shapes/WhiteSquare.png");
 		anchorPoints[x].setColor(0x77, 0x77, 0x77);
 	}
+
+	menuSelectionTexture.setRenderer(render);
+	menuSelectionTexture.loadTexture("../resources/img/shapes/WhiteSquare.png");
+	menuSelectionTexture.setColor(0x44, 0x44, 0x44);
 
 	inputFile.close();
 
@@ -208,6 +208,8 @@ void Map::unfocus()
 
 	movePlatform = false;
 
+	mouseOverMenuEntry = false;
+
 	anchorPointsShown = false;
 	for(int x = 0; x < 4; x++)
 	{
@@ -236,6 +238,11 @@ void Map::renderMap()
 		
 	if(rightClickMenuShown)
 	{
+		if(mouseOverMenuEntry)
+		{
+			menuSelectionTexture.render(menuSelectionRect.x - camera.getCamX(), menuSelectionRect.y - camera.getCamY(), menuSelectionRect.w, menuSelectionRect.h);
+		}
+
 		pMenu.displayMenu(camera.getCamX(), camera.getCamY());
 	}
 
@@ -458,7 +465,6 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 						{
 							if(platSelected[x])
 							{
-								platSelected[x] = false;
 								string s = platforms[x].getFilePath();
 								int w = platforms[x].getWidth();
 								int h = platforms[x].getHeight();
@@ -469,6 +475,7 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 								platforms[x].setWidth(w);
 								platforms[x].setHeight(h);
 								SDL_StopTextInput();
+								break;
 							}
 						}
 						break;
@@ -479,9 +486,9 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 							{
 								if(platSelected[x])
 								{
-									platSelected[x] = false;
 									platCoords[x*2] = atoi(keyboardInput.c_str());
 									SDL_StopTextInput();
+									break;
 								}
 							}
 						}
@@ -493,9 +500,9 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 							{
 								if(platSelected[x])
 								{
-									platSelected[x] = false;
 									platCoords[x*2+1] = atoi(keyboardInput.c_str());
 									SDL_StopTextInput();
+									break;
 								}
 							}
 						}
@@ -507,9 +514,9 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 							{
 								if(platSelected[x])
 								{
-									platSelected[x] = false;
 									platforms[x].setWidth(atoi(keyboardInput.c_str()));
 									SDL_StopTextInput();
+									break;
 								}
 							}
 						}
@@ -521,9 +528,9 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 							{
 								if(platSelected[x])
 								{
-									platSelected[x] = false;
 									platforms[x].setHeight(atoi(keyboardInput.c_str()));
 									SDL_StopTextInput();
+									break;
 								}
 							}
 						}
@@ -548,10 +555,32 @@ Mouse input processing
 
 void Map::processMouse(InputClass input, InputClass prevInput)
 {
+	mouseOverAction(input);
 	leftClickAction(input, prevInput);
 	rightClickAction(input, prevInput);
 }
 
+void Map::mouseOverAction(InputClass input)
+{
+	if(cState == Info)
+	{
+		if(!SDL_IsTextInputActive())
+		{
+			if(rightClickMenuShown)
+			{
+				for(int x = 0; x < pMenu.getNumEntries(); x++)
+				{
+					if(mouseOverRect(input, pMenu.getEntryRect(x)))
+					{
+						mouseOverMenuEntry = true;
+						menuSelectionRect = pMenu.getEntryRect(x);
+						break;
+					}
+				}
+			}
+		}
+	}
+}
 
 ///////////// Right click processing //////////////////////////
 

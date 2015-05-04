@@ -18,10 +18,10 @@ class Map
 private:
 	PopupMenu pMenu;
 	bool rightClickMenuShown;
-	Texture rightClickMenuText[10];
 	bool anchorPointsShown;
 	bool anchorPointSelected[4];
 	bool movePlatform;
+	bool mouseOverMenuEntry;
 	Texture anchorPoints[4];
 	Texture backgroundTexture;
 	int bgX;
@@ -39,8 +39,8 @@ private:
 	int menuY;
 	int cursorX;
 	int cursorY;
-	SDL_Rect fullMenuRect;
-	SDL_Rect menuChoiceRects[10];
+	Texture menuSelectionTexture;
+	SDL_Rect menuSelectionRect;
 	int menuIndex;
 
 	int moveStep;
@@ -91,6 +91,7 @@ public:
 	void createPlatMenu(int plat, int x, int y);
 	void processKeyboard(InputClass input, InputClass prevInput);
 	void processMouse(InputClass input, InputClass prevInput);
+	void mouseOverAction(InputClass input);
 	void rightClickAction(InputClass input, InputClass prevInput);
 	void leftClickAction(InputClass input, InputClass prevInput);
 	void mapEditorUpdate(InputClass input, InputClass prevInput);

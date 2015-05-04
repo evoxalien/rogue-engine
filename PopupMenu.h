@@ -120,7 +120,7 @@ void PopupMenu::addMenuEntry(std::string entryName, std::string entryValue)
 	{
 		entryRects[numEntries].x = menuX;
 		entryRects[numEntries].y = entryRects[numEntries-1].y + entryRects[numEntries-1].h;
-		entryRects[numEntries].w = (valueX - entryTexts[numEntries*2].getWidth()) + entryTexts[numEntries*2+1].getWidth();
+		entryRects[numEntries].w = (valueX - entryRects[numEntries-1].x) + entryTexts[numEntries*2+1].getWidth();
 		entryRects[numEntries].h = entryTexts[numEntries*2].getHeight();
 	}
 
