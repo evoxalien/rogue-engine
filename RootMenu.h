@@ -151,7 +151,7 @@ void RootMenu::displayPlatMenu()
 void RootMenu::displayPlatMenu1()
 {
 	BackGround[1].render(1280,720);
-	for(int x = 0; x < 4; x++)
+	for(int x = 0; x < 2; x++)
 	{
 		Menu[x].render(MenuShape[x].x , MenuShape[x].y );
 	}
