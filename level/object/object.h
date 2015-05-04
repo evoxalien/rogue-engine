@@ -33,6 +33,10 @@ class Object
 		static b2PolygonShape box2D_Polygon_Shape;			//A static Box2D Physics Shape, which is used by the fixture definition to define the area which the fixture will occupy
 		static float32 physics_Time_Step;
 		static float meters_Per_Pixel;
+		static float standard_Meters_Per_Pixel;
+		static float maximum_Meters_Per_Pixel;
+		static float minimum_Meters_Per_Pixel;
+		static float change_In_Meters_Per_Pixel;
 		static SDL_Renderer* SDL_Renderer_Pointer;
 		static Camera* camera_Pointer;
 
@@ -63,6 +67,7 @@ class Object
 		static void display_Information_All();	//For testing
 		static void step_Box2D_World();
 		static void update_All();
+		static void update_Meters_Per_Pixel(Sint32);
 
 		//'Getters' and 'Setters' for private static variables
 

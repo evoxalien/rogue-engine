@@ -110,6 +110,11 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
  				}
 				inputFile >> w;
 				inputFile >> h;
+
+				float tempFloat;
+				inputFile >> tempFloat;
+				inputFile >> tempFloat;
+
 				inputFile >> texturePath;
 				platforms[x].loadTexture(texturePath);
 				platforms[x].setWidth(w);
@@ -117,6 +122,9 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 			}
 //		}
 	}
+
+	pMenu.setRenderer(render);
+	pMenu.setMenuProperties("calibri", 20, textColor);
 
 	cursorTextTexture.setRenderer(render);
 	cursorTextTexture.setFont("calibri", 12);
@@ -177,8 +185,9 @@ void Map::exportMapFile(Uint32 timeStamp)
 		//outFile << shape of Object;
 		outFile << (platforms[x].getWidth()) << " ";		//Will change in the future depending on the shape of the Object
 		//cout << (platforms[x].getWidth()) << " " << (platforms[x].getWidth() /2) << endl;
-		outFile << (platforms[x].getHeight()) << "\n";	//Will change in the future depending on the shape of the Object
+		outFile << (platforms[x].getHeight()) << " ";	//Will change in the future depending on the shape of the Object
 		//cout << (platforms[x].getHeight()) << " " << (platforms[x].getHeight() /2) << endl;
+		outFile << "0 0\n";
 		//}
 		outFile << platforms[x].getFilePath() << "\n";
 	}
@@ -205,7 +214,7 @@ void Map::unfocus()
 		anchorPointSelected[x] = false;
 	}
 
-	destroyPlatMenu();
+	pMenu.destroyMenu();
 
 	if(SDL_IsTextInputActive())
 	{
@@ -227,7 +236,7 @@ void Map::renderMap()
 		
 	if(rightClickMenuShown)
 	{
-		displayPlatMenu();
+		pMenu.displayMenu(camera.getCamX(), camera.getCamY());
 	}
 
 	if(anchorPointsShown)
@@ -240,102 +249,35 @@ void Map::renderMap()
 
 void Map::createPlatMenu(int plat, int x, int y)
 {
+	std::cerr << "Plat menu being created\n";
+
 	x += camera.getCamX();
 	y += camera.getCamY();
+
 	
-	int index = 0;
+	pMenu.setLocation(x, y);
+	
 	std::stringstream ss;
-	rightClickMenuText[index].setRenderer(render);
-	rightClickMenuText[index].setFont("calibri", 20);
-	rightClickMenuText[index].loadTextRender("Texture File", textColor);
-	menuChoiceRects[index] = {x, y, rightClickMenuText[index].getWidth(), rightClickMenuText[index].getHeight()};
-	y += rightClickMenuText[index].getHeight();
-	index++;
+	
+	pMenu.addMenuEntry("Texture File", platforms[plat].getFilePath());
 
-	rightClickMenuText[index].setRenderer(render);
-	rightClickMenuText[index].setFont("calibri", 20);
-	rightClickMenuText[index].loadTextRender(platforms[plat].getFilePath(), textColor);
-	menuChoiceRects[index] = {x, y, rightClickMenuText[index].getWidth(), rightClickMenuText[index].getHeight()};
-	y += rightClickMenuText[index].getHeight();
-	index++;
-
-	rightClickMenuText[index].setRenderer(render);
-	rightClickMenuText[index].setFont("calibri", 20);
-	rightClickMenuText[index].loadTextRender("X Coordinate", textColor);
-	menuChoiceRects[index] = {x, y, rightClickMenuText[index].getWidth(), rightClickMenuText[index].getHeight()};
-	y += rightClickMenuText[index].getHeight();
-	index++;
-
-	rightClickMenuText[index].setRenderer(render);
-	rightClickMenuText[index].setFont("calibri", 20);
 	ss << platCoords[plat*2];
-	rightClickMenuText[index].loadTextRender(ss.str(), textColor);
-	menuChoiceRects[index] = {x, y, rightClickMenuText[index].getWidth(), rightClickMenuText[index].getHeight()};
-	y += rightClickMenuText[index].getHeight();
+	pMenu.addMenuEntry("X Coordinate", ss.str());
 	ss.str(std::string());
-	index++;
 
-	rightClickMenuText[index].setRenderer(render);
-	rightClickMenuText[index].setFont("calibri", 20);
-	rightClickMenuText[index].loadTextRender("Y Coordinate", textColor);
-	menuChoiceRects[index] = {x, y, rightClickMenuText[index].getWidth(), rightClickMenuText[index].getHeight()};
-	y += rightClickMenuText[index].getHeight();
-	index++;
-
-	rightClickMenuText[index].setRenderer(render);
-	rightClickMenuText[index].setFont("calibri", 20);
 	ss << platCoords[plat*2+1];
-	rightClickMenuText[index].loadTextRender(ss.str(), textColor);
-	menuChoiceRects[index] = {x, y, rightClickMenuText[index].getWidth(), rightClickMenuText[index].getHeight()};
-	y += rightClickMenuText[index].getHeight();
+	pMenu.addMenuEntry("Y Coordinate", ss.str());
 	ss.str(std::string());
-	index++;
 
-	rightClickMenuText[index].setRenderer(render);
-	rightClickMenuText[index].setFont("calibri", 20);
-	rightClickMenuText[index].loadTextRender("Width", textColor);
-	menuChoiceRects[index] = {x, y, rightClickMenuText[index].getWidth(), rightClickMenuText[index].getHeight()};
-	y += rightClickMenuText[index].getHeight();
-	index++;
-
-	rightClickMenuText[index].setRenderer(render);
-	rightClickMenuText[index].setFont("calibri", 20);
 	ss << platforms[plat].getWidth();
-	rightClickMenuText[index].loadTextRender(ss.str(), textColor);
-	menuChoiceRects[index] = {x, y, rightClickMenuText[index].getWidth(), rightClickMenuText[index].getHeight()};
-	y += rightClickMenuText[index].getHeight();
+	pMenu.addMenuEntry("Width", ss.str());
 	ss.str(std::string());
-	index++;
 
-	rightClickMenuText[index].setRenderer(render);
-	rightClickMenuText[index].setFont("calibri", 20);
-	rightClickMenuText[index].loadTextRender("Height", textColor);
-	menuChoiceRects[index] = {x, y, rightClickMenuText[index].getWidth(), rightClickMenuText[index].getHeight()};
-	y += rightClickMenuText[index].getHeight();
-	index++;
-
-	rightClickMenuText[index].setRenderer(render);
-	rightClickMenuText[index].setFont("calibri", 20);
 	ss << platforms[plat].getHeight();
-	rightClickMenuText[index].loadTextRender(ss.str(), textColor);
-	menuChoiceRects[index] = {x, y, rightClickMenuText[index].getWidth(), rightClickMenuText[index].getHeight()};
+	pMenu.addMenuEntry("Height", ss.str());
 	ss.str(std::string());
-}
 
-void Map::destroyPlatMenu()
-{
-	for(int x = 0; x < 10; x++)
-	{
-		rightClickMenuText[x].free();
-	}
-}
-
-void Map::displayPlatMenu()
-{
-	for(int x = 0; x < 10; x++)
-	{
-		rightClickMenuText[x].render(menuChoiceRects[x].x - camera.getCamX(), menuChoiceRects[x].y - camera.getCamY());
-	}
+	std::cerr << "Plat menu created\n";
 }
 
 void Map::destroyAnchorPoints()
@@ -655,12 +597,14 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 				{
 					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 					{
+						std::cerr << "Creating menu\n";
 						unfocus();
 						platSelected[x] = true;
 						menuX = input.getMouseX();
 						menuY = input.getMouseY();
 						rightClickMenuShown = true;
 						createPlatMenu(x, input.getMouseX(), input.getMouseY());
+						std::cerr << "Menu Created\n";
 						break;
 					}
 				}
@@ -810,15 +754,15 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 			if(rightClickMenuShown)
 			{
 				bool itemSelected = false;
-				for(int x = 0; x < 10; x++)
+				for(int x = 0; x < pMenu.getNumEntries(); x++)
 				{
-					if(mouseOverRect(input, menuChoiceRects[x]))
+					if(mouseOverRect(input, pMenu.getEntryRect(x)))
 					{
 						if(SDL_IsTextInputActive())
 						{
 							SDL_StopTextInput();
 						}
-						menuIndex = x/2;
+						menuIndex = x;
 						printf("Menu item %d chosen\n", menuIndex);
 						keyboardInput = "";
 						SDL_StartTextInput();
@@ -833,7 +777,6 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 						SDL_StopTextInput();
 					}
 					rightClickMenuShown = false;
-					destroyPlatMenu();
 				}
 			}
 		}
@@ -868,20 +811,25 @@ void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 	{
 		switch(input.getKeyDown())
 		{
-			case SDLK_0 : 
+			case SDLK_1 : 
 				unfocus();
 				cState = Testing;
 				cursorTextTexture.loadTextRender("   Testing", textColor);
 				break;
-			case SDLK_1 :
+			case SDLK_2 :
 				unfocus();
 				cState = Select;
 				cursorTextTexture.loadTextRender("   Select", textColor);
 				break;
-			case SDLK_2 :
+			case SDLK_3 :
 				unfocus();
 				cState = Info;
 				cursorTextTexture.loadTextRender("   Info", textColor);
+				break;
+			case SDLK_4 :
+				unfocus();
+				cState = Doors;
+				cursorTextTexture.loadTextRender("   Doors", textColor);
 				break;
 		}
 	}
@@ -890,11 +838,13 @@ void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 	{
 		textColor = {0xFF,0xFF,0xFF,0xFF};
 		cursorTextTexture.setColor(0xFF, 0xFF, 0xFF);
+		pMenu.setTextColor(textColor);
 	}
 	if(input.getMouseWheel() < 0 || input.getKeyDown() == SDLK_RIGHTBRACKET)
 	{
 		textColor = {0,0,0,0xFF};
 		cursorTextTexture.setColor(0, 0, 0);
+		pMenu.setTextColor(textColor);
 	}
 
 	cursorX = input.getMouseX();
