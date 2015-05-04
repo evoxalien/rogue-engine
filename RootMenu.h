@@ -256,7 +256,7 @@ void RootMenu::UpdateGameMenu2(int choice)
 		Control[6].loadTextRender("Use Item	     Z", textColor);
 		Control[7].loadTextRender("Activate      X", textColor);
 		Control[8].loadTextRender("Special       C", textColor);
-		Control[9].loadTextRender("Jump 		 E", textColor);
+		Control[9].loadTextRender("Jump          E", textColor);
 		Control[10].loadTextRender("Pause        ESC", textColor);
 		break;
 		case 1:
@@ -269,7 +269,7 @@ void RootMenu::UpdateGameMenu2(int choice)
 		Control[6].loadTextRender("Use Item	     /", textColor);
 		Control[7].loadTextRender("Activate     .", textColor);
 		Control[8].loadTextRender("Special       M", textColor);
-		Control[9].loadTextRender("Jump 		 ,", textColor);
+		Control[9].loadTextRender("Jump          ,", textColor);
 		Control[10].loadTextRender("Pause        Enter", textColor);
 		break;
 		case 2:
@@ -282,7 +282,7 @@ void RootMenu::UpdateGameMenu2(int choice)
 		Control[6].loadTextRender("Use Item	     A", textColor);
 		Control[7].loadTextRender("Activate      X", textColor);
 		Control[8].loadTextRender("Special       Y", textColor);
-		Control[9].loadTextRender("Jump 		 B", textColor);
+		Control[9].loadTextRender("Jump          B", textColor);
 		Control[10].loadTextRender("Pause        Start", textColor);
 		break;
       }
@@ -310,7 +310,7 @@ void RootMenu::UpdateGameMenu3(int choice,int player1)
 		Control[6].loadTextRender("Use Item	     Z", textColor);
 		Control[7].loadTextRender("Activate      X", textColor);
 		Control[8].loadTextRender("Special       C", textColor);
-		Control[9].loadTextRender("Jump 		 E", textColor);
+		Control[9].loadTextRender("Jump          E", textColor);
 		Control[10].loadTextRender("Pause        ESC", textColor);
 		break;
 		case 1:
@@ -323,7 +323,7 @@ void RootMenu::UpdateGameMenu3(int choice,int player1)
 		Control[6].loadTextRender("Use Item	     /", textColor);
 		Control[7].loadTextRender("Activate      .", textColor);
 		Control[8].loadTextRender("Special       M", textColor);
-		Control[9].loadTextRender("Jump 		 ,", textColor);
+		Control[9].loadTextRender("Jump          ,", textColor);
 		Control[10].loadTextRender("Pause        Enter", textColor);
 		break;
 		case 2:
@@ -336,7 +336,7 @@ void RootMenu::UpdateGameMenu3(int choice,int player1)
 		Control[6].loadTextRender("Use Item	     A", textColor);
 		Control[7].loadTextRender("Activate      X", textColor);
 		Control[8].loadTextRender("Special       Y", textColor);
-		Control[9].loadTextRender("Jump 		 B", textColor);
+		Control[9].loadTextRender("Jump          B", textColor);
 		Control[10].loadTextRender("Pause        Start", textColor);
 		break;
       }
