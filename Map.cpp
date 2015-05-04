@@ -41,16 +41,32 @@ Map::~Map()
 	cursorTextTexture.free();
 }
 
-bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
+bool Map::openMapFiles(std::string filePath, SDL_Renderer* r)
 {
 	render = r;
 
 	ifstream inputFile;
+	filePath = "../resources/maps/" + filePath + ".txt";
 
-	filePath = filePath + ".txt";
-	std::string filePath2 = "../resources/maps/" + filePath;
-	cout << filePath2 << endl;
-	inputFile.open(filePath2);
+	inputFile.open(filePath);
+
+	if(!inputFile)
+		return false;
+
+	int x = 0;
+	while(inputFile >> mapFiles[x])
+		{	x++;	}
+
+	return true;
+}
+
+bool Map::parseMapFile(std::string filePath)
+{
+	ifstream inputFile;
+
+	filePath = "../resources/maps/" + filePath + ".txt";
+	
+	inputFile.open(filePath);
 
 	if(!inputFile)
 		return false;
@@ -1004,6 +1020,12 @@ void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 	if(input.getKeyDown() == SDLK_ESCAPE)
 	{
 		unfocus();
+	}
+	if(input.getKeyDown() == SDLK_TAB)
+	{
+		mState = LevelLoad;
+		menuShown = true;
+		createMenu(-1, input.getMouseX(), input.getMouseY());
 	}
 
 	if(!SDL_IsTextInputActive())

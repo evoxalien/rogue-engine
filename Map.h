@@ -12,10 +12,12 @@
 #include <iostream>
 
 const int PLATMAX = 100;
+const int MAXROOMS = 50;
 
 class Map
 {
 private:
+	std::string mapFiles[MAXROOMS];
 	PopupMenu pMenu;
 	bool menuShown;
 	bool anchorPointsShown;
@@ -60,7 +62,8 @@ private:
 	{
 		Properties,
 		TextureProps,
-		PhysicsProps
+		PhysicsProps,
+		LevelLoad
 	};
 
 	struct PhysObj
@@ -94,7 +97,8 @@ private:
 public:
 	Map();
 	~Map();
-	bool parseMapFile(std::string filePath,SDL_Renderer* render);
+	bool openMapFiles(std::string filePath,SDL_Renderer* render);
+	bool parseMapFile(std::string filePath);
 	void renderMap();
 	void destroyAnchorPoints();
 	void displayAnchorPoints();

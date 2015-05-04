@@ -118,9 +118,9 @@ bool maproot::loadContent()
 {
 
    //initialize map from file
-   if(!map.parseMapFile("map1", renderer))
+   if(!map.openMapFiles("mapFileList", renderer))
    {
-      printf("Map file failed to load!!\n");
+      printf("Map files failed to load!!\n");
    }
    
    return true;
