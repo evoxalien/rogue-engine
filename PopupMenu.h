@@ -32,6 +32,9 @@ public:
 	void displayMenu(int camX, int camY);
 	SDL_Rect getEntryRect(int index);
 	int getNumEntries();
+	int getMenuX();
+	int getMenuY();
+	int getValueX();
 };
 
 PopupMenu::PopupMenu()
@@ -170,6 +173,21 @@ SDL_Rect PopupMenu::getEntryRect(int index)
 	tempRect.h = 0;
 
 	return tempRect;
+}
+
+int PopupMenu::getMenuX()
+{
+	return menuX;
+}
+
+int PopupMenu::getMenuY()
+{
+	return menuY;
+}
+
+int PopupMenu::getValueX()
+{
+	return valueX;
 }
 
 #endif

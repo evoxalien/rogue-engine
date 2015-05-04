@@ -28,6 +28,7 @@ private:
 	int bgY;
 	bool drawText;
 	SDL_Color textColor;
+	SDL_Color inputTextColor;
 	Texture cursorTextTexture;
 	Texture platforms[PLATMAX];
 	int platCoords[PLATMAX * 2];
@@ -40,6 +41,8 @@ private:
 	int cursorX;
 	int cursorY;
 	Texture menuSelectionTexture;
+	Texture currentInputStringBackground;
+	Texture currentInputStringTexture;
 	SDL_Rect menuSelectionRect;
 	int menuIndex;
 

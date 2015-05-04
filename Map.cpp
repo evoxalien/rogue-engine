@@ -10,6 +10,7 @@ Map::Map()
 {
 	numPlatforms = 0;
 	textColor = {0xFF, 0xFF, 0xFF, 0xFF};
+	inputTextColor = {0, 0, 0, 0xFF};
 	camera.setBoundRect(0,0,5000,5000);
 	render = NULL;
 	drawText = false;
@@ -32,6 +33,10 @@ Map::~Map()
 		platforms[x].free();
 	}
 
+	menuSelectionTexture.free();
+
+	currentInputStringTexture.free();
+	
 	cursorTextTexture.free();
 }
 
@@ -136,6 +141,12 @@ bool Map::parseMapFile(std::string filePath, SDL_Renderer* r)
 	menuSelectionTexture.setRenderer(render);
 	menuSelectionTexture.loadTexture("../resources/img/shapes/WhiteSquare.png");
 	menuSelectionTexture.setColor(0x44, 0x44, 0x44);
+
+	currentInputStringBackground.setRenderer(render);
+	currentInputStringBackground.loadTexture("../resources/img/shapes/WhiteSquare.png");
+
+	currentInputStringTexture.setRenderer(render);
+	currentInputStringTexture.setFont("calibri", 20);
 
 	inputFile.close();
 
@@ -244,6 +255,19 @@ void Map::renderMap()
 		}
 
 		pMenu.displayMenu(camera.getCamX(), camera.getCamY());
+
+		if(SDL_IsTextInputActive())
+		{
+			SDL_Rect tempRect;
+			tempRect.x = pMenu.getValueX() - camera.getCamX();
+			tempRect.y = menuSelectionRect.y - camera.getCamY();
+			tempRect.w = (menuSelectionRect.x - camera.getCamX() + menuSelectionRect.w) - tempRect.x;
+			tempRect.h = menuSelectionRect.h;
+
+			currentInputStringBackground.render(tempRect.x, tempRect.y, tempRect.w, tempRect.h);
+
+			currentInputStringTexture.render(tempRect.x, tempRect.y);
+		}
 	}
 
 	if(anchorPointsShown)
@@ -453,6 +477,7 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 					if(keyboardInput.length() > 0)
 					{
 						keyboardInput.pop_back();
+						currentInputStringTexture.loadTextRender(keyboardInput, inputTextColor);
 					}
 				}
 
@@ -475,6 +500,8 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 								platforms[x].setWidth(w);
 								platforms[x].setHeight(h);
 								SDL_StopTextInput();
+								pMenu.destroyMenu();
+								createPlatMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
 								break;
 							}
 						}
@@ -488,6 +515,8 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 								{
 									platCoords[x*2] = atoi(keyboardInput.c_str());
 									SDL_StopTextInput();
+									pMenu.destroyMenu();
+									createPlatMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
 									break;
 								}
 							}
@@ -502,6 +531,8 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 								{
 									platCoords[x*2+1] = atoi(keyboardInput.c_str());
 									SDL_StopTextInput();
+									pMenu.destroyMenu();
+									createPlatMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
 									break;
 								}
 							}
@@ -516,6 +547,8 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 								{
 									platforms[x].setWidth(atoi(keyboardInput.c_str()));
 									SDL_StopTextInput();
+									pMenu.destroyMenu();
+									createPlatMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
 									break;
 								}
 							}
@@ -530,18 +563,22 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 								{
 									platforms[x].setHeight(atoi(keyboardInput.c_str()));
 									SDL_StopTextInput();
+									pMenu.destroyMenu();
+									createPlatMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
 									break;
 								}
 							}
 						}
 						break;
 					}
+					currentInputStringTexture.free();
 				}
 			}
 
 			if(input.getEvent().type == SDL_TEXTINPUT)
 			{
 				keyboardInput += input.getEvent().text.text;
+				currentInputStringTexture.loadTextRender(keyboardInput, inputTextColor);
 			}
 		break; 
 	}
