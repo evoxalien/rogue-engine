@@ -4,7 +4,7 @@
 //Initialization of static Object members
 std::vector<Object*> Object::object_Pointer_Vector;
 
-b2World Object::box2D_World(b2Vec2(0,25));
+b2World Object::box2D_World(b2Vec2(0,9.81));
 b2BodyDef Object::box2D_Body_Definition;
 b2FixtureDef Object::box2D_Fixture_Definition;
 b2PolygonShape Object::box2D_Polygon_Shape;

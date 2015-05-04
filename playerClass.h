@@ -85,8 +85,8 @@ public:
 	SDL_Rect whiteBoxRect;
 	int    playerX;
 	int    playerY;
-	int    playerW;
-	int    playerH;
+	float  playerW;
+	float  playerH;
 	int    currentFrameX;
 	int    currentFrameY;
 	float  player_Acceleration_Rate;
@@ -216,9 +216,11 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 	inputFile >> CurrentData;
 	inputFile >> playerHealth;
 	// LoadSpriteContent();
-	(*this).object = Object(50, 50, 0, 2, 0, 1, 0, 0, 1, 0, 1, 1, 1, .8, 0, 1, 65535, 0, 20, 20);
-	(*this).player_Acceleration_Rate = 100000;
-	(*this).playerMovementSpeed = 5000000;
+	(*this).playerW = 2;
+	(*this).playerH = 1.75;
+	(*this).object = Object(50, 50, 0, 2, 0, 1, 0, 0, 1, 0, 1, 1, 1, .8, 0, 1, 65535, 0, ((*this).playerW / 2.0), ((*this).playerH / 2.0));
+	(*this).player_Acceleration_Rate = 3000;
+	(*this).playerMovementSpeed = 10000;
     
     //Needed a return type for success was throwing a warning John V.
     return true;
@@ -658,7 +660,7 @@ void playerClass::playerUpdate(int frame)
 
 	(*(*this).object.physics).ApplyForce(b2Vec2(change_In_X_Velocity * (*(*this).object.physics).GetMass() * Object::physics_Time_Step, change_In_Y_Velocity * (*(*this).object.physics).GetMass() * Object::physics_Time_Step), (*(*this).object.physics).GetWorldCenter(), true);
     //Smooth the Animation Transitions
-    playerAnimation.setPosition((*(*this).object.physics).GetPosition().x - 20, (*(*this).object.physics).GetPosition().y - 20);
+    playerAnimation.setPosition((*(*this).object.physics).GetPosition().x - ((*this).playerW / 2.0), (*(*this).object.physics).GetPosition().y - ((*this).playerH / 2.0));
     playerAnimation.setCurrentFrame(currentFrameX,currentFrameY);
     
     //Update of the Animations depending on Game Time

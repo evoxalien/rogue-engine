@@ -30,6 +30,7 @@ public:
 	int getFrameHeight();
 
 	void Initialize( int x, int y, int framesX, int framesY);
+	void Initialize(int, int, int, int, float, float);
 	
 	void LoadImage(string sfilename);
 	Texture Image;
@@ -45,6 +46,8 @@ private:
 	bool active;
 	int PosX, PosY, currentFrameX, currentFrameY;
 	float amountofFramesX, amountofFramesY;
+	float frame_Width_Scaling_Factor;
+	float frame_Height_Scaling_Factor;
 	
 	SDL_Rect SourceRect;
 
