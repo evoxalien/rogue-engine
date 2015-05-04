@@ -422,9 +422,9 @@ void Attributes::display_Information() const
 //Updates stats according to regeneration rates and events such as the Object being damaged, having a spell cast on the Object, or the Object killing a monster; needs to have access to time_Step
 void Attributes::update()
 {
-	(*this).stamina = std::min((((*this).get_Effective_Rate_Of_Stamina_Regeneration() * static_cast<float>(1.0 / 60)) + (*this).stamina), (*this).get_Effective_Maximum_Stamina());
-	(*this).health =  std::min((((*this).get_Effective_Rate_Of_Health_Regeneration() * static_cast<float>(1.0 / 60)) + (*this).health), (*this).get_Effective_Maximum_Health());
-	(*this).mana =  std::min((((*this).get_Effective_Rate_Of_Mana_Regeneration() * static_cast<float>(1.0 / 60)) + (*this).mana), (*this).get_Effective_Maximum_Mana()); 
+	(*this).stamina = std::min((((*this).get_Effective_Rate_Of_Stamina_Regeneration() * static_cast<float>(Object::physics_Time_Step)) + (*this).stamina), (*this).get_Effective_Maximum_Stamina());
+	(*this).health =  std::min((((*this).get_Effective_Rate_Of_Health_Regeneration() * static_cast<float>(Object::physics_Time_Step)) + (*this).health), (*this).get_Effective_Maximum_Health());
+	(*this).mana =  std::min((((*this).get_Effective_Rate_Of_Mana_Regeneration() * static_cast<float>(Object::physics_Time_Step)) + (*this).mana), (*this).get_Effective_Maximum_Mana()); 
 }
 
 float Attributes::get_Effective_Strength() const
