@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <cstdlib>
 #include <chrono>
-#include "level/level.h"	//Includes level and all Object header files and all Object component header files, including Box2D's, along with <fstream>, <string>, <algorithm>, <iostream>, <vector>, <cstdint> but excluding inherited classes (Player, NonPlayerCharacter)
+#include "level/level.h"   //Includes level and all Object header files and all Object component header files, including Box2D's, along with <fstream>, <string>, <algorithm>, <iostream>, <vector>, <cstdint> but excluding inherited classes (Player, NonPlayerCharacter)
 #include "log.h"
 #include "input.h"
 #include "SoundManager.h"
@@ -97,7 +97,8 @@ private:
    SDL_Color menuColor={0xFF,0xA5,0x00,0xFF};
    SDL_Color textColor = {0xFF,0xA5,0xA5,0xFF};
    bool newMenu=false;
-   int player1Choice, player2Choice;
+   bool mTrue = true;
+   int player1Choice, player2Choice, intiWorks=0;
 public:
    gameroot(Window *mainWindow, EngineState *currentState); 
    bool loadContent();
@@ -115,11 +116,11 @@ public:
 
 };
 
-double gameroot::maximum_Frame_Rate = 120;		//Sets the maximum number of times the main game loop can execute in a single second
-double gameroot::total_Time = 0;				//The amount of time the game has run from the start of the program
-std::chrono::high_resolution_clock::time_point gameroot::start_Of_Previous_Frame = std::chrono::high_resolution_clock::now();	//The time point that the previous instance of the main game loop (A 'frame') began
-std::chrono::high_resolution_clock::time_point gameroot::start_Of_Current_Frame = gameroot::start_Of_Previous_Frame;			//The time point at which the currently active frame began
-std::chrono::duration<double> gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame);	//The length of time the previous frame took to complete
+double gameroot::maximum_Frame_Rate = 120;      //Sets the maximum number of times the main game loop can execute in a single second
+double gameroot::total_Time = 0;          //The amount of time the game has run from the start of the program
+std::chrono::high_resolution_clock::time_point gameroot::start_Of_Previous_Frame = std::chrono::high_resolution_clock::now(); //The time point that the previous instance of the main game loop (A 'frame') began
+std::chrono::high_resolution_clock::time_point gameroot::start_Of_Current_Frame = gameroot::start_Of_Previous_Frame;       //The time point at which the currently active frame began
+std::chrono::duration<double> gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(start_Of_Current_Frame - start_Of_Previous_Frame); //The length of time the previous frame took to complete
 uint32_t gameroot::total_Frame_Time = 0;
 
 //Simple initializes
@@ -145,10 +146,10 @@ bool gameroot::initialize()
    }
 
    renderer = window->getRenderer();
-	Object::SDL_Renderer_Pointer = renderer;
+   Object::SDL_Renderer_Pointer = renderer;
    
-	gameroot::camera.setBoundRect(0,0,5000,5000);
-	Object::camera_Pointer = &camera;
+   gameroot::camera.setBoundRect(0,0,5000,5000);
+   Object::camera_Pointer = &camera;
    Object::meters_Per_Pixel = Object::standard_Meters_Per_Pixel;
    //tell texture the renderer to use
    texture.setRenderer(renderer);
@@ -198,8 +199,13 @@ bool gameroot::loadContent()
    
    texture.setWidth(window->getWidth());
    texture.setHeight(window->getHeight());
-
    
+   if(!soundManager.Load_Sound("Mechanolith.mp3","Levelmusic", 0))
+   {
+       error_log << "Sound failed to load.\n";
+       return false;
+    }
+
    return true;
 
 }
@@ -257,11 +263,12 @@ void gameroot::update()
 
    if (gameState==GamePlaying1)
    {
-		(*Object::camera_Pointer).Update_Camera(((*Hero.object.physics).GetPosition().x - ((*Object::camera_Pointer).getCamW() / Object::meters_Per_Pixel / 2.0)), ((*Hero.object.physics).GetPosition().y - ((*Object::camera_Pointer).getCamH() / Object::meters_Per_Pixel / 2.0)));
-		(*Object::camera_Pointer).update_Camera_Floats(((*Hero.object.physics).GetPosition().x - ((*Object::camera_Pointer).getCamW() / Object::meters_Per_Pixel / 2.0)), ((*Hero.object.physics).GetPosition().y - ((*Object::camera_Pointer).getCamH() / Object::meters_Per_Pixel / 2.0)));
+      (*Object::camera_Pointer).Update_Camera(((*Hero.object.physics).GetPosition().x - ((*Object::camera_Pointer).getCamW() / Object::meters_Per_Pixel / 2.0)), ((*Hero.object.physics).GetPosition().y - ((*Object::camera_Pointer).getCamH() / Object::meters_Per_Pixel / 2.0)));
+      (*Object::camera_Pointer).update_Camera_Floats(((*Hero.object.physics).GetPosition().x - ((*Object::camera_Pointer).getCamW() / Object::meters_Per_Pixel / 2.0)), ((*Hero.object.physics).GetPosition().y - ((*Object::camera_Pointer).getCamH() / Object::meters_Per_Pixel / 2.0)));
       gameLevel->update_All();
       Hero.playerUpdate(GLOBAL_FRAME_COUNTER);
       Villain.playerUpdate(GLOBAL_FRAME_COUNTER);
+
    }
    //Game Menu Starting
    if (gameState == GameRootMenu)
@@ -270,11 +277,11 @@ void gameroot::update()
       {
          case 0:
          rootMenuObject.Root[0].loadTextRender("Start", menuColor);
-         rootMenuObject.Root[1].loadTextRender("Settings", textColor);
+         rootMenuObject.Root[1].loadTextRender("Controls", textColor);
          break;
          case 1:
          rootMenuObject.Root[0].loadTextRender("Start", textColor);
-         rootMenuObject.Root[1].loadTextRender("Settings", menuColor);
+         rootMenuObject.Root[1].loadTextRender("Controls", menuColor);
          break;
       }
    }
@@ -339,6 +346,7 @@ void gameroot::update()
       {
          Hero.playerInitalize(1);
          Villain.playerInitalize(2);
+      soundManager.Play_Music("Levelmusic", 20);
       }
       if (Villain.p2k==true)
       {
@@ -348,12 +356,20 @@ void gameroot::update()
       {
          Hero.playerInitalize(1);
          Villain.playerInitalize(2);
-         Hero.init();
+         if(Hero.init()==false)
+         {
+            engineState->gameroot = false;
+            Running = false;
+         }
       }
       if (Villain.p2g==true)
       {
          Villain.playerInitalize(2);
-         Villain.init();
+         if (Villain.init()==false)
+         {
+            engineState->gameroot = false;
+            Running = false;
+         }
       }  
       if (Hero.mix==true&&Villain.mix==true)
       {
@@ -364,6 +380,7 @@ void gameroot::update()
       Hero.LoadSpriteContent();
       Villain.LoadSpriteContent();
       gameState=GamePlaying1;
+
    }
    
    while(SDL_PollEvent(&Event))
@@ -497,6 +514,12 @@ void gameroot::update()
       }
       if(gameState == GamePlaying1)
       {
+         // if (Hero.Actions.playerSpecial==true)
+         // {
+         //       soundManager.Play_Music("Levelmusic", 20);
+
+         // }
+
          if (Hero.Controller1Connected==false&&Hero.p1k==true)
          {
             Hero.playerKeyPress(input.getKeyDown());
@@ -514,7 +537,7 @@ void gameroot::update()
          }
 
       }
-	  
+     
    }  
       
       
@@ -582,10 +605,10 @@ int gameroot::execute()
 
    while(Running && engineState->isGameRunning())
    {
-      gameroot::start_Of_Current_Frame = std::chrono::high_resolution_clock::now();		//At the start of each frame, store the current time
-      gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(gameroot::start_Of_Current_Frame - gameroot::start_Of_Previous_Frame);	//Number of clock cycles between frames
+      gameroot::start_Of_Current_Frame = std::chrono::high_resolution_clock::now();    //At the start of each frame, store the current time
+      gameroot::time_Of_Previous_Frame = std::chrono::duration_cast<std::chrono::duration<double>>(gameroot::start_Of_Current_Frame - gameroot::start_Of_Previous_Frame);  //Number of clock cycles between frames
 
-	  //update and redraw window
+     //update and redraw window
       update();
       draw();
 
@@ -599,9 +622,9 @@ int gameroot::execute()
       {
          SDL_Delay((SCREEN_TICKS_PER_FRAME) - gameroot::total_Frame_Time);
       }
-		++GLOBAL_FRAME_COUNTER;// Counts up the frames in the engine at the end of every draw. 
+      ++GLOBAL_FRAME_COUNTER;// Counts up the frames in the engine at the end of every draw. 
 
-      gameroot::start_Of_Previous_Frame = gameroot::start_Of_Current_Frame;				//At the end of each frame, store the start time of the current frame to the previous frame
+      gameroot::start_Of_Previous_Frame = gameroot::start_Of_Current_Frame;            //At the end of each frame, store the start time of the current frame to the previous frame
     }
 
    close() ;
@@ -616,15 +639,15 @@ void gameroot::close()
    Hero.close();
    Villain.close();
   ////unloading of sounds
-  // soundManager.Unload_Sound("DarkSouls",0);
+   soundManager.Unload_Sound("Levelmusic",0);
   // soundManager.Unload_Sound("A2",0);
   // soundManager.Unload_Sound("SFX",1);
   // soundManager.Unload_Sound("gnt",1);
-	if(gameLevel != nullptr)
-	{
-		delete gameLevel;
-		gameLevel = nullptr;
-	}
+   if(gameLevel != nullptr)
+   {
+      delete gameLevel;
+      gameLevel = nullptr;
+   }
 
 
    IMG_Quit();

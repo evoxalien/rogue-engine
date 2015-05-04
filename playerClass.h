@@ -18,6 +18,9 @@
 SDL_GameController *ControllerHandles[MAX_CONTROLLERS];
 SDL_Haptic *RumbleHandles[MAX_CONTROLLERS];
 
+//Analog joystick dead zone
+const int JOYSTICK_DEAD_ZONE = 8000;
+
 class playerClass 
 {
 private:
@@ -27,14 +30,14 @@ private:
 		SDL_Keycode playerDown;
 		SDL_Keycode playerLeft;
 		SDL_Keycode playerRight;
-		SDL_Keycode playerActivate;
 		SDL_Keycode playerUse;
-		SDL_Keycode playerAttack;
+		SDL_Keycode playerActivate;
 		SDL_Keycode playerSpecial;
-		SDL_Keycode playerStart;
-		SDL_Keycode playerBack;
 		SDL_Keycode playerJump;
+		SDL_Keycode playerStart;
 		SDL_Keycode playerExit;
+		SDL_Keycode playerAttack;
+		SDL_Keycode playerBack;
 	};
 	struct PlayerControlsGamePad // holds what buttons activate flags
 	{
@@ -72,12 +75,12 @@ public:
 		bool  playerRight=false;
 		bool  playerActivate=false;
 		bool  playerUse=false;
-		bool  playerAttack=false;
 		bool  playerSpecial=false;
-		bool  playerStart=false;
-		bool  playerBack=false;
 		bool  playerJump=false;
+		bool  playerBack=false;
+		bool  playerStart=false;
 		bool  playerExit=false;
+		bool  playerAttack=false;
 		bool  playerLeftShoulder=false;
 		bool playerRightShoulder=false;
 	};
@@ -162,10 +165,6 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 
 	if(playerInputMode=="Keyboard") // loads SDLK data type
 	{
-		inputFile >> CurrentData;	
-		inputFile >> playerControlsKeyboard.playerActivate;
-		inputFile >> CurrentData;  
-		inputFile >> playerControlsKeyboard.playerBack;
 		inputFile >> CurrentData;
 		inputFile >> playerControlsKeyboard.playerUp;
 		inputFile >> CurrentData;
@@ -175,20 +174,22 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 		inputFile >> CurrentData;
 		inputFile >> playerControlsKeyboard.playerRight;
 		inputFile >> CurrentData;
+		inputFile >> playerControlsKeyboard.playerUse;
+		inputFile >> CurrentData;
+		inputFile >> playerControlsKeyboard.playerActivate;
+		inputFile >> CurrentData;	
+		inputFile >> playerControlsKeyboard.playerSpecial;
+		inputFile >> CurrentData;
 		inputFile >> playerControlsKeyboard.playerJump;
 		inputFile >> CurrentData;	
 		inputFile >> playerControlsKeyboard.playerStart;
-		inputFile >> CurrentData;
+		inputFile >> CurrentData;  
 		inputFile >> playerControlsKeyboard.playerExit;	
 	}
 	string GamepadMap;
 	if (playerInputMode=="Gamepad")// loads SDL_GameControllerButton type
 	{
 		inputFile >> CurrentData;	
-		inputFile >> playerControlsGamePad.playerA;
-		inputFile >> CurrentData;  
-		inputFile >> playerControlsGamePad.playerB;
-		inputFile >> CurrentData;
 		inputFile >> playerControlsGamePad.playerUp;
 		inputFile >> CurrentData;
 		inputFile >> playerControlsGamePad.playerDown;
@@ -197,16 +198,22 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 		inputFile >> CurrentData;
 		inputFile >> playerControlsGamePad.playerRight;
 		inputFile >> CurrentData;
+		inputFile >> playerControlsGamePad.playerA;
+		inputFile >> CurrentData;  
 		inputFile >> playerControlsGamePad.playerX;
+		inputFile >> CurrentData;
+		inputFile >> playerControlsGamePad.playerY;
+		inputFile >> CurrentData;
+		inputFile >> playerControlsGamePad.playerB;
 		inputFile >> CurrentData;
 		inputFile >> playerControlsGamePad.playerStart;
 		inputFile >> CurrentData;
 		inputFile >> playerControlsGamePad.playerBack;
 	}
-	inputFile >> CurrentData;
-	inputFile >> playerName;
-	inputFile >> CurrentData;
-	inputFile >> playerHealth;
+	// inputFile >> CurrentData;
+	// inputFile >> playerName;
+	// inputFile >> CurrentData;
+	// inputFile >> playerHealth;
 	// LoadSpriteContent();
 	(*this).playerW = 2;
 	(*this).playerH = 1.75;
@@ -482,7 +489,51 @@ void playerClass::UpdateSDLJoy(SDL_Event *Event)
 	// {
 	// 		printf("%i\n", SDL_JoystickNumButtons(gGameController));
 	// }
-
+	if( Event->type == SDL_JOYAXISMOTION )
+	{
+		//Motion on controller 0
+		if( Event->jaxis.which == 0 )
+		{						
+			//X axis motion
+			if( Event->jaxis.axis == 0 )
+			{
+				//Left of dead zone
+				if( Event->jaxis.value < -JOYSTICK_DEAD_ZONE )
+				{
+					Actions.playerLeft=true;
+				}
+				//Right of dead zone
+				else if( Event->jaxis.value > JOYSTICK_DEAD_ZONE )
+				{
+					Actions.playerRight=true;
+				}
+				else
+				{
+					Actions.playerLeft=false;
+					Actions.playerRight=false;
+				}
+			}
+			//Y axis motion
+			else if( Event->jaxis.axis == 1 )
+			{
+				//Below of dead zone
+				if( Event->jaxis.value < -JOYSTICK_DEAD_ZONE )
+				{
+					Actions.playerDown=true;
+				}
+				//Above of dead zone
+				else if( Event->jaxis.value > JOYSTICK_DEAD_ZONE )
+				{
+					Actions.playerUp=true;
+				}
+				else
+				{
+					Actions.playerDown=false;
+					Actions.playerUp=false;
+				}
+			}
+		}
+	}
 }
 //gamepad open //should be called once by player 1 never by player 2
 void playerClass::SDLOpenGameControllers()

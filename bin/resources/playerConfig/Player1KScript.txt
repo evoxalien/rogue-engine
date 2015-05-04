@@ -1,8 +1,4 @@
 Keyboard
-Interact
-122
-Back
-99
 Up
 119
 Down
@@ -11,13 +7,15 @@ Left
 97
 Right
 100
-Jump
+Use Item
+99
+Activate
 101
+Special 
+113
+Jump
+32
 Pause
 27
 Exit
 8
-PlayerName
-Alex
-Health
-50

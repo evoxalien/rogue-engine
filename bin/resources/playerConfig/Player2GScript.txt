@@ -1,8 +1,4 @@
 Gamepad
-Interact
-10
-Back
-11
 Up
 0
 Down
@@ -11,13 +7,15 @@ Left
 2
 Right
 3
-Jump
+Use Item
+10
+Activate
 12
+Special 
+13
+Jump
+11
 Pause
-4
+27
 Exit
-5
-PlayerName
-Johno
-Health
-50
+8
