@@ -226,8 +226,21 @@ void Map::exportMapFile(std::string fileName)
 	outFile.close();
 	cout << "Map file saved\n";
 
-	mapFiles[numMapFiles] = fileName;
-	numMapFiles++;
+	bool duplicateFileName = false;
+
+	for(int iterator = 0; iterator < numMapFiles; iterator++)
+	{
+		if(mapFiles[iterator] == fileName)
+		{
+			duplicateFileName = true;
+		}
+	}
+
+	if(duplicateFileName == false)
+	{
+		mapFiles[numMapFiles] = fileName;
+		numMapFiles++;
+	}
 
 	outFile.open("../resources/maps/mapFileList.txt");
 	for(int x = 0; x < numMapFiles; x++)
