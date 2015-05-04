@@ -292,33 +292,33 @@ void gameroot::update()
          case 0:
         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", menuColor);
         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
-        // rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-        // // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-        // rootMenuObject.Menu[3].loadTextRender("1 player on Each", textColor);
+        rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+        // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+        rootMenuObject.Menu[3].loadTextRender("1 player on Each", textColor);
          break;
          
          case 1:
          rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
          rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", menuColor);
-         // rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-         // // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-         // rootMenuObject.Menu[3].loadTextRender("1 player on Each", textColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+         // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         rootMenuObject.Menu[3].loadTextRender("1 player on Each", textColor);
          break;
          
          case 2:
-         // rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
-         // rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
-         // rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", menuColor);
-         // // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-         // rootMenuObject.Menu[3].loadTextRender("1 player on Each", textColor);
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", menuColor);
+         // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         rootMenuObject.Menu[3].loadTextRender("1 player on Each", textColor);
          break;
 
          case 3:
-         // rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
-         // rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
-         // rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-         // // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", menuColor);
-         // rootMenuObject.Menu[3].loadTextRender("1 player on Each", menuColor);
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+         // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", menuColor);
+         rootMenuObject.Menu[3].loadTextRender("1 player on Each", menuColor);
          break;
 
          // case 4:
@@ -422,12 +422,12 @@ void gameroot::update()
          {
             menuchoice--;
             if (menuchoice<0)
-               menuchoice=1;
+               menuchoice=3;
          }
          if (input.getKeyDown()==SDLK_DOWN)
          {
              menuchoice++;
-            if (menuchoice>1)
+            if (menuchoice>3)
                menuchoice=0;
          }
          if (input.getKeyDown()==SDLK_RETURN&&newMenu==true)
