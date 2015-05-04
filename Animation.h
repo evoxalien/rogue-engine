@@ -37,6 +37,7 @@ public:
 	void Update(int frameRate);
 
 	void Draw();
+	void Draw(float, float, float, float);
 
 	void SetFramerate(int speed);
 

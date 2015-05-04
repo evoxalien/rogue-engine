@@ -257,6 +257,7 @@ void gameroot::update()
    if (gameState==GamePlaying1)
    {
 		(*Object::camera_Pointer).Update_Camera(((*Hero.object.physics).GetPosition().x - ((*Object::camera_Pointer).getCamW() / Object::meters_Per_Pixel / 2.0)), ((*Hero.object.physics).GetPosition().y - ((*Object::camera_Pointer).getCamH() / Object::meters_Per_Pixel / 2.0)));
+		(*Object::camera_Pointer).update_Camera_Floats(((*Hero.object.physics).GetPosition().x - ((*Object::camera_Pointer).getCamW() / Object::meters_Per_Pixel / 2.0)), ((*Hero.object.physics).GetPosition().y - ((*Object::camera_Pointer).getCamH() / Object::meters_Per_Pixel / 2.0)));
       gameLevel->update_All();
       Hero.playerUpdate(GLOBAL_FRAME_COUNTER);
       Villain.playerUpdate(GLOBAL_FRAME_COUNTER);
@@ -534,10 +535,10 @@ void gameroot::draw()
       // Hero.playerTexture.render(0,0);
       if (Villain.p2k==true||Villain.p2g==true||Villain.mix==true)
       {
-         Villain.playerDraw();
+         Villain.player_Draw_Scaled();
          /* code */
       }
-      Hero.playerDraw();
+      Hero.player_Draw_Scaled();
    }
     if(gameState == GameRootMenu)
    {
@@ -559,7 +560,7 @@ void gameroot::draw()
    //update screen
    SDL_RenderPresent(renderer);
    
-   ++GLOBAL_FRAME_COUNTER;// Counts up the frames in the engine at the end of every draw. 
+
 }
 
 //Actual game loop
@@ -597,6 +598,7 @@ int gameroot::execute()
       {
          SDL_Delay((SCREEN_TICKS_PER_FRAME) - gameroot::total_Frame_Time);
       }
+		++GLOBAL_FRAME_COUNTER;// Counts up the frames in the engine at the end of every draw. 
 
       gameroot::start_Of_Previous_Frame = gameroot::start_Of_Current_Frame;				//At the end of each frame, store the start time of the current frame to the previous frame
     }

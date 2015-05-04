@@ -23,11 +23,15 @@ private:
 	//CAMERA TYPE
 	string CAMERA_TYPE;
 
+	float camera_X_Float;
+	float camera_Y_Float;
+
 	//CINEMATIC
 	bool CINEMATIC;
 
 	//CHECK BOUNDS
 	void CheckBounds();
+	void check_Bounds_Floats();
 
 public:
 	//CONSTRUCTOR
@@ -42,6 +46,8 @@ public:
 	int getCamY();
 	int getCamW();
 	int getCamH();
+	float get_Camera_X_Float();
+	float get_Camera_Y_Float();
 
 	void setBoundRect(int brX, int brY, int brW, int brH);
 
@@ -50,6 +56,7 @@ public:
 
 	//UPDATE THE CAMERA ON SCREEN
 	void Update_Camera(int camX,int camY);
+	void update_Camera_Floats(float, float);
 
 	//DRAW CAMERA TO SCREEN
 	//void Draw_Camera(SDL_Renderer* gRenderer);

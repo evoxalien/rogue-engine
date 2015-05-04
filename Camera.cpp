@@ -19,6 +19,8 @@ Camera::Camera(SDL_Rect bRect, int iType)
 
 	CINEMATIC = false;
 	camera = { 0, 0, CAMERA_WIDTH, CAMERA_HEIGHT};
+	(*this).camera_X_Float = 0;
+	(*this).camera_Y_Float = 0;
 
 
 }//End of Constructor
@@ -30,6 +32,8 @@ Camera::Camera(int levelWidth, int levelHeight)
 	CAMERA_TYPE = "STATIC";
 	BOUND_RECT = {0, 0, levelWidth, levelHeight};
 	camera = { 0, 0, CAMERA_WIDTH, CAMERA_HEIGHT};
+	(*this).camera_X_Float = 0;
+	(*this).camera_Y_Float = 0;
 }
 
 Camera::Camera()
@@ -37,6 +41,8 @@ Camera::Camera()
 	CAMERA_TYPE = "STATIC";
 	BOUND_RECT = {0,0,0,0};
 	camera = {0,0,CAMERA_WIDTH,CAMERA_HEIGHT};
+	(*this).camera_X_Float = 0;
+	(*this).camera_Y_Float = 0;
 }
 
 Camera::~Camera()
@@ -55,6 +61,16 @@ int Camera::getCamX(){return camera.x;}
 int Camera::getCamY(){return camera.y;}
 int Camera::getCamW(){return camera.w;}
 int Camera::getCamH(){return camera.h;}
+
+float Camera::get_Camera_X_Float()
+{
+	return (*this).camera_X_Float;
+}
+
+float Camera::get_Camera_Y_Float()
+{
+	return (*this).camera_Y_Float;
+}
 
 //Bounderies:
 //Checks bounds for the camera not to overlap edge of level
@@ -80,6 +96,27 @@ void Camera::CheckBounds()
 
 }
 
+void Camera::check_Bounds_Floats()
+{
+	if( (*this).camera_X_Float < BOUND_RECT.x )
+	{ 
+		(*this).camera_X_Float = BOUND_RECT.x;
+	}
+	if( (*this).camera_Y_Float < BOUND_RECT.y )
+	{
+		(*this).camera_Y_Float = BOUND_RECT.y;
+	}
+
+	if( (*this).camera_X_Float > BOUND_RECT.w - camera.w )
+	{
+		(*this).camera_X_Float = BOUND_RECT.w - camera.w;
+	}
+	if( (*this).camera_Y_Float > BOUND_RECT.h - camera.h )
+	{
+		(*this).camera_Y_Float = BOUND_RECT.h - camera.h;
+	}
+}
+
 //Cinematic Mode:
 void Camera::Cinematic_Mode(bool bCinematic)
 {
@@ -95,3 +132,10 @@ void Camera::Update_Camera(int camX, int camY)
 	CheckBounds();
 
 }//End of Update
+
+void Camera::update_Camera_Floats(float camera_X_Float, float camera_Y_Float)
+{
+	(*this).camera_X_Float = camera_X_Float;
+	(*this).camera_Y_Float = camera_Y_Float;
+	(*this).check_Bounds_Floats();
+}

@@ -110,6 +110,7 @@ public:
 	void UpdateGamePad();
 	void playerUpdate(int gameTime);
 	void playerDraw();
+	void player_Draw_Scaled();
 	void playerButtonPress(SDL_Keycode e);
 	void playerKeyPress(SDL_Keycode e);
 	bool playerInitalize(int playerIndexPassed);
@@ -650,5 +651,10 @@ void playerClass::playerUpdate(int frame)
 void playerClass::playerDraw()
 {
 		playerAnimation.Draw();
+}
+
+void playerClass::player_Draw_Scaled()
+{
+	playerAnimation.Draw((*(*this).object.physics).GetPosition().x - ((*this).playerW / 2.0), (*(*this).object.physics).GetPosition().y - ((*this).playerH / 2.0), (*this).playerW, (*this).playerH);
 }
 #endif
