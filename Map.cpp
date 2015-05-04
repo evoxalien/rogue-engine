@@ -19,6 +19,7 @@ Map::Map()
 	mouseOverMenuEntry = false;
 	moveStep = 1;
 	cState = Testing;
+	mState = Properties;
 	for(int x = 0; x < 4; x++)
 	{
 		anchorPointSelected[x] = false;
@@ -215,7 +216,7 @@ void Map::unfocus()
 		platforms[x].setColor(0xFF,0xFF,0xFF);
 	}
 
-	rightClickMenuShown = false;
+	menuShown = false;
 
 	movePlatform = false;
 
@@ -247,7 +248,7 @@ void Map::renderMap()
 		platforms[x].render(platCoords[x*2] - camera.getCamX(), platCoords[x*2+1] - camera.getCamY());
 	}
 		
-	if(rightClickMenuShown)
+	if(menuShown)
 	{
 		if(mouseOverMenuEntry)
 		{
@@ -278,9 +279,8 @@ void Map::renderMap()
 	cursorTextTexture.render(cursorX, cursorY);
 }
 
-void Map::createPlatMenu(int plat, int x, int y)
+void Map::createMenu(int plat, int x, int y)
 {
-	std::cerr << "Plat menu being created\n";
 
 	x += camera.getCamX();
 	y += camera.getCamY();
@@ -290,25 +290,180 @@ void Map::createPlatMenu(int plat, int x, int y)
 	
 	std::stringstream ss;
 	
-	pMenu.addMenuEntry("Texture File", platforms[plat].getFilePath());
+	if(mState == Properties)
+	{
+		pMenu.addMenuEntry("Texture Properties", "");
+		pMenu.addMenuEntry("Physics Properties", "");
+	}
+	else
+	if(mState == TextureProps)
+	{
+		pMenu.addMenuEntry("Texture File", platforms[plat].getFilePath());
 
-	ss << platCoords[plat*2];
-	pMenu.addMenuEntry("X Coordinate", ss.str());
-	ss.str(std::string());
+		ss << platCoords[plat*2];
+		pMenu.addMenuEntry("X Coordinate", ss.str());
+		ss.str(std::string());
 
-	ss << platCoords[plat*2+1];
-	pMenu.addMenuEntry("Y Coordinate", ss.str());
-	ss.str(std::string());
+		ss << platCoords[plat*2+1];
+		pMenu.addMenuEntry("Y Coordinate", ss.str());
+		ss.str(std::string());
 
-	ss << platforms[plat].getWidth();
-	pMenu.addMenuEntry("Width", ss.str());
-	ss.str(std::string());
+		ss << platforms[plat].getWidth();
+		pMenu.addMenuEntry("Width", ss.str());
+		ss.str(std::string());
 
-	ss << platforms[plat].getHeight();
-	pMenu.addMenuEntry("Height", ss.str());
-	ss.str(std::string());
+		ss << platforms[plat].getHeight();
+		pMenu.addMenuEntry("Height", ss.str());
+		ss.str(std::string());
+	}
+	else
+	if(mState == PhysicsProps)
+	{
+		pMenu.addMenuEntry("Physics Stuff", "Bullshit");
+		pMenu.addMenuEntry("Fucking", "Bullshit");
+		pMenu.addMenuEntry("Long entry is long", "Such Bullshit");
+	}
+}
 
-	std::cerr << "Plat menu created\n";
+void Map::processMenu(InputClass input)
+{
+	if(mState == Properties)
+	{
+		if(input.getMouseButton(1))
+		{
+			for(int x = 0; x < pMenu.getNumEntries(); x++)
+			{
+				if(mouseOverRect(input, pMenu.getEntryRect(x)))
+				{
+					int platIndex = 0;
+					
+					for(int y = 0; y < numPlatforms; y++)
+					{
+						if(platSelected[y])
+						{
+							platIndex = y;
+							break;
+						}
+					}
+
+					pMenu.destroyMenu();
+					switch(x)
+					{
+						case 0 :
+							mState = TextureProps;
+							break;
+						case 1 :
+							mState = PhysicsProps;
+							break;
+					}
+					createMenu(platIndex, input.getMouseX(), input.getMouseY());
+
+					break;
+				}
+			}
+		}
+	}
+	else
+	if(mState == TextureProps)
+	{
+		if(input.getKeyDown() == SDLK_RETURN)
+		{
+			switch(menuIndex)
+			{
+				case 0 : 
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						string s = platforms[x].getFilePath();
+						int w = platforms[x].getWidth();
+						int h = platforms[x].getHeight();
+						if(!platforms[x].loadTexture(keyboardInput))
+						{
+							platforms[x].loadTexture(s);
+						}
+						platforms[x].setWidth(w);
+						platforms[x].setHeight(h);
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+				break;
+				case 1 : 
+				if(atoi(keyboardInput.c_str()) != 0)
+				{
+					for(int x = 0; x < numPlatforms; x++)
+					{
+						if(platSelected[x])
+						{
+							platCoords[x*2] = atoi(keyboardInput.c_str());
+							SDL_StopTextInput();
+							pMenu.destroyMenu();
+							createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+							break;
+						}
+					}
+				}
+				break;
+				case 2 :
+				if(atoi(keyboardInput.c_str()) != 0)
+				{
+					for(int x = 0; x < numPlatforms; x++)
+					{
+						if(platSelected[x])
+						{
+							platCoords[x*2+1] = atoi(keyboardInput.c_str());
+							SDL_StopTextInput();
+							pMenu.destroyMenu();
+							createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+							break;
+						}
+					}
+				}
+				break;
+				case 3 : 
+				if(atoi(keyboardInput.c_str()) != 0)
+				{
+					for(int x = 0; x < numPlatforms; x++)
+					{
+						if(platSelected[x])
+						{
+							platforms[x].setWidth(atoi(keyboardInput.c_str()));
+							SDL_StopTextInput();
+							pMenu.destroyMenu();
+							createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+							break;
+						}
+					}
+				}
+				break;
+				case 4 :
+				if(atoi(keyboardInput.c_str()) != 0)
+				{
+					for(int x = 0; x < numPlatforms; x++)
+					{
+						if(platSelected[x])
+						{
+							platforms[x].setHeight(atoi(keyboardInput.c_str()));
+							SDL_StopTextInput();
+							pMenu.destroyMenu();
+							createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+							break;
+						}
+					}
+				}
+				break;
+			}
+			currentInputStringTexture.free();
+		}
+	}
+	else
+	if(mState == PhysicsProps)
+	{
+
+	}
 }
 
 void Map::destroyAnchorPoints()
@@ -481,104 +636,13 @@ void Map::processKeyboard(InputClass input, InputClass prevInput)
 					}
 				}
 
-				if(input.getKeyDown() == SDLK_RETURN)
-				{
-					switch(menuIndex)
-					{
-						case 0 : 
-						for(int x = 0; x < numPlatforms; x++)
-						{
-							if(platSelected[x])
-							{
-								string s = platforms[x].getFilePath();
-								int w = platforms[x].getWidth();
-								int h = platforms[x].getHeight();
-								if(!platforms[x].loadTexture(keyboardInput))
-								{
-									platforms[x].loadTexture(s);
-								}
-								platforms[x].setWidth(w);
-								platforms[x].setHeight(h);
-								SDL_StopTextInput();
-								pMenu.destroyMenu();
-								createPlatMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
-								break;
-							}
-						}
-						break;
-						case 1 : 
-						if(atoi(keyboardInput.c_str()) != 0)
-						{
-							for(int x = 0; x < numPlatforms; x++)
-							{
-								if(platSelected[x])
-								{
-									platCoords[x*2] = atoi(keyboardInput.c_str());
-									SDL_StopTextInput();
-									pMenu.destroyMenu();
-									createPlatMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
-									break;
-								}
-							}
-						}
-						break;
-						case 2 :
-						if(atoi(keyboardInput.c_str()) != 0)
-						{
-							for(int x = 0; x < numPlatforms; x++)
-							{
-								if(platSelected[x])
-								{
-									platCoords[x*2+1] = atoi(keyboardInput.c_str());
-									SDL_StopTextInput();
-									pMenu.destroyMenu();
-									createPlatMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
-									break;
-								}
-							}
-						}
-						break;
-						case 3 : 
-						if(atoi(keyboardInput.c_str()) != 0)
-						{
-							for(int x = 0; x < numPlatforms; x++)
-							{
-								if(platSelected[x])
-								{
-									platforms[x].setWidth(atoi(keyboardInput.c_str()));
-									SDL_StopTextInput();
-									pMenu.destroyMenu();
-									createPlatMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
-									break;
-								}
-							}
-						}
-						break;
-						case 4 :
-						if(atoi(keyboardInput.c_str()) != 0)
-						{
-							for(int x = 0; x < numPlatforms; x++)
-							{
-								if(platSelected[x])
-								{
-									platforms[x].setHeight(atoi(keyboardInput.c_str()));
-									SDL_StopTextInput();
-									pMenu.destroyMenu();
-									createPlatMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
-									break;
-								}
-							}
-						}
-						break;
-					}
-					currentInputStringTexture.free();
-				}
-			}
+				processMenu(input);
 
-			if(input.getEvent().type == SDL_TEXTINPUT)
-			{
-				keyboardInput += input.getEvent().text.text;
-				currentInputStringTexture.loadTextRender(keyboardInput, inputTextColor);
+				if(input.getEvent().type == SDL_TEXTINPUT)
+				{
+					keyboardInput += input.getEvent().text.text;
+					currentInputStringTexture.loadTextRender(keyboardInput, inputTextColor);
+				}
 			}
 		break; 
 	}
@@ -603,7 +667,7 @@ void Map::mouseOverAction(InputClass input)
 	{
 		if(!SDL_IsTextInputActive())
 		{
-			if(rightClickMenuShown)
+			if(menuShown)
 			{
 				for(int x = 0; x < pMenu.getNumEntries(); x++)
 				{
@@ -657,22 +721,16 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 		else
 		if(cState == Info)
 		{
-			if(!rightClickMenuShown)
+			for(int x = numPlatforms - 1; x >= 0; x--)
 			{
-				for(int x = numPlatforms - 1; x >= 0; x--)
+				if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 				{
-					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
-					{
-						std::cerr << "Creating menu\n";
-						unfocus();
-						platSelected[x] = true;
-						menuX = input.getMouseX();
-						menuY = input.getMouseY();
-						rightClickMenuShown = true;
-						createPlatMenu(x, input.getMouseX(), input.getMouseY());
-						std::cerr << "Menu Created\n";
-						break;
-					}
+					unfocus();
+					mState = Properties;
+					platSelected[x] = true;
+					menuShown = true;
+					createMenu(x, input.getMouseX(), input.getMouseY());
+					break;
 				}
 			}
 		}
@@ -817,32 +875,40 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 		else
 		if(cState == Info)
 		{
-			if(rightClickMenuShown)
+			if(mState == Properties && menuShown)
 			{
-				bool itemSelected = false;
-				for(int x = 0; x < pMenu.getNumEntries(); x++)
+				processMenu(input);
+			}
+			else
+			if(menuShown)
+			{	
+				if(input.getMouseButton(1))
 				{
-					if(mouseOverRect(input, pMenu.getEntryRect(x)))
+					bool itemSelected = false;
+					for(int x = 0; x < pMenu.getNumEntries(); x++)
+					{
+						if(mouseOverRect(input, pMenu.getEntryRect(x)))
+						{
+							if(SDL_IsTextInputActive())
+							{
+								SDL_StopTextInput();
+							}
+							menuIndex = x;
+							printf("Menu item %d chosen\n", menuIndex);
+							keyboardInput = "";
+							SDL_StartTextInput();
+							itemSelected = true;
+							break;
+						}
+					}
+					if(!itemSelected)
 					{
 						if(SDL_IsTextInputActive())
 						{
 							SDL_StopTextInput();
 						}
-						menuIndex = x;
-						printf("Menu item %d chosen\n", menuIndex);
-						keyboardInput = "";
-						SDL_StartTextInput();
-						itemSelected = true;
-						break;
+						menuShown = false;
 					}
-				}
-				if(!itemSelected)
-				{
-					if(SDL_IsTextInputActive())
-					{
-						SDL_StopTextInput();
-					}
-					rightClickMenuShown = false;
 				}
 			}
 		}

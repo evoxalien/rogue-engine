@@ -17,7 +17,7 @@ class Map
 {
 private:
 	PopupMenu pMenu;
-	bool rightClickMenuShown;
+	bool menuShown;
 	bool anchorPointsShown;
 	bool anchorPointSelected[4];
 	bool movePlatform;
@@ -56,6 +56,13 @@ private:
 		Doors
 	};
 
+	enum MenuState
+	{
+		Properties,
+		TextureProps,
+		PhysicsProps
+	};
+
 	enum ObjectType
 	{
 		Rectangle = 0,
@@ -81,6 +88,7 @@ private:
 	};
 
 	CursorState cState;
+	MenuState mState;
 	std::string keyboardInput;
 
 
@@ -91,7 +99,8 @@ public:
 	void renderMap();
 	void destroyAnchorPoints();
 	void displayAnchorPoints();
-	void createPlatMenu(int plat, int x, int y);
+	void createMenu(int plat, int x, int y);
+	void processMenu(InputClass input);
 	void processKeyboard(InputClass input, InputClass prevInput);
 	void processMouse(InputClass input, InputClass prevInput);
 	void mouseOverAction(InputClass input);
