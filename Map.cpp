@@ -9,6 +9,8 @@
 Map::Map()
 {
 	numPlatforms = 0;
+	tabMenuShown = false;
+	numMapFiles = 0;
 	textColor = {0xFF, 0xFF, 0xFF, 0xFF};
 	inputTextColor = {0, 0, 0, 0xFF};
 	camera.setBoundRect(0,0,5000,5000);
@@ -29,6 +31,11 @@ Map::Map()
 
 Map::~Map()
 {
+	destroyMap();
+}
+
+void Map::destroyMap()
+{
 	for(int x = 0; x < numPlatforms; x++)
 	{
 		platforms[x].free();
@@ -39,6 +46,8 @@ Map::~Map()
 	currentInputStringTexture.free();
 	
 	cursorTextTexture.free();
+
+	numPlatforms = 0;
 }
 
 bool Map::openMapFiles(std::string filePath, SDL_Renderer* r)
@@ -56,6 +65,8 @@ bool Map::openMapFiles(std::string filePath, SDL_Renderer* r)
 	int x = 0;
 	while(inputFile >> mapFiles[x])
 		{	x++;	}
+
+	numMapFiles = x;
 
 	return true;
 }
@@ -163,13 +174,11 @@ bool Map::parseMapFile(std::string filePath)
 	return true;
 }
 
-void Map::exportMapFile(Uint32 timeStamp)
+void Map::exportMapFile(std::string fileName)
 {
-	std::ostringstream stringStream;
-	stringStream << timeStamp;
 
 	ofstream outFile;
-	outFile.open("../resources/maps/Map_" + stringStream.str() + ".txt");
+	outFile.open("../resources/maps/" + fileName + ".txt");
 
 	outFile << "background " << bgX << " " << bgY << " ";
 	outFile << backgroundTexture.getWidth() << " ";
@@ -216,6 +225,16 @@ void Map::exportMapFile(Uint32 timeStamp)
 
 	outFile.close();
 	cout << "Map file saved\n";
+
+	mapFiles[numMapFiles] = fileName;
+	numMapFiles++;
+
+	outFile.open("../resources/maps/mapFileList.txt");
+	for(int x = 0; x < numMapFiles; x++)
+	{
+		outFile << mapFiles[x] << endl;
+	}
+	outFile.close();
 }
 
 void Map::unfocus()
@@ -227,6 +246,7 @@ void Map::unfocus()
 	}
 
 	menuShown = false;
+	tabMenuShown = false;
 
 	movePlatform = false;
 
@@ -270,10 +290,21 @@ void Map::renderMap()
 		if(SDL_IsTextInputActive())
 		{
 			SDL_Rect tempRect;
-			tempRect.x = pMenu.getValueX() - camera.getCamX();
-			tempRect.y = menuSelectionRect.y - camera.getCamY();
-			tempRect.w = (menuSelectionRect.x - camera.getCamX() + menuSelectionRect.w) - tempRect.x;
-			tempRect.h = menuSelectionRect.h;
+			if(tabMenuShown)
+			{
+				tempRect.x = pMenu.getValueX() - camera.getCamX();
+				tempRect.y = menuSelectionRect.y - camera.getCamY();
+				tempRect.w = 200;
+				tempRect.h = menuSelectionRect.h;
+			}
+			else
+			{
+				tempRect.x = pMenu.getValueX() - camera.getCamX();
+				tempRect.y = menuSelectionRect.y - camera.getCamY();
+				tempRect.w = (menuSelectionRect.x + menuSelectionRect.w - pMenu.getValueX())- camera.getCamX();
+				tempRect.h = menuSelectionRect.h;
+			}
+			
 
 			currentInputStringBackground.render(tempRect.x, tempRect.y, tempRect.w, tempRect.h);
 
@@ -402,6 +433,20 @@ void Map::createMenu(int plat, int x, int y)
 		ss.str(std::string());
 
 	}
+
+	if(mState == LevelLoad)
+	{
+		pMenu.addMenuEntry("Load Level","");
+		pMenu.addMenuEntry("Save Level","");
+	}
+
+	if(mState == LevelList)
+	{
+		for(int x = 0; x < numMapFiles; x++)
+		{
+			pMenu.addMenuEntry(mapFiles[x],"");
+		}
+	}
 }
 
 void Map::processMenu(InputClass input)
@@ -435,11 +480,81 @@ void Map::processMenu(InputClass input)
 							mState = PhysicsProps;
 							break;
 					}
-					createMenu(platIndex, input.getMouseX(), input.getMouseY());
+					createMenu(platIndex, pMenu.getMenuX(), pMenu.getMenuY());
 
 					break;
 				}
 			}
+		}
+	}
+	else
+	if(mState == LevelLoad)
+	{
+		if(input.getMouseButton(1))
+		{
+			for(int x = 0; x < pMenu.getNumEntries(); x++)
+			{
+				if(mouseOverRect(input, pMenu.getEntryRect(x)))
+				{
+					switch(x)
+					{
+						case 0 :
+							pMenu.destroyMenu();
+							mState = LevelList;
+							createMenu(-1, pMenu.getMenuX(), pMenu.getMenuY());
+							break;
+						case 1 :
+							SDL_StartTextInput();
+							keyboardInput = "";
+							mState = LevelSave;
+							break;
+					}
+					break;
+				}
+			}
+		}
+	}
+	else
+	if(mState == LevelList)
+	{
+		if(input.getMouseButton(1))
+		{
+			for(int x = 0; x < pMenu.getNumEntries(); x++)
+			{
+				if(mouseOverRect(input, pMenu.getEntryRect(x)))
+				{
+					destroyMap();
+					parseMapFile(mapFiles[x]);
+					unfocus();
+				}
+			}
+		}	
+	}
+	else
+	if(mState == LevelSave)
+	{
+		if(SDL_IsTextInputActive())
+		{
+			if(input.getKeyDown() == SDLK_BACKSPACE && keyboardInput.length() > 0)
+			{
+				keyboardInput.pop_back();
+				currentInputStringTexture.loadTextRender(keyboardInput, inputTextColor);
+			}
+			if(input.getKeyDown() == SDLK_RETURN)
+			{
+				if(keyboardInput.length() > 0)
+				{
+					exportMapFile(keyboardInput);
+					unfocus();
+					currentInputStringTexture.free();
+				}
+			}
+			if(input.getEvent().type == SDL_TEXTINPUT)
+			{
+				keyboardInput += input.getEvent().text.text;
+				currentInputStringTexture.loadTextRender(keyboardInput, inputTextColor);
+			}
+
 		}
 	}
 	else
@@ -851,159 +966,162 @@ Keyboard input processing
 
 void Map::processKeyboard(InputClass input, InputClass prevInput)
 {
-	switch(cState)
+	if(!tabMenuShown)
 	{
-		//Cursor state is Testing
-		case Testing :
-			//move camera with wasd
-			if(input.getKeyDown() == SDLK_w)
-			{
-				camera.Update_Camera(camera.getCamX(), camera.getCamY() - moveStep);
-			}
-			if(input.getKeyDown() == SDLK_s)
-			{
-				camera.Update_Camera(camera.getCamX(), camera.getCamY() + moveStep);
-			}
-			if(input.getKeyDown() == SDLK_a)
-			{
-				camera.Update_Camera(camera.getCamX() - moveStep, camera.getCamY());
-			}
-			if(input.getKeyDown() == SDLK_d)
-			{
-				camera.Update_Camera(camera.getCamX() + moveStep, camera.getCamY());
-			}
-
-			//export current map with space key
-			if(input.getKeyDown() == SDLK_SPACE)
-			{
-				Uint32 timeStamp = input.getEvent().key.timestamp;
-				exportMapFile(timeStamp);
-			}
-
-			//move currently selected platforms with arrow keys
-			if(input.getKeyDown() == SDLK_UP)
-			{
-				for(int x = 0; x < numPlatforms; x++)
+		switch(cState)
+		{
+			//Cursor state is Testing
+			case Testing :
+				//move camera with wasd
+				if(input.getKeyDown() == SDLK_w)
 				{
-					if(platSelected[x])
-					{
-						platCoords[x*2+1] -= moveStep;
-					}
+					camera.Update_Camera(camera.getCamX(), camera.getCamY() - moveStep);
 				}
-			}
-			if(input.getKeyDown() == SDLK_DOWN)
-			{
-				for(int x = 0; x < numPlatforms; x++)
+				if(input.getKeyDown() == SDLK_s)
 				{
-					if(platSelected[x])
-					{
-						platCoords[x*2+1] += moveStep;
-					}
+					camera.Update_Camera(camera.getCamX(), camera.getCamY() + moveStep);
 				}
-			}
-			if(input.getKeyDown() == SDLK_RIGHT)
-			{
-				for(int x = 0; x < numPlatforms; x++)
+				if(input.getKeyDown() == SDLK_a)
 				{
-					if(platSelected[x])
-					{
-						platCoords[x*2] += moveStep;
-					}
+					camera.Update_Camera(camera.getCamX() - moveStep, camera.getCamY());
 				}
-			}
-			if(input.getKeyDown() == SDLK_LEFT)
-			{
-				for(int x = 0; x < numPlatforms; x++)
+				if(input.getKeyDown() == SDLK_d)
 				{
-					if(platSelected[x])
-					{
-						platCoords[x*2] -= moveStep;
-					}
+					camera.Update_Camera(camera.getCamX() + moveStep, camera.getCamY());
 				}
-			}
 
-			//Change the move speed of platforms
-			if(input.getKeyDown() == SDLK_MINUS)
-			{ // Move things slower!!
-				moveStep--;
-				if(moveStep <= 0)
-					moveStep = 1;
-				cout << "Key - Pressed" << endl;
-			}
-			
-			if(input.getKeyDown() == SDLK_EQUALS)
-			{ //Move things faster!
-				moveStep++;
-				if(moveStep > 10)
-					moveStep = 10;
-				cout << "Key = Pressed" << endl;
-			}
-
-				//add new platform with p key
-			if(input.getKeyDown() == SDLK_p && numPlatforms < PLATMAX)
-			{
-				platforms[numPlatforms].setRenderer(render);
-				platforms[numPlatforms].loadTexture("img/shapes/OrangeSquare.png");
-				platforms[numPlatforms].setWidth(100);
-				platforms[numPlatforms].setHeight(100);
-				platSelected[numPlatforms] = false;
-				platCoords[numPlatforms*2] = input.getMouseX();
-				platCoords[numPlatforms*2+1] = input.getMouseY();
-				numPlatforms++;
-			}
-
-
-				//remove platform with r key, mouse must be over platform
-			if(input.getKeyDown() == SDLK_r)
-			{
-				for(int x = numPlatforms - 1; x >= 0; x--)
+				//export current map with space key
+				/*if(input.getKeyDown() == SDLK_SPACE)
 				{
-					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+					Uint32 timeStamp = input.getEvent().key.timestamp;
+					exportMapFile(timeStamp);
+				}*/
+
+				//move currently selected platforms with arrow keys
+				if(input.getKeyDown() == SDLK_UP)
+				{
+					for(int x = 0; x < numPlatforms; x++)
 					{
-						for(int y = x; y < numPlatforms; y++)
+						if(platSelected[x])
 						{
-							platforms[y] = platforms[y+1];
-							platSelected[y] = platSelected[y+1];
-							platCoords[y*2] = platCoords[(y+1)*2];
-							platCoords[y*2+1] = platCoords[(y+1)*2+1];
+							platCoords[x*2+1] -= moveStep;
 						}
-						numPlatforms--;
-						x--;
-						break;
 					}
 				}
-			}
-		break;
-		//Cursor State is Select
-		case Select :
-			
-		break;
-		//Cursor state is Info
-		case Info :
-			if(SDL_IsTextInputActive())
-			{
-				if(input.getKeyDown() == SDLK_BACKSPACE)
+				if(input.getKeyDown() == SDLK_DOWN)
 				{
-					if(keyboardInput.length() > 0)
+					for(int x = 0; x < numPlatforms; x++)
 					{
-						keyboardInput.pop_back();
+						if(platSelected[x])
+						{
+							platCoords[x*2+1] += moveStep;
+						}
+					}
+				}
+				if(input.getKeyDown() == SDLK_RIGHT)
+				{
+					for(int x = 0; x < numPlatforms; x++)
+					{
+						if(platSelected[x])
+						{
+							platCoords[x*2] += moveStep;
+						}
+					}
+				}
+				if(input.getKeyDown() == SDLK_LEFT)
+				{
+					for(int x = 0; x < numPlatforms; x++)
+					{
+						if(platSelected[x])
+						{
+							platCoords[x*2] -= moveStep;
+						}
+					}
+				}
+
+				//Change the move speed of platforms
+				if(input.getKeyDown() == SDLK_MINUS)
+				{ // Move things slower!!
+					moveStep--;
+					if(moveStep <= 0)
+						moveStep = 1;
+					cout << "Key - Pressed" << endl;
+				}
+				
+				if(input.getKeyDown() == SDLK_EQUALS)
+				{ //Move things faster!
+					moveStep++;
+					if(moveStep > 10)
+						moveStep = 10;
+					cout << "Key = Pressed" << endl;
+				}
+
+					//add new platform with p key
+				if(input.getKeyDown() == SDLK_p && numPlatforms < PLATMAX)
+				{
+					platforms[numPlatforms].setRenderer(render);
+					platforms[numPlatforms].loadTexture("../resources/img/shapes/OrangeSquare.png");
+					platforms[numPlatforms].setWidth(100);
+					platforms[numPlatforms].setHeight(100);
+					platSelected[numPlatforms] = false;
+					platCoords[numPlatforms*2] = input.getMouseX();
+					platCoords[numPlatforms*2+1] = input.getMouseY();
+					numPlatforms++;
+				}
+
+
+					//remove platform with r key, mouse must be over platform
+				if(input.getKeyDown() == SDLK_r)
+				{
+					for(int x = numPlatforms - 1; x >= 0; x--)
+					{
+						if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+						{
+							for(int y = x; y < numPlatforms; y++)
+							{
+								platforms[y] = platforms[y+1];
+								platSelected[y] = platSelected[y+1];
+								platCoords[y*2] = platCoords[(y+1)*2];
+								platCoords[y*2+1] = platCoords[(y+1)*2+1];
+							}
+							numPlatforms--;
+							x--;
+							break;
+						}
+					}
+				}
+			break;
+			//Cursor State is Select
+			case Select :
+				
+			break;
+			//Cursor state is Info
+			case Info :
+				if(SDL_IsTextInputActive() && !tabMenuShown)
+				{
+					if(input.getKeyDown() == SDLK_BACKSPACE)
+					{
+						if(keyboardInput.length() > 0)
+						{
+							keyboardInput.pop_back();
+							currentInputStringTexture.loadTextRender(keyboardInput, inputTextColor);
+						}
+					}
+
+					processMenu(input);
+
+					if(input.getEvent().type == SDL_TEXTINPUT)
+					{
+						keyboardInput += input.getEvent().text.text;
 						currentInputStringTexture.loadTextRender(keyboardInput, inputTextColor);
 					}
 				}
+			break;
+			//Cursor state is Events
+			case Events :
 
-				processMenu(input);
-
-				if(input.getEvent().type == SDL_TEXTINPUT)
-				{
-					keyboardInput += input.getEvent().text.text;
-					currentInputStringTexture.loadTextRender(keyboardInput, inputTextColor);
-				}
-			}
-		break;
-		//Cursor state is Events
-		case Events :
-
-		break;
+			break;
+		}
 	}
 }
 
@@ -1022,20 +1140,17 @@ void Map::processMouse(InputClass input, InputClass prevInput)
 
 void Map::mouseOverAction(InputClass input)
 {
-	if(cState == Info)
+	if(!SDL_IsTextInputActive())
 	{
-		if(!SDL_IsTextInputActive())
+		if(menuShown)
 		{
-			if(menuShown)
+			for(int x = 0; x < pMenu.getNumEntries(); x++)
 			{
-				for(int x = 0; x < pMenu.getNumEntries(); x++)
+				if(mouseOverRect(input, pMenu.getEntryRect(x)))
 				{
-					if(mouseOverRect(input, pMenu.getEntryRect(x)))
-					{
-						mouseOverMenuEntry = true;
-						menuSelectionRect = pMenu.getEntryRect(x);
-						break;
-					}
+					mouseOverMenuEntry = true;
+					menuSelectionRect = pMenu.getEntryRect(x);
+					break;
 				}
 			}
 		}
@@ -1100,107 +1215,133 @@ void Map::rightClickAction(InputClass input, InputClass prevInput)
 
 void Map::leftClickAction(InputClass input, InputClass prevInput)
 {
-	if(input.getMouseButton(1))
+	if(!tabMenuShown)
 	{
-		if(cState == Testing)
+		if(input.getMouseButton(1))
 		{
-			//select platforms with left mouse button
-			for(int x = numPlatforms - 1; x >= 0; x--)
+			if(cState == Testing)
 			{
-				if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+				//select platforms with left mouse button
+				for(int x = numPlatforms - 1; x >= 0; x--)
 				{
-					platSelected[x] = true;
-					platforms[x].setColor(0x77,0x77,0x77);
-					break;
+					if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
+					{
+						platSelected[x] = true;
+						platforms[x].setColor(0x77,0x77,0x77);
+						break;
+					}
 				}
 			}
-		}
-		else
-		if(cState == Select)
-		{
-			if(anchorPointsShown)
+			else
+			if(cState == Select)
 			{
-				bool runLoop = true;
-
-				for(int x = 0; x < 4; x++)
+				if(anchorPointsShown)
 				{
-					if(anchorPointSelected[x])
+					bool runLoop = true;
+
+					for(int x = 0; x < 4; x++)
 					{
-						for(int y = 0; y < numPlatforms; y++)
+						if(anchorPointSelected[x])
 						{
-							if(platSelected[y])
+							for(int y = 0; y < numPlatforms; y++)
 							{
-								runLoop = false;
-								switch(x)
+								if(platSelected[y])
 								{
-									case 0 :
-										platforms[y].setWidth(platforms[y].getWidth() + ((platCoords[y*2] - camera.getCamX()) - input.getMouseX() - anchorPoints[0].getWidth()/2));
-										platforms[y].setHeight(platforms[y].getHeight() + ((platCoords[y*2+1] - camera.getCamY()) - input.getMouseY() - anchorPoints[0].getWidth()/2));
-										platCoords[y*2] = input.getMouseX() + anchorPoints[0].getWidth()/2 + camera.getCamX();
-										platCoords[y*2+1] = input.getMouseY() + anchorPoints[0].getHeight()/2 + camera.getCamY();
-										break;
-									case 1 :
-										platforms[y].setWidth(platforms[y].getWidth() + (input.getMouseX() - anchorPoints[3].getWidth()/2) - (platCoords[y*2] + platforms[y].getWidth() - camera.getCamX()));
-										platforms[y].setHeight(platforms[y].getHeight() + ((platCoords[y*2+1] - camera.getCamY()) - input.getMouseY() - anchorPoints[0].getWidth()/2));
-										platCoords[y*2+1] = input.getMouseY() + anchorPoints[0].getHeight()/2 + camera.getCamY();
-										break;
-									case 2 :
-										platforms[y].setHeight(platforms[y].getHeight() + (input.getMouseY() - anchorPoints[3].getWidth()/2) - (platCoords[y*2+1] + platforms[y].getHeight() - camera.getCamY()));
-										platforms[y].setWidth(platforms[y].getWidth() + ((platCoords[y*2] - camera.getCamX()) - input.getMouseX() - anchorPoints[0].getWidth()/2));
-										platCoords[y*2] = input.getMouseX() + anchorPoints[0].getWidth()/2 + camera.getCamX();
-										break;
-									case 3 :
-										platforms[y].setWidth(platforms[y].getWidth() + (input.getMouseX() - anchorPoints[3].getWidth()/2) - (platCoords[y*2] + platforms[y].getWidth() - camera.getCamX()));
-										platforms[y].setHeight(platforms[y].getHeight() + (input.getMouseY() - anchorPoints[3].getWidth()/2) - (platCoords[y*2+1] + platforms[y].getHeight() - camera.getCamY()));
-										break;
+									runLoop = false;
+									switch(x)
+									{
+										case 0 :
+											platforms[y].setWidth(platforms[y].getWidth() + ((platCoords[y*2] - camera.getCamX()) - input.getMouseX() - anchorPoints[0].getWidth()/2));
+											platforms[y].setHeight(platforms[y].getHeight() + ((platCoords[y*2+1] - camera.getCamY()) - input.getMouseY() - anchorPoints[0].getWidth()/2));
+											platCoords[y*2] = input.getMouseX() + anchorPoints[0].getWidth()/2 + camera.getCamX();
+											platCoords[y*2+1] = input.getMouseY() + anchorPoints[0].getHeight()/2 + camera.getCamY();
+											break;
+										case 1 :
+											platforms[y].setWidth(platforms[y].getWidth() + (input.getMouseX() - anchorPoints[3].getWidth()/2) - (platCoords[y*2] + platforms[y].getWidth() - camera.getCamX()));
+											platforms[y].setHeight(platforms[y].getHeight() + ((platCoords[y*2+1] - camera.getCamY()) - input.getMouseY() - anchorPoints[0].getWidth()/2));
+											platCoords[y*2+1] = input.getMouseY() + anchorPoints[0].getHeight()/2 + camera.getCamY();
+											break;
+										case 2 :
+											platforms[y].setHeight(platforms[y].getHeight() + (input.getMouseY() - anchorPoints[3].getWidth()/2) - (platCoords[y*2+1] + platforms[y].getHeight() - camera.getCamY()));
+											platforms[y].setWidth(platforms[y].getWidth() + ((platCoords[y*2] - camera.getCamX()) - input.getMouseX() - anchorPoints[0].getWidth()/2));
+											platCoords[y*2] = input.getMouseX() + anchorPoints[0].getWidth()/2 + camera.getCamX();
+											break;
+										case 3 :
+											platforms[y].setWidth(platforms[y].getWidth() + (input.getMouseX() - anchorPoints[3].getWidth()/2) - (platCoords[y*2] + platforms[y].getWidth() - camera.getCamX()));
+											platforms[y].setHeight(platforms[y].getHeight() + (input.getMouseY() - anchorPoints[3].getWidth()/2) - (platCoords[y*2+1] + platforms[y].getHeight() - camera.getCamY()));
+											break;
+									}
+									break;
+									x = 4;
 								}
-								break;
-								x = 4;
+							}
+						}
+					}
+
+					if(runLoop)
+					{
+						for(int x = numPlatforms - 1; x >= 0; x--)
+						{
+							if(platSelected[x])
+							{
+								if(mouseOverRect(input,
+									{platCoords[x*2] - anchorPoints[0].getWidth(),
+									platCoords[x*2+1] - anchorPoints[0].getHeight(),
+									anchorPoints[0].getWidth(),
+									anchorPoints[0].getHeight()}))
+								{
+									anchorPointSelected[0] = true;
+									break;
+								}
+								if(mouseOverRect(input,
+									{platCoords[x*2] + platforms[x].getWidth(),
+									platCoords[x*2+1] - anchorPoints[1].getHeight(),
+									anchorPoints[1].getWidth(),
+									anchorPoints[1].getHeight()}))
+								{
+									anchorPointSelected[1] = true;
+									break;
+								}
+								if(mouseOverRect(input,
+									{platCoords[x*2] - anchorPoints[2].getWidth(),
+									platCoords[x*2+1] + platforms[x].getHeight(),
+									anchorPoints[2].getWidth(),
+									anchorPoints[2].getHeight()}))
+								{
+									anchorPointSelected[2] = true;
+									break;
+								}
+								if(mouseOverRect(input,
+									{platCoords[x*2] + platforms[x].getWidth(),
+									platCoords[x*2+1] + platforms[x].getHeight(),
+									anchorPoints[3].getWidth(),
+									anchorPoints[3].getHeight()}))
+								{
+									anchorPointSelected[3] = true;
+									break;
+								}
 							}
 						}
 					}
 				}
-
-				if(runLoop)
+				else
 				{
 					for(int x = numPlatforms - 1; x >= 0; x--)
 					{
-						if(platSelected[x])
+						if(movePlatform)
 						{
-							if(mouseOverRect(input,
-								{platCoords[x*2] - anchorPoints[0].getWidth(),
-								platCoords[x*2+1] - anchorPoints[0].getHeight(),
-								anchorPoints[0].getWidth(),
-								anchorPoints[0].getHeight()}))
+							if(platSelected[x])
 							{
-								anchorPointSelected[0] = true;
-								break;
+								platCoords[x*2] = input.getMouseX() - platforms[x].getWidth()/2 + camera.getCamX();
+								platCoords[x*2+1] = input.getMouseY() - platforms[x].getHeight()/2 + camera.getCamY();
 							}
-							if(mouseOverRect(input,
-								{platCoords[x*2] + platforms[x].getWidth(),
-								platCoords[x*2+1] - anchorPoints[1].getHeight(),
-								anchorPoints[1].getWidth(),
-								anchorPoints[1].getHeight()}))
+						}
+						else
+						{
+							if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
 							{
-								anchorPointSelected[1] = true;
-								break;
-							}
-							if(mouseOverRect(input,
-								{platCoords[x*2] - anchorPoints[2].getWidth(),
-								platCoords[x*2+1] + platforms[x].getHeight(),
-								anchorPoints[2].getWidth(),
-								anchorPoints[2].getHeight()}))
-							{
-								anchorPointSelected[2] = true;
-								break;
-							}
-							if(mouseOverRect(input,
-								{platCoords[x*2] + platforms[x].getWidth(),
-								platCoords[x*2+1] + platforms[x].getHeight(),
-								anchorPoints[3].getWidth(),
-								anchorPoints[3].getHeight()}))
-							{
-								anchorPointSelected[3] = true;
+								platSelected[x] = true;
+								movePlatform = true;
 								break;
 							}
 						}
@@ -1208,86 +1349,67 @@ void Map::leftClickAction(InputClass input, InputClass prevInput)
 				}
 			}
 			else
+			if(cState == Info)
 			{
-				for(int x = numPlatforms - 1; x >= 0; x--)
+				if(mState == Properties && menuShown)
 				{
-					if(movePlatform)
-					{
-						if(platSelected[x])
-						{
-							platCoords[x*2] = input.getMouseX() - platforms[x].getWidth()/2 + camera.getCamX();
-							platCoords[x*2+1] = input.getMouseY() - platforms[x].getHeight()/2 + camera.getCamY();
-						}
-					}
-					else
-					{
-						if(mouseOverRect(input, {platCoords[x*2],platCoords[x*2+1],platforms[x].getWidth(),platforms[x].getHeight()}))
-						{
-							platSelected[x] = true;
-							movePlatform = true;
-							break;
-						}
-					}
+					processMenu(input);
 				}
-			}
-		}
-		else
-		if(cState == Info)
-		{
-			if(mState == Properties && menuShown)
-			{
-				processMenu(input);
-			}
-			else
-			if(menuShown)
-			{	
-				if(input.getMouseButton(1))
-				{
-					bool itemSelected = false;
-					for(int x = 0; x < pMenu.getNumEntries(); x++)
+				else
+				if(menuShown)
+				{	
+					if(input.getMouseButton(1))
 					{
-						if(mouseOverRect(input, pMenu.getEntryRect(x)))
+						bool itemSelected = false;
+						for(int x = 0; x < pMenu.getNumEntries(); x++)
+						{
+							if(mouseOverRect(input, pMenu.getEntryRect(x)))
+							{
+								if(SDL_IsTextInputActive())
+								{
+									SDL_StopTextInput();
+								}
+								menuIndex = x;
+								printf("Menu item %d chosen\n", menuIndex);
+								keyboardInput = "";
+								SDL_StartTextInput();
+								itemSelected = true;
+								break;
+							}
+						}
+						if(!itemSelected)
 						{
 							if(SDL_IsTextInputActive())
 							{
 								SDL_StopTextInput();
 							}
-							menuIndex = x;
-							printf("Menu item %d chosen\n", menuIndex);
-							keyboardInput = "";
-							SDL_StartTextInput();
-							itemSelected = true;
-							break;
+							menuShown = false;
 						}
 					}
-					if(!itemSelected)
+				}
+			}
+		}
+		if(!input.getMouseButton(1))
+		{
+			if(cState == Select)
+			{
+				if(!anchorPointsShown)
+				{
+					unfocus();
+				}
+				else
+				{
+					for(int x = 0; x < 4; x++)
 					{
-						if(SDL_IsTextInputActive())
-						{
-							SDL_StopTextInput();
-						}
-						menuShown = false;
+						anchorPointSelected[x] = false;
 					}
 				}
 			}
 		}
 	}
-	if(!input.getMouseButton(1))
+	else
 	{
-		if(cState == Select)
-		{
-			if(!anchorPointsShown)
-			{
-				unfocus();
-			}
-			else
-			{
-				for(int x = 0; x < 4; x++)
-				{
-					anchorPointSelected[x] = false;
-				}
-			}
-		}
+		processMenu(input);
 	}
 }
 
@@ -1299,8 +1421,10 @@ void Map::mapEditorUpdate(InputClass input, InputClass prevInput)
 	}
 	if(input.getKeyDown() == SDLK_TAB)
 	{
+		unfocus();
 		mState = LevelLoad;
 		menuShown = true;
+		tabMenuShown = true;
 		createMenu(-1, input.getMouseX(), input.getMouseY());
 	}
 

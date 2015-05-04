@@ -1,0 +1,63 @@
+background 0 0 1280 720
+../resources/img/backgrounds/NightSky.png
+platforms 30
+0 500 0 0 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 200 30 0 0
+../resources/img/shapes/OrangeSquare.png
+300 400 0 0 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 200 30 0 0
+../resources/img/shapes/OrangeSquare.png
+190 -14 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 56 52 0 0
+../resources/img/shapes/OrangeSquare.png
+630 367 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 200 30 0 0
+../resources/img/shapes/OrangeSquare.png
+396 79 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 200 30 0 0
+../resources/img/shapes/OrangeSquare.png
+362 209 0 2 0 0 0 0 1 0 0 1 0 0.5 0.4 1 65535 0 73 56 0 0
+../resources/img/shapes/OrangeSquare.png
+31 60 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 200 30 0 0
+../resources/img/shapes/OrangeSquare.png
+626 437 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+556 132 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+789 136 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 39 94 0 0
+../resources/img/shapes/OrangeSquare.png
+736 251 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+713 19 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+668 130 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+512 128 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+511 193 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+501 176 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+313 72 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+71 143 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+815 147 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+389 442 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+199 86 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+100 131 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+99 260 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+70 177 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+92 327 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+546 524 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+447 527 0 2 0 0 0 0 1 0 1 1 1 0.5 0.4 1 65535 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+422 24 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+201 395 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png
+240 543 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 100 100 0 0
+../resources/img/shapes/OrangeSquare.png

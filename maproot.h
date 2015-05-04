@@ -123,7 +123,7 @@ bool maproot::loadContent()
       printf("Map files failed to load!!\n");
    }
 
-   map.parseMapFile("map1");
+   map.parseMapFile("NewMap");
    
    return true;
 

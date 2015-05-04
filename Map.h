@@ -24,6 +24,7 @@ private:
 	bool anchorPointSelected[4];
 	bool movePlatform;
 	bool mouseOverMenuEntry;
+	bool tabMenuShown;
 	Texture anchorPoints[4];
 	Texture backgroundTexture;
 	int bgX;
@@ -47,6 +48,7 @@ private:
 	Texture currentInputStringTexture;
 	SDL_Rect menuSelectionRect;
 	int menuIndex;
+	int numMapFiles;
 
 	int moveStep;
 
@@ -63,7 +65,9 @@ private:
 		Properties,
 		TextureProps,
 		PhysicsProps,
-		LevelLoad
+		LevelLoad,
+		LevelList,
+		LevelSave
 	};
 
 	struct PhysObj
@@ -97,6 +101,7 @@ private:
 public:
 	Map();
 	~Map();
+	void destroyMap();
 	bool openMapFiles(std::string filePath,SDL_Renderer* render);
 	bool parseMapFile(std::string filePath);
 	void renderMap();
@@ -111,7 +116,7 @@ public:
 	void leftClickAction(InputClass input, InputClass prevInput);
 	void mapEditorUpdate(InputClass input, InputClass prevInput);
 	void unfocus();
-	void exportMapFile(Uint32 timeStamp);
+	void exportMapFile(std::string fileName);
 	bool mouseOverRect(InputClass input, SDL_Rect rect);
 };
 
