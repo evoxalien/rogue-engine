@@ -110,12 +110,12 @@ void RootMenu::initilizeMenu(SDL_Renderer *rendererIn)
 	y += Menu[index].getHeight();
 	index++;
 	
-	// Menu[index].setRenderer(renderer);
-	// Menu[index].setFont("calibri", 20);
-	// Menu[index].loadTextRender("2 players on GamePad", textColor);
-	// MenuShape[index] = {x, y, Menu[index].getWidth(), Menu[index].getHeight()};
-	// y += Menu[index].getHeight();
-	// index++;
+	Menu[index].setRenderer(renderer);
+	Menu[index].setFont("calibri", 20);
+	Menu[index].loadTextRender("2 players on GamePad", textColor);
+	MenuShape[index] = {x, y, Menu[index].getWidth(), Menu[index].getHeight()};
+	y += Menu[index].getHeight();
+	index++;
 
 	Menu[index].setRenderer(renderer);
 	Menu[index].setFont("calibri", 20);
@@ -151,7 +151,7 @@ void RootMenu::displayPlatMenu()
 void RootMenu::displayPlatMenu1()
 {
 	BackGround[1].render(1280,720);
-	for(int x = 0; x < 4; x++)
+	for(int x = 0; x < 5; x++)
 	{
 		Menu[x].render(MenuShape[x].x , MenuShape[x].y );
 	}

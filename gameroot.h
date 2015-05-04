@@ -293,41 +293,41 @@ void gameroot::update()
         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", menuColor);
         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-        // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-        rootMenuObject.Menu[3].loadTextRender("1 player on Each", textColor);
+        rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+        rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
          break;
          
          case 1:
          rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
          rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", menuColor);
          rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-         // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-         rootMenuObject.Menu[3].loadTextRender("1 player on Each", textColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
          break;
          
          case 2:
          rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
          rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
          rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", menuColor);
-         // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-         rootMenuObject.Menu[3].loadTextRender("1 player on Each", textColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
          break;
 
          case 3:
          rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
          rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
          rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-         // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", menuColor);
-         rootMenuObject.Menu[3].loadTextRender("1 player on Each", menuColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", menuColor);
+         rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
          break;
 
-         // case 4:
-         // rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
-         // rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
-         // rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
-         // // rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
-         // rootMenuObject.Menu[4].loadTextRender("1 player on Each", menuColor);
-         // break;
+         case 4:
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         rootMenuObject.Menu[4].loadTextRender("1 player on Each", menuColor);
+         break;
       }
       // rootMenuObject.UpdateGameMenu1(menuchoice);
    }
@@ -358,7 +358,8 @@ void gameroot::update()
          Villain.playerInitalize(2);
          if(Hero.init()==false)
          {
-            printf("howdy\n");
+            engineState->gameroot = false;
+            Running = false;
          }
       }
       if (Villain.p2g==true)
@@ -366,7 +367,8 @@ void gameroot::update()
          Villain.playerInitalize(2);
          if (Villain.init()==false)
          {
-            printf("howdy\n");
+            engineState->gameroot = false;
+            Running = false;
          }
       }  
       if (Hero.mix==true&&Villain.mix==true)
@@ -422,12 +424,12 @@ void gameroot::update()
          {
             menuchoice--;
             if (menuchoice<0)
-               menuchoice=3;
+               menuchoice=4;
          }
          if (input.getKeyDown()==SDLK_DOWN)
          {
              menuchoice++;
-            if (menuchoice>3)
+            if (menuchoice>4)
                menuchoice=0;
          }
          if (input.getKeyDown()==SDLK_RETURN&&newMenu==true)
@@ -445,12 +447,12 @@ void gameroot::update()
                Hero.p1g=true;
                break;
                case 3:
-               Hero.mix=true;
-               Villain.mix=true;
-               break;
-               case 4:
                Hero.p1g=true;
                Villain.p2g=true;
+               break;
+               case 4:
+               Hero.mix=true;
+               Villain.mix=true;
                break;
             }
             gameState=Loading;
@@ -515,6 +517,7 @@ void gameroot::update()
          // if (Hero.Actions.playerSpecial==true)
          // {
          //       soundManager.Play_Music("Levelmusic", 20);
+
          // }
 
          if (Hero.Controller1Connected==false&&Hero.p1k==true)
