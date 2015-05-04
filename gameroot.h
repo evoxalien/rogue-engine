@@ -359,28 +359,10 @@ void gameroot::update()
          Villain.playerInitalize(2);
          Villain.init();
       }
-      // if (Hero.player1Choice!=5)
-      // {
-      //    Hero.playerInitalize(1);
-      //    if (Hero.player1Choice==2)
-      //    {
-      //       Hero.init();
-      //    }         
-      // }
-      // if (Villain.player2Choice!=5)
-      // {
-      //    Villain.playerInitalize(2);
-      //    if (Villain.player2Choice==2)
-      //    {
-      //       Villain.init();
-      //    }
-      // }
-
       Hero.LoadSpriteContent();
       Villain.LoadSpriteContent();
       gameState=GamePlaying1;
    }
-
    
    while(SDL_PollEvent(&Event))
    {
@@ -528,18 +510,8 @@ void gameroot::update()
             Villain.playerKeyPress(input.getKeyDown());
             Villain.playerKeyRelease(input.getKeyUp());
          }
-         // if (Hero.player1Choice<2)
-         // {
-         //    Hero.playerKeyPress(input.getKeyDown());
-         //    Hero.playerKeyRelease(input.getKeyUp());
-         // }
-         // if (Villain.player2Choice<2)
-         // {
-         //    Villain.playerKeyPress(input.getKeyDown());
-         //    Villain.playerKeyRelease(input.getKeyUp());
-         // }
-      }
 
+      }
 	  
    }  
       

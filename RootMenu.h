@@ -41,8 +41,28 @@ public:
 	void UpdateGameMenu2(int choice);
 	void displayPlatMenu3();
 	void UpdateGameMenu3(int choice,int player1);
+	~RootMenu();
 };
 
+RootMenu::~RootMenu()
+{
+	for(int x = 0; x < 3; x++)
+	{
+		Root[x].free();
+	}
+	for(int x = 0; x < 5; x++)
+	{
+		Menu[x].free();
+	}
+	for(int x = 0; x < 4; x++)
+	{
+		BackGround[x].free();
+	}
+	for(int x = 0; x < 15; x++)
+	{
+		Control[x].free();
+	}
+}
 
 void RootMenu::initilizeMenu(SDL_Renderer *rendererIn)
 {
