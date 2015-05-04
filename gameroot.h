@@ -97,6 +97,7 @@ private:
    SDL_Color menuColor={0xFF,0xA5,0x00,0xFF};
    SDL_Color textColor = {0xFF,0xA5,0xA5,0xFF};
    bool newMenu=false;
+   int player1Choice, player2Choice;
 public:
    gameroot(Window *mainWindow, EngineState *currentState); 
    bool loadContent();
@@ -171,6 +172,8 @@ bool gameroot::initialize()
    GLOBAL_FRAME_COUNTER = 0; //This is necessary for the animation timing in the animation class. 
 
    rootMenuObject.initilizeMenu(renderer);
+   rootMenuObject.initilizeMenu2(renderer);
+
    Hero.playerX=0;
    Hero.playerY=0;
    Hero.InitSprite(renderer);
@@ -218,6 +221,14 @@ void gameroot::OnEvent(SDL_Event *Event)
          }
      }
    }
+   // if (Hero.player1Choice!=5)
+   // {
+   //    Hero.UpdateSDLJoy(Event);
+   // }
+   // if (Villain.player2Choice!=5)
+   // {
+   //    Villain.UpdateSDLJoy(Event);
+   // }
    if (Hero.playerInputMode=="Gamepad"&&Hero.Controller1Connected==true)
    {
       Hero.UpdateSDLJoy(Event);
@@ -260,18 +271,69 @@ void gameroot::update()
       {
          case 0:
          rootMenuObject.Root[0].loadTextRender("Start", menuColor);
-         rootMenuObject.Root[1].loadTextRender("Settings Dont touch", textColor);
+         rootMenuObject.Root[1].loadTextRender("Settings", textColor);
          break;
          case 1:
          rootMenuObject.Root[0].loadTextRender("Start", textColor);
-         rootMenuObject.Root[1].loadTextRender("Settings Dont touch", menuColor);
+         rootMenuObject.Root[1].loadTextRender("Settings", menuColor);
          break;
       }
    }
    if (gameState == GameMenu1)
    {
-      rootMenuObject.UpdateGameMenu1(menuchoice);
+      switch (menuchoice)
+      {
+         case 0:
+        rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", menuColor);
+        rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
+        rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+        rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+        rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
+         break;
+         
+         case 1:
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", menuColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
+         break;
+         
+         case 2:
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", menuColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
+         break;
+
+         case 3:
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", menuColor);
+         rootMenuObject.Menu[4].loadTextRender("1 player on Each", textColor);
+         break;
+
+         case 4:
+         rootMenuObject.Menu[0].loadTextRender("1 player on Keyboard", textColor);
+         rootMenuObject.Menu[1].loadTextRender("2 players on Keyboard", textColor);
+         rootMenuObject.Menu[2].loadTextRender("1 player on GamePad", textColor);
+         rootMenuObject.Menu[3].loadTextRender("2 players on GamePad", textColor);
+         rootMenuObject.Menu[4].loadTextRender("1 player on Each", menuColor);
+         break;
+      }
+      // rootMenuObject.UpdateGameMenu1(menuchoice);
    }
+   if (gameState==GameMenu2)
+   {
+      rootMenuObject.UpdateGameMenu2(menuchoice);
+   }
+   if (gameState==GameMenu3)
+   {
+      rootMenuObject.UpdateGameMenu3(menuchoice,player1Choice);
+   }
+
    if (gameState==Loading)
    {
       if (Hero.p1k==true)
@@ -300,12 +362,29 @@ void gameroot::update()
          Villain.playerInitalize(2);
          Villain.init();
       }
+      // if (Hero.player1Choice!=5)
+      // {
+      //    Hero.playerInitalize(1);
+      //    if (Hero.player1Choice==2)
+      //    {
+      //       Hero.init();
+      //    }         
+      // }
+      // if (Villain.player2Choice!=5)
+      // {
+      //    Villain.playerInitalize(2);
+      //    if (Villain.player2Choice==2)
+      //    {
+      //       Villain.init();
+      //    }
+      // }
+
       Hero.LoadSpriteContent();
       Villain.LoadSpriteContent();
       gameState=GamePlaying1;
    }
 
-
+   
    while(SDL_PollEvent(&Event))
    {
       //Updates input object, holding current buttons pressed
@@ -341,6 +420,7 @@ void gameroot::update()
          if (input.getKeyUp()==SDLK_RETURN)
          {
             newMenu=true;
+            menuchoice=0;
          }
          if (input.getKeyDown()==SDLK_UP)
          {
@@ -380,7 +460,60 @@ void gameroot::update()
             gameState=Loading;
          }
       }
-
+      if (gameState==GameMenu2)
+      {
+         if (input.getKeyUp()==SDLK_RETURN)
+         {
+            newMenu=true;
+            menuchoice=0;
+         }
+         if (input.getKeyDown()==SDLK_LEFT)
+         {
+            menuchoice--;
+            if (menuchoice<0)
+               menuchoice=2;
+         }
+         if (input.getKeyDown()==SDLK_RIGHT)
+         {
+             menuchoice++;
+            if (menuchoice>2)
+               menuchoice=0;
+         }
+         if (input.getKeyDown()==SDLK_RETURN&&newMenu==true)
+         {
+            // player1Choice=menuchoice;
+            // Hero.player1Choice=player1Choice;
+            newMenu=false;
+            gameState=GameMenu3;
+         }
+      }
+      if (gameState==GameMenu3)
+      {
+         if (input.getKeyUp()==SDLK_RETURN)
+         {
+            newMenu=true;
+            menuchoice=0;
+         }
+         if (input.getKeyDown()==SDLK_LEFT)
+         {
+            menuchoice--;
+            if (menuchoice<0)
+               menuchoice=2;
+         }
+         if (input.getKeyDown()==SDLK_RIGHT)
+         {
+             menuchoice++;
+            if (menuchoice>2)
+               menuchoice=0;
+         }
+         if (input.getKeyDown()==SDLK_RETURN&&newMenu==true)
+         {
+            // player2Choice=menuchoice;
+            // Villain.player2Choice=player2Choice;
+            newMenu=false;
+            gameState=GameMenu1;
+         }
+      }
       if(gameState == GamePlaying1)
       {
          if (Hero.Controller1Connected==false&&Hero.p1k==true)
@@ -398,7 +531,16 @@ void gameroot::update()
             Villain.playerKeyPress(input.getKeyDown());
             Villain.playerKeyRelease(input.getKeyUp());
          }
-
+         // if (Hero.player1Choice<2)
+         // {
+         //    Hero.playerKeyPress(input.getKeyDown());
+         //    Hero.playerKeyRelease(input.getKeyUp());
+         // }
+         // if (Villain.player2Choice<2)
+         // {
+         //    Villain.playerKeyPress(input.getKeyDown());
+         //    Villain.playerKeyRelease(input.getKeyUp());
+         // }
       }
 
 	  
@@ -435,6 +577,14 @@ void gameroot::draw()
    if(gameState == GameMenu1)
    {
       rootMenuObject.displayPlatMenu1();
+   }
+      if(gameState == GameMenu2)
+   {
+      rootMenuObject.displayPlatMenu2();
+   }
+      if(gameState == GameMenu3)
+   {
+      rootMenuObject.displayPlatMenu3();
    }
    
    //update screen

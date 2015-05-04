@@ -95,10 +95,13 @@ public:
 	bool Controller1Connected=false;
 	bool Controller2Connected=false;
 	bool Controller3Connected=false;
+	bool settingsCheck=false;
 	string playerInputMode;
 	Animation playerAnimation;
 	bool p1k=false,p2k=false,p1g=false,p2g=false;
 	bool mix=false;
+	int player1Choice=5;
+	int player2Choice=5;
 	SDL_Joystick* gGameController = NULL;
 	void InitSprite(SDL_Renderer* gRenderer);
 	void loadSpriteContent();
@@ -145,11 +148,19 @@ bool playerClass::playerInitalize(int playerIndexPassed)
 	{
 	   inputFile.open("../resources/playerConfig/Player2GScript.txt");
 	}
-
-	// if (playerIndex==0)//player 1 set to controller but no controller defaults to keyboard
-	// {
-	//    inputFile.open("../resources/playerConfig/Player0Script.txt");
-	// }
+	// if (player1Choice==0)
+	//     inputFile.open("../resources/playerConfig/Player1KScript.txt");
+	// if (player1Choice==1)
+	//     inputFile.open("../resources/playerConfig/Player2KScript.txt");
+	// if (player1Choice==2)
+	//     inputFile.open("../resources/playerConfig/Player1GScript.txt");
+	// if (player2Choice==0)
+	//     inputFile.open("../resources/playerConfig/Player1KScript.txt");
+	// if (player2Choice==1)
+	//     inputFile.open("../resources/playerConfig/Player2KScript.txt");
+	// if (player2Choice==2)
+	//     inputFile.open("../resources/playerConfig/Player2GScript.txt");
+	
 
 	if(!inputFile)//file failed
 		return false;
@@ -316,14 +327,14 @@ void playerClass::playerKeyRelease(SDL_Keycode e)
 			Actions.playerJump=true;
 		if (e==playerControlsKeyboard.playerExit)
 			Actions.playerExit=true;
-		if(e== SDLK_DOWN)
-            Actions.playerUp=false;       
-        else if ( e== SDLK_UP)
-            Actions.playerDown=false;            
-        else if (e== SDLK_RIGHT)
-            Actions.playerRight=false; 
-        else if (e== SDLK_LEFT)
-            Actions.playerLeft=false; 
+		// if(e== SDLK_DOWN)
+  //           Actions.playerUp=false;       
+  //       else if ( e== SDLK_UP)
+  //           Actions.playerDown=false;            
+  //       else if (e== SDLK_RIGHT)
+  //           Actions.playerRight=false; 
+  //       else if (e== SDLK_LEFT)
+  //           Actions.playerLeft=false; 
 	}
 }
 
@@ -370,6 +381,19 @@ bool playerClass::init()
 				Controller3Connected=true;
 				gGameController = SDL_JoystickOpen( 0 );
 			}
+			// if (player1Choice==2)
+			// {
+			// 	gGameController = SDL_JoystickOpen( 0 );
+			// 	settingsCheck=true;
+			// }
+			// if (player2Choice==2&&settingsCheck==true)
+			// {
+			// 	gGameController = SDL_JoystickOpen( 1 );
+			// }
+			// if (player2Choice==2&&settingsCheck==false)
+			// {
+			// 	gGameController = SDL_JoystickOpen( 0 );
+			// }
 			//Load joystick
 			// if (playerIndex==1&&playerInputMode=="Gamepad"&&SDL_NumJoysticks()>0)
 			// {
