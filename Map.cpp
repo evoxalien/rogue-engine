@@ -541,7 +541,283 @@ void Map::processMenu(InputClass input)
 	else
 	if(mState == PhysicsProps)
 	{
+		if(input.getKeyDown() == SDLK_RETURN)
+		{
+			switch(menuIndex)
+			{
 
+				case 0 :		
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].angle = atof(keyboardInput.c_str()); //Initial Angle in Radians
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+
+				break;
+				case 1 :
+				
+				
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].bodyType = atoi(keyboardInput.c_str()); //Body type of the Object (0 for Static, 1 for Kinematic, 2 for Dynamic)
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+				
+				break;
+
+				case 2 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].tunneling = atoi(keyboardInput.c_str()); //Boolean for whether the Object should check for tunneling against Dynamic bodies, usually turned on for very fast objects such as bullets (0 only checks against Static and Kinematic bodies, 1 includes Dynamic bodies as well)
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+				
+				break;
+
+				case 3 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].fixedRotation = atoi(keyboardInput.c_str()); //Boolean for whether to use fixed rotation (0 uses rotations, 1 fixes rotation)
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+				
+				break;
+
+				case 4 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].linearDampening = atof(keyboardInput.c_str()); //Linear Damping slows Objects as they travel, not 100% sure how it affects movement, but I believe it's a constant force against the direction of movement so the Object eventually halts
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+
+				case 5 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].angularDampening = atof(keyboardInput.c_str()); //Angular Damping slows an Objects rotation, similar to Linear Damping but will cause the Object to stop spinning over time
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+
+				case 6 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].gravityScale = atof(keyboardInput.c_str()); //The Gravity Scale is a multiplier to determine how much force the Box2D World exerts on the Object
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+
+				case 7 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].physicsSleep = atoi(keyboardInput.c_str()); //Boolean for whether Physics Sleep is allowed; if it is on, the Object enters a low-maintenence state until collided with (0 is no sleep, 1 is sleep enabled)
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+
+				case 8 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].sleepAwake = atoi(keyboardInput.c_str()); //Boolean for whether the Object should enter into the World as 'Awake' or 'Asleep', see above (0 is Asleep, 1 is Awake)
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+
+				case 9 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].activeInactive = atoi(keyboardInput.c_str()); //Boolean for whether the Object should enter int othe World as 'Active' or 'Inactive'; I can't recall for sure, but I believe Inactive will be treated as if it's not present until activated (0 is Inactive, 1 is Active)
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+
+				case 10 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].density = atof(keyboardInput.c_str()); //Density of the fixture that will be applied to the Object; higher densities will result in larger weights for the same size; I belive 0 should be avoided
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+
+				case 11 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].friction = atof(keyboardInput.c_str()); //The Friction of the fixture that will be applied to the Object; higher frictions will result in a faster loss of momentum when Objects come in constant contact with the Object
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+
+				case 12 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].restitution = atof(keyboardInput.c_str()); //The Restitution of the fixture that will be applied to the Object; should generally be confined between 0 and 1- 0 will result in Objects sticking to one another, 1 will have them bounce apart with the energy conserved- most likely uses the lowest of the two in collisions
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+
+				case 13 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].layer = atoi(keyboardInput.c_str()); //Layers the Object exists in- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object exists in that layer, if 0, it does not
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+
+				case 14 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].layersCanCollide = atoi(keyboardInput.c_str()); //Layers the Object can collide with- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object may potentially collide with another Object which exists in that layer
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+
+				case 15 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].collisionGroupIndex = atoi(keyboardInput.c_str()); //Layers the Object can collide with- each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object may potentially collide with another Object which exists in that layer
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+				
+				break;
+				
+				case 16 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].xVel = atof(keyboardInput.c_str()); 
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+			
+				break;
+				
+				case 17 :
+				for(int x = 0; x < numPlatforms; x++)
+				{
+					if(platSelected[x])
+					{
+						physicsObjs[x].yVel = atof(keyboardInput.c_str());
+						SDL_StopTextInput();
+						pMenu.destroyMenu();
+						createMenu(x, pMenu.getMenuX(), pMenu.getMenuY());
+						break;
+					}
+				}
+				
+				break;
+			}
+			currentInputStringTexture.free();
+		}
 	}
 }
 
