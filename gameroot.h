@@ -251,6 +251,7 @@ void gameroot::update()
    EngineActiveState=gameState;
 
    gameroot::total_Time = gameroot::total_Time + gameroot::time_Of_Previous_Frame.count();   //Add the time of the last frame to the total time
+   Object::physics_Time_Step = gameroot::time_Of_Previous_Frame.count();
 
    debug_log << "\ntest " << GLOBAL_FRAME_COUNTER << "\n";
 
