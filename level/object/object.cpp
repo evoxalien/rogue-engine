@@ -140,6 +140,63 @@ Object::Object(const float x_Position, const float y_Position, const float angle
 	Object::object_Pointer_Vector.push_back(this);
 }
 
+Object::Object(const float x_Position, const float y_Position, const float angle_In_Radians, const int body_Type, const bool check_For_Dynamic_Tunneling, const bool use_Fixed_Rotation, const float linear_Damping, const float angular_Damping, const float gravity_Scale, const bool allow_Physics_Sleep, const bool initialize_Awake, const bool initialize_Active, const float density, const float friction, const float restitution, const uint16 exists_In_Layers, const uint16 collides_With_Layers, const int group_Index, const float x_Half_Length, const float y_Half_Length, const float initial_X_Velocity, const float initial_Y_Velocity, const std::string animation_File_Path)//, const int amountofFramesX, const int amountofFramesY)
+{
+	std::cout << "Object(Physics components + Animation)" << std::endl;
+
+	Object::box2D_Body_Definition.position.Set(x_Position + x_Half_Length, y_Position + y_Half_Length);
+	Object::box2D_Body_Definition.angle = angle_In_Radians;
+	if(body_Type == 0)
+	{
+		Object::box2D_Body_Definition.type = b2_staticBody;
+	}
+	else if(body_Type == 1)
+	{
+		Object::box2D_Body_Definition.type = b2_kinematicBody;
+	}
+	else
+	{
+		Object::box2D_Body_Definition.type = b2_dynamicBody;
+		Object::box2D_Body_Definition.bullet = check_For_Dynamic_Tunneling;
+	}
+	Object::box2D_Body_Definition.fixedRotation = use_Fixed_Rotation;
+	Object::box2D_Body_Definition.linearDamping = linear_Damping;
+	Object::box2D_Body_Definition.angularDamping = angular_Damping;
+	Object::box2D_Body_Definition.gravityScale = gravity_Scale;
+	Object::box2D_Body_Definition.allowSleep = allow_Physics_Sleep;
+	Object::box2D_Body_Definition.awake = initialize_Awake;
+	Object::box2D_Body_Definition.active = initialize_Active;
+	Object::box2D_Body_Definition.userData = this;
+
+	(*this).physics = Object::box2D_World.CreateBody(&Object::box2D_Body_Definition);	//Create an instance of a Box2D body in the Box2D World with the definition provided from the paramaters and point the Object member 'physics' to the body
+
+	Object::box2D_Fixture_Definition.density = density;
+	Object::box2D_Fixture_Definition.friction = friction;
+	Object::box2D_Fixture_Definition.restitution = restitution;
+	Object::box2D_Fixture_Definition.filter.categoryBits = exists_In_Layers;	//Each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object exists in that layer, if 0, it does not
+	Object::box2D_Fixture_Definition.filter.maskBits = collides_With_Layers;	//Each bit of the 16 bit unsigned integer represents a layer; if the bit is 1, the Object may potentially collide with another Object which exists in that layer
+	Object::box2D_Fixture_Definition.filter.groupIndex = group_Index;			//If 0, Object will collide with all other Objects which share both the existing layers and colliding layers; if the value pair of colliding objects are different, the same rules will apply; if the pair is positive and the same, they will collide regardless of layers, and if the pair is negative and the same, they will never collide, regardless of layers
+
+	Object::box2D_Polygon_Shape.SetAsBox(x_Half_Length, y_Half_Length);
+
+	Object::box2D_Fixture_Definition.shape = &Object::box2D_Polygon_Shape;
+
+	(*(*this).physics).CreateFixture(&Object::box2D_Fixture_Definition);		//The body will contain a fixture with the shape and attributes set by the parameters; currently only support for a single rectangle is present
+
+	(*(*this).physics).ApplyLinearImpulse(b2Vec2(initial_X_Velocity, initial_Y_Velocity), (*(*this).physics).GetWorldCenter(), true);
+
+//	(*this).animation.Initialize(x_Position, y_Position, amountofFramesX, amountofFramesY);
+	(*this).animation.Image.setRenderer(Object::SDL_Renderer_Pointer);
+//	(*this).animation.setActive(true);
+	(*this).animation.Image.loadTexture(animation_File_Path);
+//	(*this).animation.LoadImage(animation_File_Path)
+	(*this).animation.Image.setWidth(static_cast<int>(x_Half_Length * 2));
+	(*this).animation.Image.setHeight(static_cast<int>(y_Half_Length * 2));
+
+	(*this).set_Object_Pointer_Vector_Index(static_cast<std::uint16_t>(Object::object_Pointer_Vector.size()));
+	Object::object_Pointer_Vector.push_back(this);
+}
+
 //Constructor for when Behavior is known; adds a pointer to the Object to the Object pointer vector and stores the index in necessary members so they can access their data
 Object::Object(const Behavior behavior)
 {

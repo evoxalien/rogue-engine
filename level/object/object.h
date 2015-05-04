@@ -55,6 +55,7 @@ class Object
 		Object();									//Default constructor
 		Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float);	//Constructor for Physics, may need to be updated to handle multiple fixtures
 		Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float, const std::string);//, const int, const int);
+		Object(const float, const float, const float, const int, const bool, const bool, const float, const float, const float, const bool, const bool, const bool, const float, const float, const float, const uint16, const uint16, const int, const float, const float, const float, const float, const std::string);
 		Object(const Behavior);						//Constructor for when there is an already existing Behavior the Object should follow
 		Object(const Attributes);					//Constructor for when the Attributes of an Object is known
 		Object(const Behavior, const Attributes);	//Constructor for when both the Behavior and Attributes of the Object are known
